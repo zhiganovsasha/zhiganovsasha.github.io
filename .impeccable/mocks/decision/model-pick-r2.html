@@ -198,66 +198,6 @@
         white-space: nowrap;
       }
 
-      .evidence {
-        display: grid;
-        grid-template-columns: 44% 56%;
-        min-height: 250px;
-      }
-
-      .evidence-copy {
-        padding: 34px 50px;
-      }
-
-      .eyebrow {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        color: rgba(11, 11, 11, 0.64);
-        font-size: 15px;
-      }
-
-      .eyebrow::after {
-        content: "";
-        width: 150px;
-        height: 1px;
-        background: var(--rule);
-      }
-
-      .evidence h3 {
-        margin: 18px 0 0;
-        font-size: 46px;
-        line-height: 1;
-        letter-spacing: -0.055em;
-      }
-
-      .evidence-visual {
-        position: relative;
-        overflow: hidden;
-        background: var(--ink);
-      }
-
-      .evidence-visual::before,
-      .evidence-visual::after {
-        content: "";
-        position: absolute;
-        border: 1px solid rgba(255, 255, 255, 0.32);
-      }
-
-      .evidence-visual::before {
-        width: 330px;
-        height: 330px;
-        top: -95px;
-        left: 310px;
-        border-radius: 50%;
-      }
-
-      .evidence-visual::after {
-        width: 190px;
-        height: 190px;
-        top: 15px;
-        left: 380px;
-        border-radius: 46px;
-      }
     </style>
   </head>
   <body>
@@ -299,13 +239,6 @@
         I turn research into ideas, and ideas into working products.
       </section>
 
-      <section class="evidence">
-        <div class="evidence-copy">
-          <div class="eyebrow">Selected evidence</div>
-          <h3>SHUM Telegram Assistant</h3>
-        </div>
-        <div class="evidence-visual" aria-hidden="true"></div>
-      </section>
     </main>
   </body>
 </html>
