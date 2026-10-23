@@ -1,0 +1,233 @@
+{
+  "title": "Выберите визуальный мир главной страницы",
+  "question": "Какой принцип должен стать основой сайта: профиль-досье, живой редакционный портрет или привычная структура портфолио?",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Editorial Identity Dossier",
+      "kicker": "THE ROLL",
+      "lineage": "International identity records and editorial research dossiers",
+      "thesis": "Узнаваемый человек остаётся постоянным центром, а каждое направление открывается как отдельный слой доказательств.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "matte white paper",
+        "real photographic portrait",
+        "red registration ink"
+      ],
+      "viewport": "Крупный портрет удерживает экран, а нумерованные направления пересекают границу между фотографией и информацией.",
+      "risk": "Может стать слишком бюрократичным или похожим на CV, если метаданные окажутся важнее человека.",
+      "raised": [
+        {
+          "from": "Cathode numeral stack",
+          "raise": "Активное и неактивное состояния должны различаться мгновенно и без декоративного шума."
+        },
+        {
+          "from": "Phosphor terminal",
+          "raise": "Интерфейс сам сообщает о смене состояния, не пряча её в лишнем модальном окне."
+        },
+        {
+          "from": "Paper automata",
+          "raise": "Одно осмысленное движение связывается с выбором направления, а не рассыпается на hover-эффекты."
+        },
+        {
+          "from": "Indoor weather sun",
+          "raise": "Портрет получает монументальный масштаб и остаётся главным визуальным событием."
+        },
+        {
+          "from": "Creator hardware",
+          "raise": "Красный резервируется для единственного действия или состояния, которое действительно важно."
+        },
+        {
+          "from": "Push Pin poster",
+          "raise": "Человеческое тепло создаётся фотографией и кадрированием, а не иллюстративным декором."
+        }
+      ],
+      "comp": ".impeccable/mocks/decision/assigned.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "Living Editorial Profile",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "International long-form profiles and modernist Sunday supplements",
+      "thesis": "Личность, вопрос и направления собираются в один живой редакционный разворот без метафоры досье.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "uncoated publication paper",
+        "natural portrait print",
+        "hairline rules"
+      ],
+      "viewport": "Портрет расположен немного левее центра, вопрос и индекс направлений живут вокруг него, а ключевая фраза пересекает композицию.",
+      "risk": "Это наиболее знакомое и надёжное направление, поэтому без точной композиции и переходов оно может стать просто хорошим редакционным шаблоном.",
+      "comp": ".impeccable/mocks/decision/model-pick.png"
+    },
+    {
+      "id": "challenger-cathode",
+      "label": "Cathode State Stack",
+      "verdict": "declined",
+      "lineage": "Cathode numeral tubes and layered state displays",
+      "thesis": "Все направления присутствуют одновременно, а выбранное состояние резко проявляется красным.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "layered typography",
+        "fine state gauze"
+      ],
+      "viewport": "Портрет окружён полупрозрачными слоями вариантов, один из которых выходит вперёд.",
+      "case": "Чётко показывает состояние, но многослойная сетка превращается в запрещённый декоративный паттерн.",
+      "kept": "Мгновенное различие активного и неактивного состояния.",
+      "risk": "Похож на эффектную технологическую демонстрацию и конкурирует с лицом.",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-struck-cathode-gauze-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/operate-b-struck-cathode-gauze.webp"
+    },
+    {
+      "id": "challenger-terminal",
+      "label": "Phosphor Transcript",
+      "verdict": "declined",
+      "lineage": "Green-phosphor terminal transcripts",
+      "thesis": "Профессиональная история печатается как живой журнал состояний и команд.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "monospaced transcript",
+        "state history"
+      ],
+      "viewport": "Текстовый журнал разворачивается рядом с портретом и ведёт посетителя по истории работы.",
+      "case": "Механика понятна, но визуально воспроизводит именно тот AI и вайбкодинг-образ, который исключён владельцем.",
+      "kept": "Состояния называют себя прямо и не маскируются декоративным интерфейсом.",
+      "risk": "Стереотипный AI-сайт с терминалом вместо личности.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-phosphor-terminal-midnight-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/signals-instruments-phosphor-terminal-midnight.webp"
+    },
+    {
+      "id": "challenger-paper",
+      "label": "Paper Mechanism",
+      "verdict": "declined",
+      "lineage": "Hand-cranked paper automata",
+      "thesis": "Каждое направление раскрывается одним физически понятным движением бумажного механизма.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "cut paper",
+        "pinned joints"
+      ],
+      "viewport": "Портрет и направления раскрываются через складки и шарниры одного бумажного объекта.",
+      "case": "Движение хорошо объясняет выбор, но иллюстративность уводит сайт в сторону художественного объекта.",
+      "kept": "Одно оркестрированное движение должно быть связано с действием пользователя.",
+      "risk": "Сайт начинает выглядеть как арт-проект или выставочная работа.",
+      "hero": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-crank-paper-menagerie-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-crank-paper-menagerie.webp"
+    },
+    {
+      "id": "challenger-weather",
+      "label": "Monumental Light Hall",
+      "verdict": "declined",
+      "lineage": "Large-scale light and mirrored installation spaces",
+      "thesis": "Портрет и выбор направления становятся одной масштабной световой сценой.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "monumental light",
+        "human silhouette"
+      ],
+      "viewport": "Лицо занимает архитектурный масштаб, а текст лежит на одной спокойной линии горизонта.",
+      "case": "Масштаб удерживает внимание, но пространственная метафора сильнее содержания и даёт музейную ассоциацию.",
+      "kept": "Портрет имеет право быть монументальным и не нуждается в окружающем декоре.",
+      "risk": "Слишком близко к художественной галерее и медиаинсталляции.",
+      "hero": "https://impeccable.style/worlds/cards/light-shadow-caustics-indoor-weather-sun-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/light-shadow-caustics-indoor-weather-sun.webp"
+    },
+    {
+      "id": "challenger-hardware",
+      "label": "Creator Hardware",
+      "verdict": "declined",
+      "lineage": "Purpose-built creator hardware and tactile control surfaces",
+      "thesis": "Направления работы становятся набором точных физических клавиш с одним красным действием.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "tactile controls",
+        "single action key"
+      ],
+      "viewport": "Портрет соседствует с компактной панелью направлений и одним однозначным активным состоянием.",
+      "case": "Функциональность сильна, но сетка клавиш превращает личный сайт в интерфейс инструмента.",
+      "kept": "Каждое действие должно ощущаться определённым, а красный принадлежит одному главному состоянию.",
+      "risk": "Ассоциация с креативным софтом, устройством или технологическим концептом вместо человека.",
+      "hero": "https://impeccable.style/worlds/cards/design-canon-creator-hardware-bench-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/design-canon-creator-hardware-bench.webp"
+    },
+    {
+      "id": "challenger-poster",
+      "label": "Push Pin Portrait",
+      "verdict": "declined",
+      "lineage": "Push Pin Studios posters and illustrated profiles",
+      "thesis": "Портрет становится эмблемой, вокруг которой разворачиваются направления и подписи.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#E21B1B"
+      ],
+      "materials": [
+        "flat portrait contour",
+        "poster lettering"
+      ],
+      "viewport": "Иллюстративный профиль удерживает центр, а направления располагаются как подписи афиши.",
+      "case": "Человеческий характер заметен, но язык слишком прямо связывает владельца с графическим дизайном.",
+      "kept": "Тепло и индивидуальность должны исходить от портрета, а не от технологических эффектов.",
+      "risk": "Выглядит как портфолио графического дизайнера и нарушает минимальную палитру.",
+      "hero": "https://impeccable.style/worlds/cards/brand-identity-canon-push-pin-poster-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/brand-identity-canon-push-pin-poster.webp"
+    }
+  ],
+  "reroll": {
+    "registers": [
+      "safer",
+      "bolder"
+    ]
+  },
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": true,
+  "canonCard": {
+    "label": "Polished portfolio standard",
+    "thesis": "Знакомая двухколоночная главная с портретом и понятной сеткой направлений, выполненная без стилистического шума.",
+    "palette": [
+      "#FFFFFF",
+      "#0B0B0B",
+      "#E21B1B"
+    ],
+    "materials": [
+      "clean grid",
+      "natural portrait photography",
+      "hairline borders"
+    ],
+    "viewport": "Слева имя и позиционирование, справа портрет, ниже четыре одинаково устроенные карточки направлений.",
+    "risk": "Понятно и профессионально, но почти неотличимо от множества качественных персональных сайтов.",
+    "comp": ".impeccable/mocks/decision/canon.png"
+  },
+  "steer": true
+}

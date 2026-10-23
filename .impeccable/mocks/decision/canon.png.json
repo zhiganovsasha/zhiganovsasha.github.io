@@ -1,0 +1,7 @@
+{
+  "promptFile": "prompts/canon.txt",
+  "generator": "image_gen",
+  "referencedImages": [
+    "C:/Users/1234/Pictures/userpic.jpg"
+  ]
+}

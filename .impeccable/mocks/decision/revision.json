@@ -1,0 +1,32 @@
+{
+  "title": "Утвердите портрет с восстановленным фоном",
+  "question": "Теперь за точным портретом возвращён мягкий фон из исходной фотографии. Сохраняем этот вариант как визуальную основу главной страницы?",
+  "options": [
+    {
+      "id": "model-pick-revised",
+      "label": "Living Editorial Profile, portrait and blur",
+      "kicker": "YOUR SELECTION",
+      "lineage": "International long-form profiles and modernist Sunday supplements",
+      "thesis": "Точный исходный портрет, мягко размытый фон из той же фотографии и ненумерованные направления образуют один спокойный редакционный разворот.",
+      "palette": [
+        "#FFFFFF",
+        "#0B0B0B",
+        "#6E1F2B"
+      ],
+      "materials": [
+        "literal source-photo cutout",
+        "blurred original-photo background",
+        "uncoated publication paper",
+        "hairline rules"
+      ],
+      "viewport": "Вырезанный портрет заходит волосами на шапку, вопрос и ненумерованный список направлений занимают правую часть, а ключевая фраза связывает весь экран.",
+      "risk": "При реализации нельзя подменить точное кадрирование сгенерированным портретом или вернуть интерфейсные штампы через метки и номера.",
+      "comp": ".impeccable/mocks/decision/model-pick-r2.png"
+    }
+  ],
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "steer": true
+}

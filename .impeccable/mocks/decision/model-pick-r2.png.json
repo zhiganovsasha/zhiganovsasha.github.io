@@ -1,0 +1,9 @@
+{
+  "source": "model-pick-r2.html",
+  "portrait": "assets/alexander-cutout.png",
+  "background": "assets/alexander-source.jpg",
+  "portraitPolicy": "Exact source pixels only. No generation, redraw, retouching, beautification, or color editing. Layout may only scale and position the PNG.",
+  "backgroundPolicy": "The naturally blurred city background comes from the original source photograph and is aligned beneath the exact cutout. It is not generated imagery.",
+  "palette": ["#FFFFFF", "#0B0B0B", "#6E1F2B"],
+  "generator": "HTML/CSS browser render"
+}

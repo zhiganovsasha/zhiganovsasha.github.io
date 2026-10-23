@@ -1,0 +1,11 @@
+Edit the first referenced website comp in place. The second referenced image is the protected original portrait source. Preserve the layout, exact recognizable face, head shape, hair silhouette, eyes, nose, lips, beard, skin texture, clothing, pose, and photographic realism from the existing second-direction comp. Do not redraw, beautify, reinterpret, retouch, or regenerate the person. The final website will use a literal cutout from the original photo. Keep the valuable three-dimensional overlap where the top of the real hair rises into and overlaps the white navigation header.
+
+Make only these design revisions:
+1. Replace every bright signal red accent with a deep restrained burgundy, approximately #6E1F2B. This includes the active Home label, small accents, active route marker, and any fine rules. Burgundy must feel dark, mature, and editorial, never vivid red.
+2. Remove the label '01 / PROFILE' entirely. Do not replace it with any number, slash, index, badge, eyebrow, or metadata token. Let 'Creative Technologist' begin that left text rail directly.
+3. Remove '01', '02', '03', and '04' from the four navigation rows. Do not replace them with bullets, icons, pills, tags, or serial numbers. The rows should read only 'AI Development', 'Art Projects', 'Education & Speaking', and 'Blog', with clean alignment and hairline separators.
+4. Remove any visible 'OPEN' label if it reads like interface metadata. Indicate the active AI Development row only through burgundy type or a short burgundy underline, subtle and functional.
+5. Keep the exact white, black, and burgundy palette, the asymmetrical editorial spread, the large question 'What would you like to explore?', the cross-composition line 'I turn research into ideas, and ideas into working products.', and the start of 'Selected evidence' below.
+6. Do not add any stereotypical AI-design device: no numbering, slash labels, accordions with metadata, chips, pills, gradients, glass, glow, code, terminal, particles, generative line patterns, grids used as decoration, or futuristic symbols.
+
+The result must remain a 1440×900 edge-to-edge high-fidelity desktop webpage comp with no browser frame. It should feel like rigorously designed functional minimalism: calm, human, editorial, attentive, and employable. All text must be spelled exactly and legibly.

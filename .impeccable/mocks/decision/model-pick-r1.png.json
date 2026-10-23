@@ -1,0 +1,8 @@
+{
+  "promptFile": "prompts/model-pick-r1.txt",
+  "generator": "image_gen",
+  "referencedImages": [
+    ".impeccable/mocks/decision/model-pick.png",
+    "C:/Users/1234/Pictures/userpic.jpg"
+  ]
+}

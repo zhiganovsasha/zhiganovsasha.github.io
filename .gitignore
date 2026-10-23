@@ -4,3 +4,7 @@ node_modules/
 .playwright/
 .playwright-mcp/
 preview-*.png
+
+# MemPalace per-project files
+mempalace.yaml
+entities.json
