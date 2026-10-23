@@ -8,3 +8,4 @@ preview-*.png
 # MemPalace per-project files
 mempalace.yaml
 entities.json
+.gstack/
