@@ -1,0 +1,161 @@
+---
+interface Props {
+  current?: 'home' | 'development' | 'contact';
+}
+
+const { current } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" translate="no">Alexander Zhiganov</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
+      <a
+        href="/development"
+        aria-current={current === 'development' ? 'page' : undefined}
+        >AI Development</a
+      >
+      <a href="#contact" aria-current={current === 'contact' ? 'page' : undefined}
+        >Contact</a
+      >
+      <div class="cv">
+        <button
+          class="cv-trigger"
+          type="button"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="cv-menu"
+        >
+          Download CV
+          <svg
+            class="chev"
+            width="10"
+            height="6"
+            viewBox="0 0 10 6"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5"></path>
+          </svg>
+        </button>
+        <ul class="cv-menu" id="cv-menu" aria-label="Available CV formats and roles">
+          <li>
+            <a
+              href="/cv/Alexander-Zhiganov-CV-AI-Developer.pdf"
+              download="Alexander-Zhiganov-CV-AI-Developer.pdf"
+              aria-label="Download AI Developer CV in English (PDF, 101 KB)"
+            >
+              AI Developer <span class="get">PDF</span>
+            </a>
+          </li>
+          <li>
+            <span aria-disabled="true" title="Not available in this release">
+              Creative Director <span class="cv-status">Unavailable</span>
+            </span>
+          </li>
+          <li>
+            <span aria-disabled="true" title="Not available in this release">
+              Educator &amp; Speaker <span class="cv-status">Unavailable</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const cv = document.querySelector('.cv');
+  if (cv) {
+    const trigger = cv.querySelector('.cv-trigger') as HTMLButtonElement;
+    const menu = cv.querySelector('.cv-menu') as HTMLElement;
+
+    const close = () => {
+      menu.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    };
+    const open = () => {
+      menu.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+    };
+
+    trigger.addEventListener('click', () => {
+      const isOpen = menu.classList.contains('open');
+      isOpen ? close() : open();
+    });
+
+    menu.querySelector('a')?.addEventListener('click', () => {
+      close();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!cv.contains(event.target as Node)) close();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && menu.classList.contains('open')) {
+        close();
+        trigger.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  @media (max-width: 640px) {
+    .site-header .wrap {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+      padding-block: 6px 8px;
+      min-height: auto;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      align-self: flex-start;
+    }
+
+    .main-nav a[href='/'] {
+      display: none;
+    }
+
+    .main-nav {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .main-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding-block: 0;
+    }
+
+    .cv-trigger {
+      font-size: 13px;
+      min-height: 44px;
+      padding: 8px 10px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .main-nav {
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .cv-trigger {
+      font-size: 12px;
+      padding: 8px 8px;
+      gap: 4px;
+    }
+  }
+</style>

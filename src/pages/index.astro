@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ExploreIndex from '../components/ExploreIndex.astro';
+import portrait from '../assets/portrait.png';
+---
+
+<Base title="Alexander Zhiganov — Creative Technologist" current="home">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="kicker">Creative Technologist</p>
+        <h1 class="display hero-name">Alexander<br />Zhiganov</h1>
+        <p class="lede hero-lede">
+          I turn research into ideas, and ideas into working products.
+        </p>
+        <p class="hero-sub muted">
+          Working at the intersection of art, technology, and AI. I build with
+          AI already, as a habit rather than an experiment.
+        </p>
+        <p class="hero-relocation">
+          <span class="marker" aria-hidden="true"></span>
+          Relocating to the UAE in November&nbsp;2026. Open to opportunities in this
+          country and remote worldwide!
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/development"
+            >Explore AI Development <span aria-hidden="true">↗</span></a
+          >
+          <a class="btn btn-ghost" href="#contact">Contact</a>
+        </div>
+      </div>
+      <figure class="hero-portrait">
+        <Image
+          src={portrait}
+          alt="Portrait of Alexander Zhiganov"
+          widths={[560, 900, 1400]}
+          sizes="(max-width: 900px) 100vw, 48vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <ExploreIndex />
+</Base>
+
+<style>
+  .hero {
+    padding-top: clamp(40px, 6vw, 88px);
+    padding-bottom: clamp(56px, 7vw, 104px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .hero-name {
+    font-size: clamp(52px, 7.4vw, 108px);
+    margin-top: 18px;
+  }
+
+  .hero-lede {
+    margin-top: clamp(24px, 3vw, 40px);
+    max-width: 30ch;
+    font-weight: 550;
+  }
+
+  .hero-sub {
+    margin: 18px 0 0;
+    max-width: 44ch;
+    font-size: 16px;
+  }
+
+  .hero-relocation {
+    margin: 28px 0 0;
+    font-size: 15px;
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    max-width: 46ch;
+  }
+
+  .hero-relocation .marker {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    background: var(--signal);
+    transform: translateY(1px);
+  }
+
+  .hero-actions {
+    margin-top: 36px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .hero-portrait {
+    margin: 0;
+    position: relative;
+  }
+
+  .hero-portrait img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-portrait {
+      order: -1;
+      max-width: 420px;
+    }
+  }
+</style>

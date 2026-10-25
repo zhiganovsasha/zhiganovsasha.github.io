@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import CaseStudy from '../../layouts/CaseStudy.astro';
+import cover from '../../assets/blob-tracker-cover.jpg';
+
+const stack = [
+  'JavaScript',
+  'OpenCV.js',
+  'WebGL2',
+  'WebCodecs',
+  'Mediabunny',
+  'Playwright',
+  'GitHub Pages',
+];
+---
+
+<CaseStudy
+  pageTitle="Blob Tracker — Alexander Zhiganov"
+  title="Blob Tracker"
+  role="I first built Blob Tracker as a local production tool for SHUM's Instagram content. I later turned it into a standalone browser application, adapting the detector, visualizer and post-processing system of the MIT-licensed Apolotary project to JavaScript and OpenCV.js."
+>
+  <section class="case-section">
+    <h2>Interface</h2>
+    <div class="case-content">
+      <figure class="case-figure">
+        <Image
+          src={cover}
+          alt="Blob Tracker interactive browser interface and tracking effects"
+          class="case-img"
+          widths={[600, 1000, 1280]}
+          sizes="(max-width: 900px) 100vw, 65vw"
+        />
+        <figcaption>Standalone browser application running real-time OpenCV.js tracking</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Where It Started</h2>
+    <div class="case-content">
+      <p>
+        The story begins with a production need, not with open source. SHUM's
+        Instagram account needed a series of Reels built around blob-tracking
+        effects. No ready tool fit the task, so I built a local one. Only
+        after it proved itself in production did I turn it into a standalone
+        browser application and release it as my first open-source project,
+        free for anyone to use.
+      </p>
+      <p>
+        The browser version adapts the detector, visualizer, and
+        post-processing system of the MIT-licensed Apolotary project to
+        JavaScript and OpenCV.js. The original project and its license are
+        credited in the repository.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>What It Does</h2>
+    <div class="case-content">
+      <ul>
+        <li>
+          14 visual effects, from Contour and Grid to Heatmap and
+          Voronoi, applied to detected blobs.
+        </li>
+        <li>
+          4 detector modes: Edge, Motion, HSV, and Area, with sensitivity
+          and object-size presets.
+        </li>
+        <li>
+          A WebGL2 GPU pipeline for blur and Sobel edge detection, 5 to
+          10 times faster than CPU OpenCV.
+        </li>
+        <li>
+          Source-size export with audio through 3 engines: Mediabunny,
+          WebCodecs H.264, and a MediaRecorder fallback.
+        </li>
+        <li>English and Russian interface.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Links</h2>
+    <div class="case-content">
+      <ul>
+        <li>
+          <a
+            href="https://github.com/alexjiganov179-lab/blob-tracker"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Source code for Blob Tracker on GitHub (opens in a new tab)"
+            >Source code on GitHub <span aria-hidden="true">↗</span></a
+          >, MIT license
+        </li>
+        <li>
+          <a
+            href="https://alexjiganov179-lab.github.io/blob-tracker/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Live demo for Blob Tracker in the browser (opens in a new tab)"
+            >Live demo in the browser <span aria-hidden="true">↗</span></a
+          >
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Stack</h2>
+    <div class="case-content">
+      <ul class="stack-list">
+        {stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</CaseStudy>

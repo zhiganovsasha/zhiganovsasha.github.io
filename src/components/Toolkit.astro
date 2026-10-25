@@ -1,0 +1,112 @@
+---
+const groups = [
+  {
+    label: 'Models & Inference',
+    items: ['DeepSeek V4 Flash', 'DeepSeek V4 Pro', 'Gemma 4 12B', 'Qwen3 Embedding 8B'],
+  },
+  {
+    label: 'Creative AI',
+    items: ['Stable Diffusion', 'Midjourney', 'Runway', 'Higgsfield', 'Seedance'],
+  },
+  {
+    label: 'Speech & Documents',
+    items: ['Yandex SpeechKit', 'Whisper', 'Tesseract', 'Docling', 'OCRmyPDF'],
+  },
+  {
+    label: 'Infrastructure',
+    items: ['OpenRouter', 'Replicate', 'Ollama', 'ChromaDB', 'MCP'],
+  },
+  {
+    label: 'AI Agents',
+    items: ['OpenAI Codex', 'Google Antigravity', 'OpenCode'],
+  },
+];
+---
+
+<section class="section toolkit" aria-labelledby="toolkit-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="toolkit-title">My AI Toolkit</h2>
+      <p class="note">
+        Full stacks live inside the case studies. This is the everyday working
+        set.
+      </p>
+    </div>
+    <dl class="toolkit-grid">
+      {
+        groups.map((group) => (
+          <div class="toolkit-group">
+            <dt>{group.label}</dt>
+            <dd>
+              <ul class="chip-list" role="list">
+                {group.items.map((item) => (
+                  <li class="chip" translate="no">{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .note {
+    max-width: 300px;
+    font-size: 14px;
+    color: var(--mute);
+    margin: 0;
+  }
+
+  .toolkit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 0;
+  }
+
+  .toolkit-group {
+    background: var(--paper);
+    padding: 24px;
+  }
+
+  .toolkit-group dt {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 16px;
+  }
+
+  .toolkit-group dd {
+    margin: 0;
+  }
+
+  .chip-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule-strong);
+    white-space: nowrap;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .chip:hover {
+    border-color: var(--ink);
+    background-color: var(--field);
+  }
+</style>

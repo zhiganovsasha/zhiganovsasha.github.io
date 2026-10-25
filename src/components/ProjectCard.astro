@@ -1,0 +1,173 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  title: string;
+  result: string;
+  code: string;
+  href?: string;
+  action?: string;
+  status?: string;
+  image?: ImageMetadata;
+}
+
+const { title, result, code, href, action = 'View case study', status, image } =
+  Astro.props;
+---
+
+<article class="project-card">
+  <div class="cover" aria-hidden="true">
+    {image && (
+      <Image
+        src={image}
+        alt=""
+        class="cover-image"
+        widths={[400, 720]}
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
+    )}
+    <span class="cover-code" translate="no">{code}</span>
+  </div>
+  <div class="body">
+    <div class="title-row">
+      <h3>{title}</h3>
+      {status && <span class="status">{status}</span>}
+    </div>
+    <p class="result">{result}</p>
+    {
+      href && (
+        <a
+          class="case-link"
+          href={href}
+          aria-label={`${action}: ${title}${status ? ` (${status})` : ''}`}
+        >
+          {action}{' '}
+          <span aria-hidden="true">{href.startsWith('#') ? '↓' : '↗'}</span>
+        </a>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .project-card {
+    border: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    transition:
+      border-color var(--dur-normal) var(--ease-out),
+      transform var(--dur-normal) var(--ease-out);
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+
+  .cover {
+    aspect-ratio: 16 / 9;
+    background: var(--field);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--dur-normal) var(--ease-out);
+  }
+
+  .project-card:hover .cover-image {
+    transform: scale(1.02);
+  }
+
+  .cover-code {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: rgba(11, 11, 11, 0.75);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(4px);
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid rgba(11, 11, 11, 0.08);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .body {
+    padding: 22px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .title-row h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .status {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--signal);
+    border: 1px solid var(--signal);
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+
+  .result {
+    margin: 0;
+    font-size: 15px;
+    color: var(--mute);
+    flex: 1;
+  }
+
+  .case-link {
+    font-size: 15px;
+    font-weight: 550;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--signal);
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-block: 4px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .case-link:hover {
+    color: var(--signal);
+    border-color: var(--signal);
+  }
+
+  .case-link:active {
+    transform: translateY(1px);
+  }
+</style>

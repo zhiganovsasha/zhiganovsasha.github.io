@@ -1,0 +1,80 @@
+---
+import CaseStudy from '../../layouts/CaseStudy.astro';
+
+const stack = [
+  'FastAPI',
+  'React',
+  'Vite',
+  'TypeScript',
+  'ChromaDB',
+  'SQLite FTS5',
+  'Hybrid search',
+  'MCP server',
+];
+---
+
+<CaseStudy
+  pageTitle="SHUM Brain — Alexander Zhiganov"
+  title="SHUM Brain"
+  status="Development in progress"
+  role="A knowledge system for the studio, built with AI agents: hybrid search, source-anchored answers, a wiki, and a knowledge graph."
+>
+  <section class="case-section">
+    <h2>What It Is</h2>
+    <div class="case-content">
+      <p>
+        SHUM Brain is the studio's memory: projects, people, contractors,
+        clients, equipment, production decisions, pricing, and lessons
+        learned, turned into a system that answers questions with sources
+        attached. The project has a substantial working implementation and is
+        currently paused mid-development.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>What Is Implemented</h2>
+    <div class="case-content">
+      <ul>
+        <li>
+          Hybrid search combining ChromaDB vector retrieval with SQLite FTS5
+          full-text search.
+        </li>
+        <li>
+          Answers anchored to their sources, with confidence levels including
+          explicit conflict states.
+        </li>
+        <li>A wiki layer over the studio's knowledge.</li>
+        <li>A knowledge graph of projects, people, and decisions.</li>
+        <li>
+          An MCP server, so AI agents can query the brain directly as a tool.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Status and Direction</h2>
+    <div class="case-content">
+      <p>
+        Development in progress. Connecting SHUM Brain to the SHUM Telegram
+        Assistant is a planned future direction, not an existing production
+        integration.
+      </p>
+      <p>
+        Like the assistant, this product was built with AI agents as the
+        development workflow. Public demonstrations will use dedicated safe
+        demo data.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Stack</h2>
+    <div class="case-content">
+      <ul class="stack-list">
+        {stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</CaseStudy>

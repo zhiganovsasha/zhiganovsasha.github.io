@@ -1,0 +1,280 @@
+---
+// Explore index: four directions, one active, three unavailable with dialogs.
+---
+
+<section class="section explore" aria-labelledby="explore-title">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 id="explore-title">What Would You Like to Explore?</h2>
+    </div>
+
+    <ul class="dir-list" role="list">
+      <li>
+        <a
+          class="dir-row active"
+          href="/development"
+          aria-label="AI Development: Production products, cases, AI pipelines"
+        >
+          <span class="dir-name">AI Development</span>
+          <span class="dir-meta">Production products, cases, AI pipelines</span>
+          <span class="dir-arrow" aria-hidden="true">↗</span>
+        </a>
+      </li>
+      <li>
+        <button
+          class="dir-row muted-row"
+          type="button"
+          data-dialog="dialog-art"
+          aria-haspopup="dialog"
+          aria-controls="dialog-art"
+        >
+          <span class="dir-name">Art Projects</span>
+          <span class="dir-hint">Not part of this release</span>
+        </button>
+      </li>
+      <li>
+        <button
+          class="dir-row muted-row"
+          type="button"
+          data-dialog="dialog-education"
+          aria-haspopup="dialog"
+          aria-controls="dialog-education"
+        >
+          <span class="dir-name">Education &amp; Speaking</span>
+          <span class="dir-hint">Not part of this release</span>
+        </button>
+      </li>
+      <li>
+        <button
+          class="dir-row muted-row"
+          type="button"
+          data-dialog="dialog-blog"
+          aria-haspopup="dialog"
+          aria-controls="dialog-blog"
+        >
+          <span class="dir-name">Blog</span>
+          <span class="dir-hint">Not part of this release</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<dialog class="dir-dialog" id="dialog-art" aria-labelledby="dialog-art-title">
+  <div class="inner">
+    <h3 id="dialog-art-title">Art Projects</h3>
+    <p>
+      This direction is not part of the first release. The page is in progress
+      and will open in a later version. Meanwhile, AI Development is fully
+      available.
+    </p>
+    <div class="actions">
+      <a class="dialog-cta" href="/development"
+        >Explore AI Development <span aria-hidden="true">↗</span></a
+      >
+      <button
+        class="close"
+        type="button"
+        data-close
+        aria-label="Close Art Projects dialog"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<dialog
+  class="dir-dialog"
+  id="dialog-education"
+  aria-labelledby="dialog-education-title"
+>
+  <div class="inner">
+    <h3 id="dialog-education-title">Education &amp; Speaking</h3>
+    <p>
+      This direction is not part of the first release. The page is in progress
+      and will open in a later version. Meanwhile, AI Development is fully
+      available.
+    </p>
+    <div class="actions">
+      <a class="dialog-cta" href="/development"
+        >Explore AI Development <span aria-hidden="true">↗</span></a
+      >
+      <button
+        class="close"
+        type="button"
+        data-close
+        aria-label="Close Education and Speaking dialog"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="dir-dialog" id="dialog-blog" aria-labelledby="dialog-blog-title">
+  <div class="inner">
+    <h3 id="dialog-blog-title">Blog</h3>
+    <p>
+      This direction is not part of the first release. The page is in progress
+      and will open in a later version. Meanwhile, AI Development is fully
+      available.
+    </p>
+    <div class="actions">
+      <a class="dialog-cta" href="/development"
+        >Explore AI Development <span aria-hidden="true">↗</span></a
+      >
+      <button
+        class="close"
+        type="button"
+        data-close
+        aria-label="Close Blog dialog"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  let lastFocusedTrigger: HTMLElement | null = null;
+
+  document.querySelectorAll('[data-dialog]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const id = trigger.getAttribute('data-dialog');
+      const dialog = id && document.getElementById(id);
+      if (dialog instanceof HTMLDialogElement) {
+        lastFocusedTrigger = trigger as HTMLElement;
+        dialog.showModal();
+      }
+    });
+  });
+
+  document.querySelectorAll('dialog.dir-dialog').forEach((dialog) => {
+    const el = dialog as HTMLDialogElement;
+    const returnFocus = () => {
+      if (lastFocusedTrigger) {
+        lastFocusedTrigger.focus();
+        lastFocusedTrigger = null;
+      }
+    };
+
+    el.addEventListener('close', returnFocus);
+
+    el.addEventListener('click', (event) => {
+      if (event.target === el) el.close();
+    });
+
+    el.querySelector('[data-close]')?.addEventListener('click', () => {
+      el.close();
+    });
+  });
+</script>
+
+<style>
+  .dir-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .dir-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    gap: 24px;
+    width: 100%;
+    min-width: 0;
+    padding: clamp(20px, 3vw, 34px) 8px;
+    border: 0;
+    border-top: 1px solid var(--rule);
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--ink);
+    transition:
+      background var(--dur-normal) var(--ease-out),
+      color var(--dur-normal) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .dir-row:active {
+    transform: translateY(1px);
+  }
+
+  .dir-name {
+    font-size: clamp(30px, 4.6vw, 58px);
+    font-weight: 660;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
+  .dir-meta {
+    font-size: 14px;
+    color: var(--mute);
+  }
+
+  .dir-arrow {
+    font-size: clamp(24px, 3vw, 36px);
+    transition:
+      transform var(--dur-normal) var(--ease-out),
+      color var(--dur-normal) var(--ease-out);
+  }
+
+  .dir-row.active:hover,
+  .dir-row.active:focus-visible {
+    background: var(--ink);
+    color: #fff;
+    transform: translateX(8px);
+  }
+
+  .dir-row.active:hover .dir-meta {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .dir-row.active:hover .dir-arrow {
+    transform: translate(4px, -4px);
+    color: var(--signal);
+  }
+
+  .muted-row {
+    cursor: pointer;
+  }
+
+  .muted-row .dir-name {
+    color: var(--faint);
+    transition: color var(--dur-normal) var(--ease-out);
+  }
+
+  .muted-row .dir-hint {
+    font-size: 13px;
+    color: var(--faint);
+    opacity: 0;
+    transition: opacity var(--dur-normal) var(--ease-out);
+  }
+
+  .muted-row:hover .dir-name,
+  .muted-row:focus-visible .dir-name {
+    color: var(--mute);
+  }
+
+  .muted-row:hover .dir-hint,
+  .muted-row:focus-visible .dir-hint {
+    opacity: 1;
+  }
+
+  @media (max-width: 720px) {
+    .dir-row {
+      grid-template-columns: 1fr auto;
+    }
+
+    .dir-meta {
+      display: none;
+    }
+  }
+</style>

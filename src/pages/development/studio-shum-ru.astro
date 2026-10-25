@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import CaseStudy from '../../layouts/CaseStudy.astro';
+import cover from '../../assets/studio-shum-cover.jpg';
+
+const stack = [
+  'Astro 7',
+  'Node.js',
+  'SQLite',
+  'Sharp',
+  'Typograf',
+  'Three.js',
+  'Playwright',
+  'Nginx',
+  'GitHub Actions',
+  'Deploy-package verification',
+  'Smoke tests',
+  'Atomic deploy and rollback',
+];
+---
+
+<CaseStudy
+  pageTitle="studio-shum.ru — Alexander Zhiganov"
+  title="studio-shum.ru"
+  status="Production"
+  role="An urgent rebuild under real pressure: restore availability, keep every URL, and never lose a lead again."
+>
+  <section class="case-section">
+    <h2>Production site</h2>
+    <div class="case-content">
+      <figure class="case-figure">
+        <Image
+          src={cover}
+          alt="Studio SHUM production homepage rebuilt and deployed on controlled infrastructure"
+          class="case-img"
+          widths={[600, 1000, 1400]}
+          sizes="(max-width: 900px) 100vw, 65vw"
+        />
+        <figcaption>Production homepage of studio-shum.ru rebuilt with Astro on self-hosted infrastructure</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>The Problem</h2>
+    <div class="case-content">
+      <p class="pull-quote">
+        When studio-shum.ru was blocked in Russia, we started losing potential
+        leads. I urgently rebuilt the website on infrastructure we could
+        control.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>The Task</h2>
+    <div class="case-content">
+      <ul>
+        <li>Restore availability urgently.</li>
+        <li>Move the site to infrastructure we control.</li>
+        <li>
+          Preserve the existing materials, design, URLs, and media so that no
+          link and no search result breaks.
+        </li>
+        <li>Reduce the risk of losing leads during and after the move.</li>
+        <li>Keep the site's search visibility intact.</li>
+        <li>
+          Create a reproducible process for publishing and rolling back, so
+          the next emergency is a routine operation.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>How It Was Built</h2>
+    <div class="case-content">
+      <p>
+        The site was rebuilt as a static Astro project with a verified
+        deployment pipeline: every deploy package is checked before release,
+        smoke tests run against the live result, and releases are atomic with
+        an immediate rollback path. Images are optimized at build time with
+        Sharp, typography is normalized with Typograf, and Playwright guards
+        the result with end-to-end checks.
+      </p>
+      <p>
+        This case also shows that I build websites and landings as part of
+        ongoing work: from urgency and constraints to a controlled,
+        reproducible production process.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Stack</h2>
+    <div class="case-content">
+      <ul class="stack-list">
+        {stack.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</CaseStudy>

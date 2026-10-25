@@ -1,0 +1,204 @@
+---
+import Base from '../layouts/Base.astro';
+
+interface Props {
+  title: string;
+  role: string;
+  status?: string;
+  pageTitle: string;
+}
+
+const { title, role, status, pageTitle } = Astro.props;
+---
+
+<Base title={pageTitle} current="development">
+  <article class="case">
+    <header class="case-head">
+      <div class="wrap">
+        <a class="back" href="/development"
+          ><span aria-hidden="true">←</span> Back to AI Development</a
+        >
+        <p class="kicker case-kicker">
+          Case Study
+          {status && <span class="status">{status}</span>}
+        </p>
+        <h1 class="display case-title">{title}</h1>
+        <p class="lede case-role">{role}</p>
+      </div>
+    </header>
+    <div class="wrap case-body">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+<style>
+  .case-head {
+    padding-block: clamp(40px, 6vw, 88px) clamp(32px, 4vw, 56px);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding-block: 4px;
+    font-size: 14px;
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .back:hover {
+    color: var(--signal);
+  }
+
+  .back:active {
+    transform: translateX(-2px);
+  }
+
+  .case-kicker {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .status {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--signal);
+    border: 1px solid var(--signal);
+    padding: 4px 10px;
+  }
+
+  .case-title {
+    font-size: clamp(44px, 6.4vw, 88px);
+    margin-top: 18px;
+  }
+
+  .case-role {
+    margin-top: 24px;
+    max-width: 52ch;
+  }
+
+  .case-body {
+    padding-block: clamp(40px, 5vw, 72px) clamp(64px, 8vw, 120px);
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    gap: 24px clamp(32px, 5vw, 80px);
+  }
+
+  .case-body :global(h2) {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin: 0;
+    padding-top: 6px;
+  }
+
+  .case-body :global(.case-section) {
+    display: contents;
+  }
+
+  .case-body :global(.case-content) {
+    max-width: 72ch;
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .case-body :global(.case-content p) {
+    margin: 0 0 1em;
+  }
+
+  .case-body :global(.case-content a) {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--signal);
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      text-decoration-color var(--dur-fast) var(--ease-out);
+  }
+
+  .case-body :global(.case-content a:hover) {
+    color: var(--signal);
+    text-decoration-color: var(--signal);
+  }
+
+  .case-body :global(.case-content ul) {
+    margin: 0 0 1em;
+    padding-left: 1.2em;
+  }
+
+  .case-body :global(.case-content li) {
+    margin-bottom: 0.4em;
+  }
+
+  .case-body :global(.stack-list) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+  }
+
+  .case-body :global(.stack-list li) {
+    font-size: 14px;
+    padding: 6px 12px;
+    border: 1px solid var(--rule-strong);
+    margin: 0;
+    white-space: nowrap;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .case-body :global(.stack-list li:hover) {
+    border-color: var(--ink);
+    background-color: var(--field);
+  }
+
+  .case-body :global(.pull-quote) {
+    border-left: 2px solid var(--ink);
+    padding-left: 24px;
+    font-size: clamp(20px, 2.2vw, 26px);
+    font-weight: 550;
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+    margin: 0 0 1.2em;
+  }
+
+  .case-body :global(.case-figure) {
+    margin: 0 0 2em;
+    border: 1px solid var(--rule);
+    background: var(--field);
+    overflow: hidden;
+  }
+
+  .case-body :global(.case-img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .case-body :global(figcaption) {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--mute);
+    border-top: 1px solid var(--rule);
+    background: var(--bg);
+  }
+
+  @media (max-width: 760px) {
+    .case-body {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

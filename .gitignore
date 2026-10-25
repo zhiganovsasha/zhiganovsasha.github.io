@@ -9,3 +9,6 @@ preview-*.png
 mempalace.yaml
 entities.json
 .gstack/
+dist/
+opencode.json
+

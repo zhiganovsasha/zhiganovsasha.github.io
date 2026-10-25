@@ -1,0 +1,427 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Toolkit from '../../components/Toolkit.astro';
+import Skills from '../../components/Skills.astro';
+import assistantDiagram from '../../assets/shum-assistant-diagram.png';
+import studioShumCover from '../../assets/studio-shum-cover.jpg';
+import blobTrackerCover from '../../assets/blob-tracker-cover.jpg';
+
+const projects = [
+  {
+    code: 'SHUM / OPS',
+    title: 'SHUM Telegram Assistant',
+    result:
+      "A production assistant and admin panel that runs SHUM studio's daily operations: calendar, budgets, HR, client base, documents, and speech.",
+    href: '/development/shum-telegram-assistant',
+    image: assistantDiagram,
+  },
+  {
+    code: 'SHUM / WEB',
+    title: 'studio-shum.ru',
+    result:
+      'An urgent rebuild of the studio website on controlled infrastructure, preserving content, URLs, and search visibility.',
+    href: '/development/studio-shum-ru',
+    image: studioShumCover,
+  },
+  {
+    code: 'OPEN SOURCE',
+    title: 'Blob Tracker',
+    result:
+      'A free browser app that turns any video into blob-tracking motion graphics, born from a real production need.',
+    href: '/development/blob-tracker',
+    image: blobTrackerCover,
+  },
+  {
+    code: 'SHUM / MEMORY',
+    title: 'SHUM Brain',
+    result:
+      'A knowledge system for the studio: hybrid search, source-anchored answers, a wiki, and a knowledge graph.',
+    href: '/development/shum-brain',
+    status: 'Development in progress',
+  },
+  {
+    code: 'PIPELINE',
+    title: 'AI Video Production',
+    result:
+      'Production AI video pipelines: models, compute, and teams organized until the final video ships.',
+    href: '#ai-video-production',
+    action: 'Jump to Section',
+  },
+];
+---
+
+<Base
+  title="AI Development — Alexander Zhiganov"
+  description="Production products, cases, and AI pipelines built by Alexander Zhiganov with AI agents as the everyday development workflow."
+  current="development"
+>
+  <header class="page-head">
+    <div class="wrap">
+      <h1 class="display">AI Development</h1>
+      <p class="lede page-lede">
+        Working products, not demos. Every case here was conceived, designed,
+        and built with AI agents as the ordinary development and production
+        environment.
+      </p>
+    </div>
+  </header>
+
+  <section class="section catalog" aria-label="Projects">
+    <h2 class="sr-only">Selected Projects</h2>
+    <div class="wrap catalog-grid">
+      {projects.map((p) => <ProjectCard {...p} />)}
+    </div>
+  </section>
+
+  <section
+    class="section video-prod"
+    id="ai-video-production"
+    tabindex="-1"
+    aria-labelledby="video-prod-title"
+  >
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="video-prod-title">AI Video Production</h2>
+        <p class="note">
+          I have worked with AI since 2022. The focus here is production
+          pipelines, not pretty pictures.
+        </p>
+      </div>
+
+      <div
+        class="video-gallery"
+        data-gallery
+        role="region"
+        tabindex="0"
+        aria-roledescription="carousel"
+        aria-label="AI Video Production case studies (use left and right arrow keys to navigate)"
+      >
+        <div
+          class="video-slide"
+          data-slide
+          role="group"
+          aria-roledescription="slide"
+          aria-label="Case 1 of 2: Kirigami, 2023"
+        >
+          <div class="video-grid">
+            <div class="video-copy">
+              <h3>Kirigami, 2023</h3>
+              <p>
+                A Stable Diffusion video built as a production pipeline: 3,250
+                frames rendered across 6 computers in about 10 hours, then
+                edited and scored into a 130-second final piece in Premiere
+                and Ableton.
+              </p>
+              <p>
+                The work is the pipeline: defining the task, choosing models
+                and tools, organizing compute and the team around it, hitting
+                the problems that break a render at frame 2,000, and
+                solving them until the final video ships.
+              </p>
+            </div>
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/GHEVjcgCb8M"
+                title="Kirigami — AI video production case study"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="video-slide"
+          data-slide
+          role="group"
+          aria-roledescription="slide"
+          aria-label="Case 2 of 2: SHUM x MAER"
+          hidden
+        >
+          <div class="video-grid">
+            <div class="video-copy">
+              <h3>SHUM x MAER</h3>
+              <p>
+                A collaboration with the MAER media holding for March&nbsp;8: an
+                AI-generated video produced as a client project for the
+                holding's media surfaces.
+              </p>
+              <p>
+                The work is the pipeline: defining the task, choosing models
+                and tools, organizing compute and the team around it, and
+                shipping the final video on a production deadline.
+              </p>
+            </div>
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/eEAHjD6OBbI"
+                title="SHUM x MAER — AI video production case study"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-nav">
+          <button
+            class="gallery-arrow"
+            type="button"
+            data-prev
+            aria-label="Previous case study"
+            disabled><span aria-hidden="true">←</span></button
+          >
+          <span class="gallery-counter" data-counter aria-hidden="true"
+            >1 / 2</span
+          >
+          <button
+            class="gallery-arrow"
+            type="button"
+            data-next
+            aria-label="Next case study"
+            ><span aria-hidden="true">→</span></button
+          >
+        </div>
+        <div class="sr-only" aria-live="polite" data-gallery-status>
+          Showing case 1 of 2: Kirigami, 2023
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const gallery = document.querySelector('[data-gallery]');
+    if (gallery) {
+      const slides = Array.from(gallery.querySelectorAll('[data-slide]'));
+      const prev = gallery.querySelector('[data-prev]');
+      const next = gallery.querySelector('[data-next]');
+      const counter = gallery.querySelector('[data-counter]');
+      const status = gallery.querySelector('[data-gallery-status]');
+      let current = 0;
+
+      const stopVideo = (slide: Element) => {
+        const frame = slide.querySelector('iframe');
+        if (frame) frame.src = frame.src;
+      };
+
+      const show = (index: number) => {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        slides.forEach((slide, i) => {
+          const active = i === current;
+          if (!active && !slide.hasAttribute('hidden')) stopVideo(slide);
+          slide.toggleAttribute('hidden', !active);
+        });
+        if (prev) (prev as HTMLButtonElement).disabled = current === 0;
+        if (next)
+          (next as HTMLButtonElement).disabled =
+            current === slides.length - 1;
+        if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+        if (status) {
+          const activeHeading =
+            slides[current]?.querySelector('h3')?.textContent?.trim() || '';
+          status.textContent = `Showing case ${current + 1} of ${slides.length}: ${activeHeading}`;
+        }
+      };
+
+      prev?.addEventListener('click', () => show(current - 1));
+      next?.addEventListener('click', () => show(current + 1));
+
+      gallery.addEventListener('keydown', (e) => {
+        const evt = e as KeyboardEvent;
+        if (evt.key === 'ArrowLeft') {
+          show(current - 1);
+        } else if (evt.key === 'ArrowRight') {
+          show(current + 1);
+        }
+      });
+
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      gallery.addEventListener(
+        'touchstart',
+        (e) => {
+          const touch = (e as TouchEvent).changedTouches[0];
+          touchStartX = touch.screenX;
+          touchStartY = touch.screenY;
+        },
+        { passive: true }
+      );
+
+      gallery.addEventListener(
+        'touchend',
+        (e) => {
+          const touch = (e as TouchEvent).changedTouches[0];
+          const diffX = touch.screenX - touchStartX;
+          const diffY = touch.screenY - touchStartY;
+
+          if (Math.abs(diffX) >= 40 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX < 0) {
+              show(current + 1);
+            } else {
+              show(current - 1);
+            }
+          }
+        },
+        { passive: true }
+      );
+
+      show(0);
+    }
+  </script>
+
+  <section class="section statement" aria-label="Statement">
+    <div class="wrap">
+      <p class="statement-text">
+        A year ago, I had never written code. Today, I build and run my own
+        production apps, bots, and AI agents.
+      </p>
+    </div>
+  </section>
+
+  <Toolkit />
+  <Skills />
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(48px, 7vw, 104px) clamp(32px, 4vw, 56px);
+  }
+
+  .page-head h1 {
+    font-size: clamp(38px, 8vw, 120px);
+    margin-top: 0;
+  }
+
+  .page-lede {
+    margin-top: 28px;
+    max-width: 56ch;
+  }
+
+  .catalog {
+    border-top: 1px solid var(--rule);
+  }
+
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 24px;
+  }
+
+  .note {
+    max-width: 320px;
+    font-size: 14px;
+    color: var(--mute);
+    margin: 0;
+  }
+
+  .video-gallery {
+    touch-action: pan-y;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .video-copy h3 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .video-copy p {
+    margin: 0 0 1em;
+    color: var(--mute);
+  }
+
+  .video-slide[hidden] {
+    display: none;
+  }
+
+  .video-frame {
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--rule);
+    background: var(--ink);
+  }
+
+  .video-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .gallery-nav {
+    margin-top: clamp(28px, 4vw, 48px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .gallery-arrow {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    background: none;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .gallery-arrow:hover:not(:disabled),
+  .gallery-arrow:focus-visible {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #fff;
+  }
+
+  .gallery-arrow:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  .gallery-arrow:disabled {
+    color: var(--faint);
+    cursor: default;
+  }
+
+  .gallery-counter {
+    font-size: 14px;
+    color: var(--mute);
+    min-width: 4ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .statement {
+    background: var(--field);
+    border-top: 1px solid var(--rule);
+  }
+
+  .statement-text {
+    margin: 0;
+    max-width: 24ch;
+    font-size: clamp(30px, 4.4vw, 56px);
+    font-weight: 640;
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  @media (max-width: 860px) {
+    .video-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -12,6 +12,7 @@
         --ink: #0b0b0b;
         --wine: #6e1f2b;
         --rule: rgba(11, 11, 11, 0.18);
+        --gutter: clamp(24px, 3.125vw, 50px);
         font-family: Arial, Helvetica, sans-serif;
       }
 
@@ -28,14 +29,10 @@
         color: var(--ink);
       }
 
-      body {
-        min-width: 1180px;
-      }
-
       .page {
         position: relative;
-        width: 1600px;
-        min-height: 1000px;
+        width: 100%;
+        min-height: 100svh;
         overflow: hidden;
         background: var(--paper);
       }
@@ -47,7 +44,7 @@
         grid-template-columns: 1fr auto;
         align-items: center;
         height: 58px;
-        padding: 0 50px;
+        padding: 0 var(--gutter);
         border-bottom: 1px solid var(--rule);
         font-size: 17px;
       }
@@ -78,7 +75,7 @@
 
       .portrait-field {
         position: absolute;
-        inset: 0 590px 0 0;
+        inset: 0 36.875% 0 0;
         overflow: hidden;
         background: rgba(11, 11, 11, 0.025);
       }
@@ -86,8 +83,8 @@
       .portrait-background {
         position: absolute;
         top: -64px;
-        left: 285px;
-        width: 725px;
+        left: clamp(220px, 17.813vw, 285px);
+        width: clamp(620px, 45.313vw, 725px);
         height: auto;
         display: block;
         mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.38) 16%, #000000 36%);
@@ -106,8 +103,8 @@
         position: absolute;
         z-index: 30;
         top: -64px;
-        left: 285px;
-        width: 725px;
+        left: clamp(220px, 17.813vw, 285px);
+        width: clamp(620px, 45.313vw, 725px);
         height: auto;
         display: block;
         clip-path: inset(0 0 145px 0);
@@ -117,7 +114,7 @@
         position: absolute;
         z-index: 10;
         top: 116px;
-        left: 50px;
+        left: var(--gutter);
         width: 240px;
       }
 
@@ -146,14 +143,14 @@
         position: absolute;
         z-index: 10;
         top: 78px;
-        right: 50px;
-        width: 535px;
+        right: var(--gutter);
+        width: min(33.438vw, 535px);
       }
 
       .explore h2 {
         max-width: 530px;
         margin: 0 0 60px;
-        font-size: 67px;
+        font-size: clamp(52px, 4.188vw, 67px);
         line-height: 0.98;
         letter-spacing: -0.055em;
       }
@@ -188,14 +185,158 @@
         display: flex;
         align-items: center;
         min-height: 100px;
-        padding: 0 48px 6px;
+        padding: 0 var(--gutter) 6px;
         border-top: 1px solid var(--rule);
         border-bottom: 1px solid var(--rule);
         background: var(--paper);
-        font-size: 66px;
+        font-size: clamp(36px, 4.125vw, 66px);
         line-height: 0.98;
         letter-spacing: -0.055em;
-        white-space: nowrap;
+        text-wrap: balance;
+      }
+
+      @media (max-width: 1100px) {
+        .masthead {
+          grid-template-columns: 1fr;
+          gap: 13px;
+          height: auto;
+          min-height: 96px;
+          padding-top: 16px;
+          padding-bottom: 14px;
+        }
+
+        .nav {
+          justify-content: space-between;
+          gap: 18px;
+          font-size: 15px;
+        }
+
+        .hero {
+          height: auto;
+        }
+
+        .portrait-field {
+          position: relative;
+          inset: auto;
+          height: clamp(420px, 68vw, 535px);
+        }
+
+        .portrait-background,
+        .portrait {
+          top: -42px;
+          left: clamp(150px, 23vw, 190px);
+          width: clamp(535px, 80vw, 630px);
+        }
+
+        .portrait {
+          clip-path: inset(0 0 205px 0);
+        }
+
+        .identity {
+          top: 62px;
+          width: 210px;
+        }
+
+        .explore {
+          position: relative;
+          top: auto;
+          right: auto;
+          width: 100%;
+          padding: 42px var(--gutter) 34px;
+          border-top: 1px solid var(--rule);
+          background: var(--paper);
+        }
+
+        .explore h2 {
+          max-width: 680px;
+          margin-bottom: 38px;
+          font-size: clamp(52px, 8vw, 66px);
+        }
+
+        .directions li,
+        .directions li:first-child {
+          min-height: 74px;
+        }
+
+        .statement {
+          min-height: 0;
+          padding-top: 30px;
+          padding-bottom: 34px;
+          font-size: clamp(36px, 6.5vw, 52px);
+        }
+      }
+
+      @media (max-width: 560px) {
+        :root {
+          --gutter: 20px;
+        }
+
+        .masthead {
+          min-height: 92px;
+          gap: 12px;
+          padding-top: 14px;
+          padding-bottom: 12px;
+          font-size: 15px;
+        }
+
+        .nav {
+          gap: 8px;
+          font-size: 12px;
+        }
+
+        .portrait-field {
+          height: 390px;
+        }
+
+        .portrait-background,
+        .portrait {
+          top: -24px;
+          left: 15vw;
+          width: max(390px, 106vw);
+        }
+
+        .portrait {
+          clip-path: inset(0 0 122px 0);
+        }
+
+        .identity {
+          top: 42px;
+          width: 145px;
+        }
+
+        .identity h1 {
+          font-size: 25px;
+        }
+
+        .identity .rule {
+          margin: 19px 0 16px;
+        }
+
+        .identity p {
+          font-size: 16px;
+        }
+
+        .explore {
+          padding-top: 32px;
+          padding-bottom: 24px;
+        }
+
+        .explore h2 {
+          margin-bottom: 28px;
+          font-size: clamp(42px, 13vw, 52px);
+        }
+
+        .directions li,
+        .directions li:first-child {
+          min-height: 64px;
+          font-size: 23px;
+        }
+
+        .statement {
+          padding-top: 26px;
+          padding-bottom: 30px;
+          font-size: clamp(32px, 10vw, 42px);
+        }
       }
 
     </style>
