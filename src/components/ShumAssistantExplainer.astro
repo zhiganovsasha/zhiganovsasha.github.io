@@ -9,7 +9,7 @@
 </svg>
 
 <div class="explainer-intro">
-  <p class="lead">Messy messages, voice notes, screenshots, links, and PDFs go in. <b>Human-approved records</b> come out in Google Calendar and Google Sheets. This page explains the whole machine: nine topic windows, one webhook, three media pipelines, five AI providers, and the admin panel that watches all of it.</p>
+  <p class="lead">Messy messages, voice notes, screenshots, links, and PDFs go in. <b>Human-approved records</b> come out in Google Calendar and Google Sheets. This page explains the whole machine: 9 topic windows, 1 webhook, 3 media pipelines, 5 AI providers, and the admin panel that watches all of it.</p>
   <p class="meta">Production system, reviewed 26 October 2026 / Repository: shum-telegram-assistant / Live at assistant.studio-shum.ru</p>
   <nav class="toc" aria-label="Sections">
   <span class="toc-label">Read</span>
@@ -67,7 +67,7 @@
   <p class="ve-label">At a glance</p>
   <div class="kpis">
     <div class="kpi"><span class="ve-label">Bot topics</span><span class="val"><span data-count="9">9</span></span><span class="kpi-note">Nine function windows inside Telegram.</span></div>
-    <div class="kpi"><span class="ve-label">Error sources</span><span class="val"><span data-count="16">16</span></span><span class="kpi-note">One incident registry across functions and infrastructure.</span></div>
+    <div class="kpi"><span class="ve-label">Error sources</span><span class="val"><span data-count="16">16</span></span><span class="kpi-note">1 incident registry across functions and infrastructure.</span></div>
     <div class="kpi"><span class="ve-label">AI providers</span><span class="val"><span data-count="5">5</span></span><span class="kpi-note">Text, vision, speech, and image generation.</span></div>
     <div class="kpi"><span class="ve-label">Backend test files</span><span class="val"><span data-count="149">149</span></span><span class="kpi-note">149 test modules at review time. Historical snapshots mention 843 and 1,102 tests.</span></div>
     <div class="kpi"><span class="ve-label">Migrations</span><span class="val"><span data-count="43">43</span></span><span class="kpi-note">Durable schema history, not an in-memory prototype.</span></div>
@@ -86,7 +86,7 @@
     </div>
     <div class="note-box">
       <h3>What makes it a product, not a chatbot</h3>
-      <p>Durable state in PostgreSQL, permission-gated topics, idempotent writes, background workers for slow media, one ledger for AI spend, and an admin panel that shows services, costs, and recoverable errors.</p>
+      <p>Durable state in PostgreSQL, permission-gated topics, idempotent writes, background workers for slow media, 1 ledger for AI spend, and an admin panel that shows services, costs, and recoverable errors.</p>
     </div>
   </div>
 </section>
@@ -110,13 +110,13 @@
       </article>
       <article class="topic">
         <div class="topic-head"><h3>Avatars</h3><span class="chip ok">live</span></div>
-        <p class="io">Text / voice idea → adapted prompt → 1024×1024 PNG</p>
+        <p class="io">Text / voice idea → adapted prompt → 1024×1024&nbsp;PNG</p>
         <p>Translates and adapts the idea through Surplus, generates a sticker through Replicate, and composites the exact SHUM background color #F3AC03.</p>
       </article>
       <article class="topic">
         <div class="topic-head"><h3>Budget</h3><span class="chip ok">live</span></div>
         <p class="io">Receipt / text / voice → expense or income draft → finance Sheets</p>
-        <p>Handles monthly expenses, income history with the 8% AUSN tax, expected receipts, safe arithmetic formulas, and a knowledge base of recurring merchants.</p>
+        <p>Handles monthly expenses, income history with the 8%&nbsp;AUSN tax, expected receipts, safe arithmetic formulas, and a knowledge base of recurring merchants.</p>
       </article>
       <article class="topic">
         <div class="topic-head"><h3>PR and marketing</h3><span class="chip ok">live</span></div>
@@ -136,7 +136,7 @@
       <article class="topic">
         <div class="topic-head"><h3>Enquiries</h3><span class="chip ok">live</span></div>
         <p class="io">Website form → minimized receipt → Telegram topic</p>
-        <p>A protected ingress accepts enquiries from studio-shum.ru, uses a no-replay protocol, and anonymizes cards after 30 days.</p>
+        <p>A protected ingress accepts enquiries from studio-shum.ru, uses a no-replay protocol, and anonymizes cards after 30&nbsp;days.</p>
       </article>
       <article class="topic">
         <div class="topic-head"><h3>Estimates</h3><span class="chip warn">reserved</span></div>
@@ -175,7 +175,7 @@
       </div>
       <div class="stage-copy" aria-live="polite">
         <p data-stage-copy="1">Telegram sends a signed POST to <code>/webhook/telegram</code>. The same bot token must not be used by local polling and the production webhook at the same time.</p>
-        <p data-stage-copy="2" hidden>Caddy terminates HTTPS and proxies the request. Its write timeout is 60 seconds. The handler keeps a 5-second safety margin, so the application budget is 50 seconds.</p>
+        <p data-stage-copy="2" hidden>Caddy terminates HTTPS and proxies the request. Its write timeout is 60&nbsp;seconds. The handler keeps a 5-second safety margin, so the application budget is 50&nbsp;seconds.</p>
         <p data-stage-copy="3" hidden>The router reads <code>chat_id</code> and <code>message_thread_id</code>, finds the function, and checks <code>FunctionPermission</code>. Unknown topics and revoked users get an explicit refusal.</p>
         <p data-stage-copy="4" hidden>The ingest layer normalizes text, captions, forwarded provenance, entities, hidden links, and attachment descriptors. Diagnostic logs stay metadata-only.</p>
         <p data-stage-copy="5" hidden>Voice goes to Yandex SpeechKit. Images go to the Vision worker. PDFs go to Docling and OCR. Durable batches survive retries, restarts, and slow documents.</p>
@@ -191,7 +191,7 @@
         <button type="button" data-next aria-label="Next stage">→</button>
       </div>
     </div>
-    <figcaption><span class="fig-n">Fig. 3</span><span class="fig-text">Slow work leaves the request immediately. If a handler exceeds 50 seconds, the bot records an incident and returns HTTP 200 so Telegram does not retry in a storm.</span></figcaption>
+    <figcaption><span class="fig-n">Fig. 3</span><span class="fig-text">Slow work leaves the request immediately. If a handler exceeds 50&nbsp;seconds, the bot records an incident and returns HTTP 200 so Telegram does not retry in a storm.</span></figcaption>
   </figure>
 </section>
 
@@ -319,9 +319,9 @@
   <div class="split">
     <div>
       <p>The bot and the admin API are separate FastAPI processes built from the same image. They share PostgreSQL but not a request path. The bot owns Telegram updates and business writes. The admin panel is a read surface for state, access, services, journal, errors, and AI spend. Access is the main write surface, with a few explicit recovery actions.</p>
-      <p>Deployment is one `main` branch, GitHub Actions, Docker Compose, and Caddy. Migrations run as a one-shot service before the app starts. The deploy workflow builds the Vision profile, restores Google service-account credentials from a GitHub secret when needed, and verifies public `/health` after restart.</p>
+      <p>Deployment is one <code>main</code> branch, GitHub Actions, Docker Compose, and Caddy. Migrations run as a one-shot service before the app starts. The deploy workflow builds the Vision profile, restores Google service-account credentials from a GitHub secret when needed, and verifies public <code>/health</code> after restart.</p>
     </div>
-    <ul class="stack-list" aria-label="Stack">
+    <ul class="stack-list" aria-label="Stack" translate="no">
       <li>FastAPI</li><li>aiogram</li><li>PostgreSQL 16</li><li>React 19</li><li>Vite</li><li>TypeScript</li><li>Docker Compose</li><li>Caddy</li><li>GitHub Actions</li><li>Google Calendar API</li><li>Google Sheets API</li><li>Docling</li><li>OCRmyPDF</li><li>Tesseract</li><li>Yandex SpeechKit</li><li>Replicate</li><li>DeepSeek</li><li>Surplus</li><li>OpenRouter</li>
     </ul>
   </div>
@@ -359,7 +359,7 @@
         <div class="pipe-steps">
           <div class="pipe-step"><span class="dot"></span><span>Telegram sends OggOpus for voice, MP4 for a video note.</span></div>
           <div class="pipe-step"><span class="dot"></span><span>MP4 is converted to MP3 by FFmpeg through a short-lived seekable file in <code>/dev/shm</code>.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Yandex SpeechKit transcribes. Recognition routes by duration: ≤ 30 s synchronous, longer asynchronous.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Yandex SpeechKit transcribes. Recognition routes by duration: ≤&nbsp;30&nbsp;s synchronous, longer asynchronous.</span></div>
           <div class="pipe-step"><span class="dot"></span><span>The recognized text is injected into the topic as a normal text message.</span></div>
         </div>
         <p class="pipe-note">Header-only MP3 output is rejected. The temporary input is deleted in <code>finally</code>.</p>
@@ -382,7 +382,7 @@
           <div class="pipe-step"><span class="dot"></span><span>Follow-up messages in the same topic append to the active batch instead of being discarded.</span></div>
           <div class="pipe-step"><span class="dot"></span><span>The resumed card sees the combined text, captions, attachments, and full extracted PDF text.</span></div>
         </div>
-        <p class="pipe-note">Background timeout is 300 s. Worker lease is <code>max(90, timeout × 2)</code>.</p>
+        <p class="pipe-note">Background timeout is 300&nbsp;s. Worker lease is <code>max(90, timeout × 2)</code>.</p>
       </article>
     </div>
     <figcaption><span class="fig-n">Fig. 5</span><span class="fig-text">The slowest material never blocks the bot. Each pipeline stores enough state to finish after a restart.</span></figcaption>
@@ -440,7 +440,7 @@
         <tr><th>DeepSeek</th><td>Structured extraction for Calendar, HR, Budget, PR, and Client Base.</td><td>Tokens</td><td>Live wallet API</td></tr>
         <tr><th>OpenRouter</th><td>Additional model access and fallback paths.</td><td>Tokens</td><td>Live credits API</td></tr>
         <tr><th>Replicate</th><td><code>fofr/sticker-maker</code> avatars, composited to the exact <code>#F3AC03</code> background.</td><td>Predictions</td><td>Honest unsupported state</td></tr>
-        <tr><th>Yandex SpeechKit</th><td>Voice and video-note transcription. Sync at 30 s or less, async above 30 s.</td><td>Audio seconds</td><td>JWT → IAM → Cloud Billing</td></tr>
+        <tr><th>Yandex SpeechKit</th><td>Voice and video-note transcription. Sync at 30&nbsp;s or less, async above 30&nbsp;s.</td><td>Audio seconds</td><td>JWT → IAM → Cloud Billing</td></tr>
       </tbody>
     </table>
   </div>
@@ -462,22 +462,22 @@
     <div class="budget-frame">
       <svg class="ve-bars" viewBox="0 0 240 108" role="img" aria-label="The webhook budget is 50 seconds. Web fetch is 14 seconds. STT sync is 30 seconds. OCR gets 300 seconds in a background worker."><text y="12">Web fetch</text><rect x="84" y="5" width="4.67" height="14" rx="2"/><text x="96.67" y="12">14s</text><text y="40">STT sync</text><rect x="84" y="33" width="10" height="14" rx="2"/><text x="102" y="40">30s</text><text y="68">Webhook</text><rect class="hot" x="84" y="61" width="16.67" height="14" rx="2"/><text x="108.67" y="68">50s</text><text y="96">OCR</text><rect x="84" y="89" width="100" height="14" rx="2"/><text x="192" y="96">300s</text></svg>
       <div class="budget-notes">
-        <p><b>Synchronous, 50 s or less.</b> Web fetch, speech-to-text for short clips, and the webhook itself protect one shared budget. The bot must answer Telegram inside it.</p>
-        <p><b>Background, 300 s.</b> OCR is a separate worker with a separate lease. A long PDF can finish after the webhook has already returned.</p>
+        <p><b>Synchronous, 50&nbsp;s or less.</b> Web fetch, speech-to-text for short clips, and the webhook itself protect one shared budget. The bot must answer Telegram inside it.</p>
+        <p><b>Background, 300&nbsp;s.</b> OCR is a separate worker with a separate lease. A long PDF can finish after the webhook has already returned.</p>
       </div>
     </div>
-    <figcaption><span class="fig-n">Fig. 7</span><span class="fig-text">Most limits protect the 50-second synchronous webhook. OCR is allowed 300 seconds only because it runs out of band.</span></figcaption>
+    <figcaption><span class="fig-n">Fig. 7</span><span class="fig-text">Most limits protect the 50-second synchronous webhook. OCR is allowed 300&nbsp;seconds only because it runs out of band.</span></figcaption>
   </figure>
   <div class="ve-table">
     <table>
       <thead><tr><th>Failure mode</th><th>Mechanism that answers it</th><th>Visible result</th></tr></thead>
       <tbody>
-        <tr><th>Telegram retry storm</th><td>A 50 s handler budget. On expiry: record <code>telegram_webhook:timeout:TimeoutError</code> and return HTTP 200. Five fast successful updates recover the incident.</td><td><span class="chip ok">self-healing</span></td></tr>
+        <tr><th>Telegram retry storm</th><td>A 50&nbsp;s handler budget. On expiry: record <code>telegram_webhook:timeout:TimeoutError</code> and return HTTP 200. Five fast successful updates recover the incident.</td><td><span class="chip ok">self-healing</span></td></tr>
         <tr><th>Double tap on Save</th><td>Atomic claim with <code>with_for_update()</code>, version increment, one-use sibling tokens, and <code>reconciliation_required</code> after an ambiguous timeout.</td><td><span class="chip ok">no replay</span></td></tr>
         <tr><th>Google call blocks the bot</th><td>Synchronous Sheets and Calendar calls are offloaded to worker threads with <code>asyncio.to_thread</code> or <code>_run_blocking</code>.</td><td><span class="chip ok">no frozen loop</span></td></tr>
         <tr><th>Worker dies on a long OCR</th><td>Adaptive lease <code>max(90, timeout × 2)</code>, explicit state transitions, and a stale-claim sweep on the next loop.</td><td><span class="chip ok">durable job</span></td></tr>
         <tr><th>Duplicate candidate or client</th><td>Deduplication by phone, site, domain, or URL. Preview before write. HR writes one person to one primary sheet.</td><td><span class="chip ok">one row</span></td></tr>
-        <tr><th>WAF or DDoS-Guard tarpit</th><td>Chrome 142 headers, TCP/TLS connect cap, bounded fast retry, one 14 s deadline per URL, 5 MB cap.</td><td><span class="chip ok">bounded fetch</span></td></tr>
+        <tr><th>WAF or DDoS-Guard tarpit</th><td>Chrome 142 headers, TCP/TLS connect cap, bounded fast retry, one 14&nbsp;s deadline per URL, 5&nbsp;MB cap.</td><td><span class="chip ok">bounded fetch</span></td></tr>
         <tr><th>PII leaks into AI or logs</th><td>Personal Data is read-only, never sent to AI, never stored in PostgreSQL or incidents. Incidents carry metadata only. HR and Budget comments are human-only.</td><td><span class="chip ok">contained</span></td></tr>
         <tr><th>Restart during a write</th><td>Durable drafts, media batches, continuation batches, idempotency keys, and a startup recovery sweep for stale saving drafts.</td><td><span class="chip ok">recoverable</span></td></tr>
       </tbody>
@@ -493,8 +493,8 @@
             <tr><th><code>TELEGRAM_HANDLER_BUDGET_SECONDS</code></th><td class="num">50</td><td>The synchronous webhook response. Never applied to background tasks.</td></tr>
             <tr><th><code>ATTACHMENT_ENRICHMENT_TIMEOUT_SECONDS</code></th><td class="num">300</td><td>The OCR worker. Cutting it to 50 s would kill valid PDFs.</td></tr>
             <tr><th><code>WEB_FETCH_TIMEOUT_SECONDS</code></th><td class="num">14</td><td>One URL across HR, PR, Client Base, and Calendar. Validator ceiling is 18 s.</td></tr>
-            <tr><th><code>PENDING_HR_BATCH_TTL_SECONDS</code></th><td class="num">1 800</td><td>The HR preview confirmation token: 30 minutes.</td></tr>
-            <tr><th>Saving-draft lease</th><td class="num">300</td><td>Recovery of writes stuck in <code>saving</code> for five minutes.</td></tr>
+            <tr><th><code>PENDING_HR_BATCH_TTL_SECONDS</code></th><td class="num">1 800</td><td>The HR preview confirmation token: 30&nbsp;minutes.</td></tr>
+            <tr><th>Saving-draft lease</th><td class="num">300</td><td>Recovery of writes stuck in <code>saving</code> for 5&nbsp;minutes.</td></tr>
             <tr><th>Vision work directory</th><td>tmpfs</td><td><code>/tmp/shum-vision-work</code>, outside the persistent volume.</td></tr>
           </tbody>
         </table>
@@ -534,7 +534,7 @@
       <article class="admin-card">
         <div class="topic-head"><h3>Error logs</h3><span class="chip ok">read</span></div>
         <p class="cmd">/errors</p>
-        <p>Sixteen sources, domain filters, repeat counts, last-seen time, expandable technical context, and self-healing incidents.</p>
+        <p>16 sources, domain filters, repeat counts, last-seen time, expandable technical context, and self-healing incidents.</p>
       </article>
       <article class="admin-card">
         <div class="topic-head"><h3>AI and spend</h3><span class="chip ok">read</span></div>
@@ -544,7 +544,7 @@
       <article class="admin-card">
         <div class="topic-head"><h3>Onboarding</h3><span class="chip ok">read</span></div>
         <p class="cmd">/tutorial</p>
-        <p>A twelve-step onboarding wizard for new team members: the bot, each function, the admin panel, and the backlog.</p>
+        <p>A 12-step onboarding wizard for new team members: the bot, each function, the admin panel, and the backlog.</p>
       </article>
       <article class="admin-card">
         <div class="topic-head"><h3>Design rule</h3><span class="chip ok">visible</span></div>
@@ -567,7 +567,7 @@
         <tr><th>Calendar</th><td>Google Calendar SHUM</td><td>Create, update, delete, restore</td><td>Preview, duplicate detection, JSON-LD poster parsing, external guests through a service account with a 403 fallback.</td></tr>
         <tr><th>HR</th><td>HR workbook, ten profile sheets</td><td>One primary sheet per person</td><td>Candidate deduplication, PDF continuation, human-only <code>Comment</code>, one-click save state machine.</td></tr>
         <tr><th>Client Base</th><td>Five active client sheets</td><td>Append or update one row</td><td>Website and domain deduplication, media and PDF input, durable post-save comment.</td></tr>
-        <tr><th>Budget</th><td>Finance workbook, three active sheets</td><td>Expenses, income, expected receipts</td><td>8% AUSN tax, safe arithmetic formulas, raw-cell reads, no-replay save.</td></tr>
+        <tr><th>Budget</th><td>Finance workbook, 3 active sheets</td><td>Expenses, income, expected receipts</td><td>8%&nbsp;AUSN tax, safe arithmetic formulas, raw-cell reads, no-replay save.</td></tr>
         <tr><th>PR and Marketing</th><td>PR workbook</td><td>Append or update in place</td><td>URL deduplication, text-only HTML cards, SSRF-safe enrichment, edit-in-place.</td></tr>
         <tr><th>Personal Data</th><td>Dedicated personal-data workbook</td><td>Read-only</td><td>Never sent to AI, never persisted, never logged. One-tap copy cards.</td></tr>
         <tr><th>Website Enquiries</th><td>Telegram topic plus admin receipts</td><td>Ingress and anonymize</td><td>Protected endpoint, minimized receipt, no-replay protocol, 30-day anonymization.</td></tr>
@@ -598,7 +598,22 @@ const explainer = document.querySelector('.lifecycle');
     let current = 1;
     let timer;
 
-    const show = (value) => {
+    const getStageFromUrl = () => {
+      const hashMatch = window.location.hash.match(/^#stage-(\d+)$/);
+      if (hashMatch) {
+        const val = parseInt(hashMatch[1], 10);
+        if (!isNaN(val) && val >= 1 && val <= stages.length) return val;
+      }
+      const params = new URLSearchParams(window.location.search);
+      const stageParam = params.get('stage');
+      if (stageParam) {
+        const val = parseInt(stageParam, 10);
+        if (!isNaN(val) && val >= 1 && val <= stages.length) return val;
+      }
+      return null;
+    };
+
+    const show = (value, syncUrl = true) => {
       current = Math.min(Math.max(value, 1), stages.length);
       stages.forEach((stage) => {
         const stageNumber = Number(stage.dataset.stage);
@@ -612,6 +627,9 @@ const explainer = document.querySelector('.lifecycle');
       if (position) position.textContent = current + ' / ' + stages.length;
       if (previous) previous.disabled = current === 1;
       if (next) next.disabled = current === stages.length;
+      if (syncUrl) {
+        history.replaceState(null, '', '#stage-' + current);
+      }
     };
 
     const stop = () => {
@@ -640,7 +658,19 @@ const explainer = document.querySelector('.lifecycle');
       }, 1600);
     });
 
-    show(1);
+    const syncFromUrl = () => {
+      const urlStage = getStageFromUrl();
+      if (urlStage !== null && urlStage !== current) {
+        stop();
+        show(urlStage, false);
+      }
+    };
+
+    window.addEventListener('popstate', syncFromUrl);
+    window.addEventListener('hashchange', syncFromUrl);
+
+    const initial = getStageFromUrl();
+    show(initial !== null ? initial : 1, initial !== null);
   }
 </script>
 
@@ -1131,6 +1161,11 @@ details.deep summary {
   cursor: pointer;
 }
 
+details.deep summary:hover {
+  color: var(--ink);
+  background: var(--field);
+}
+
 details.deep summary::-webkit-details-marker {
   display: none;
 }
@@ -1196,6 +1231,11 @@ details.deep .deep-body > *:first-child {
 
 .stage[data-state='complete'] {
   background: var(--field);
+}
+
+.stage:hover:not([data-state='current']) {
+  background: var(--field);
+  color: var(--ink);
 }
 
 .stage[data-state='current'] {
