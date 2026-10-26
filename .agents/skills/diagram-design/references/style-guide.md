@@ -1,8 +1,10 @@
+Profile: zhiganovsasha.github.io (saved 2026-10-26)
+
 # Style Guide
 
 **The single source of truth for colors, typography, and tokens.** Every diagram draws from this — not from hex values inlined in other reference files. If you want to change the visual skin of Diagram Design, change this file.
 
-Default skin is a cool editorial palette — white-smoke paper, jet-black ink, atomic-tangerine accent, blue-slate muted. It's designed to look good out of the box; swap these values (or run [`onboarding.md`](onboarding.md)) and every new diagram inherits the new skin without touching any type-specific logic.
+Active skin matches zhiganovsasha.github.io: pure-white paper, near-black ink, crimson signal accent, warm off-white secondary fill, Inter everywhere — the site is deliberately all-sans. It's designed to sit inside the site's case-study pages without reading as a foreign embed; swap these values (or run [`onboarding.md`](onboarding.md)) and every new diagram inherits the new skin without touching any type-specific logic.
 
 To generate your own from a website URL, see [`onboarding.md`](onboarding.md).
 
@@ -14,22 +16,20 @@ To generate your own from a website URL, see [`onboarding.md`](onboarding.md).
 
 Every token is referred to by **semantic role**, not by its hex value. Type references (`type-*.md`) and SKILL.md say `accent`, not `#f7591f`.
 
-| Role | Purpose | Default (light) | Default (dark) |
+| Role | Purpose | Active (light) | Dark (unused) |
 |---|---|---|---|
-| `paper` | Page background, default node fill | `#f5f5f5` (white-smoke) | `#2d3142` (jet-black) |
-| `paper-2` | Diagram container bg, secondary fill | `#ececec` | `#393e53` |
-| `ink` | Primary text, primary stroke | `#2d3142` (jet-black) | `#f5f5f5` (white-smoke) |
-| `muted` | Secondary text, default arrow stroke | `#4f5d75` (blue-slate) | `#bfc0c0` (silver) |
-| `soft` | Sublabels, boundary labels | `#7a8399` | `#8e98ac` |
-| `rule` | Hairline borders | `rgba(45,49,66,0.12)` | `rgba(245,245,245,0.12)` |
-| `rule-solid` | Stronger borders, baselines | `#bfc0c0` (silver) | `rgba(191,192,192,0.25)` |
-| `accent` | Focal / 1–2 max per diagram | `#eb6c36` (atomic-tangerine) | `#f08a59` |
-| `accent-tint` | Fill for accent-bordered boxes | `rgba(235,108,54,0.08)` | `rgba(240,138,89,0.10)` |
+| `paper` | Page background, default node fill | `#ffffff` (pure white, matches site `--paper`) | `#0b0b0b` |
+| `paper-2` | Diagram container bg, secondary fill | `#f5f4f1` (warm field, site `--field`) | `#1c1c1c` |
+| `ink` | Primary text, primary stroke | `#0b0b0b` (site `--ink`) | `#f5f4f1` |
+| `muted` | Secondary text, default arrow stroke | `rgba(11,11,11,0.56)` (site `--mute`) | `#bfc0c0` |
+| `soft` | Sublabels, boundary labels | `rgba(11,11,11,0.48)` (site `--faint`) | `#8e98ac` |
+| `rule` | Hairline borders | `rgba(11,11,11,0.14)` (site `--rule`) | `rgba(245,244,241,0.12)` |
+| `rule-solid` | Stronger borders, baselines | `rgba(11,11,11,0.32)` (site `--rule-strong`) | `rgba(191,192,192,0.25)` |
+| `accent` | Focal / 1–2 max per diagram | `#960018` (crimson signal, site `--signal`) | `#e0435c` |
+| `accent-tint` | Fill for accent-bordered boxes | `rgba(150,0,24,0.06)` | `rgba(224,67,92,0.10)` |
 | `link` | HTTP/API calls, external arrows | `#2e5aa8` | `#6a95d8` |
 
-> **Brand palette source:** this skin maps to a five-color brand palette — `jet-black #2d3142`, `silver #bfc0c0`, `white-smoke #f5f5f5`, `atomic-tangerine #eb6c36`, `blue-slate #4f5d75`. The `soft`, `rule`, and `link` tokens are derived (lighter slate, ink-at-opacity, and a saturated variant in the blue-slate hue family) to cover roles the brand palette doesn't name directly.
-
-> **Note:** The pre-baked example HTML files in `assets/` were built under an earlier skin. Regenerating them against the current `style-guide.md` is a v5.1 task. New diagrams the skill produces will use the tokens above.
+> **Brand palette source:** zhiganovsasha.github.io case-study pages. Ink is near-black on pure white; the one accent is crimson `#960018` used sparingly as the site's `--signal`. `paper-2` matches the site's warm `--field` so diagrams can sit in framed containers without a hue clash. `link` is retained from the default skin for HTTP/API arrows; it is a technical annotation color, not a brand color.
 
 ### Inversion rule (light → dark)
 
@@ -73,20 +73,23 @@ A self-contained palette for the terminal-window primitive (see [primitive-termi
 
 | Role | Family | Size | Weight | Usage |
 |---|---|---|---|---|
-| `title` | Instrument Serif | 1.75rem | 400 | Page H1 |
-| `node-name` | Geist (sans) | 12px | 600 | Human-readable labels |
-| `sublabel` | Geist Mono | 9px | 400 | Port, protocol, URL, field type |
-| `eyebrow` | Geist Mono | 7–8px | 500, tracked 0.18em, uppercase | Type tags, axis labels |
-| `arrow-label` | Geist Mono | 8px | 400, tracked 0.06em | Arrow annotations |
-| `callout` | Instrument Serif *italic* | 14px | 400 | Editorial asides only |
+| `title` | Inter (sans) | clamp(32px, 4.6vw, 60px) | 680, tracked -0.04em | Page H1, section heads — matches site `.section-head h2` |
+| `node-name` | Inter (sans) | 12px | 600 | Human-readable labels |
+| `sublabel` | system mono | 9px | 400 | Port, protocol, URL, field type |
+| `eyebrow` | system mono | 7–8px | 500, tracked 0.18em, uppercase | Type tags, axis labels |
+| `arrow-label` | system mono | 8px | 400, tracked 0.06em | Arrow annotations |
+| `callout` | Inter (sans) *italic* | 14px | 400 | Editorial asides only |
 
 ### Font stack
 
-```html
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+No external font loading. The site ships Inter Variable locally via `@fontsource-variable/inter`; diagrams inherit it when embedded in site pages. Standalone mocks rely on the system-installed Inter / system-ui fallback — do not add Google Fonts links.
+
+```css
+--font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+--font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
 ```
 
-**Load-bearing rule:** Mono is for *technical* content (ports, commands, URLs, field types). Names go in Geist sans. Page title is Instrument Serif. Italic Instrument Serif is reserved for annotation callouts (see [primitive-annotation.md](primitive-annotation.md)). **Never JetBrains Mono** as a blanket "dev" font.
+**Load-bearing rule:** Mono is for *technical* content (ports, commands, URLs, field types) — inside SVGs use the system mono stack above, matching the site's own components (`Skills.astro`, `ShumAssistantExplainer.astro`). Everything else goes in Inter — the site's only typeface. The site has no serif anywhere, so titles are Inter 680 with tight -0.04em tracking, exactly like site headings; an italic Inter callout is the annotation register (see [primitive-annotation.md](primitive-annotation.md)). **Never JetBrains Mono or Geist Mono** as a blanket "dev" font.
 
 ---
 
@@ -134,7 +137,7 @@ Four options:
 - **Contrast**: `ink` must hit WCAG AA on `paper`. `muted` must hit AA on `paper` for 11px+ text.
 - **One accent**: pick one color for `accent`. Two accents erases the focal signal.
 - **No rainbow palette**: if your brand ships 8 colors, pick 3 (paper, ink, accent). The rest become `muted` variants.
-- **Serif + sans + mono**: three families, not more. If brand typography is all sans, keep Instrument Serif for `title` and `callout` anyway — the contrast is load-bearing.
+- **Sans + mono only (this skin)**: the site ships exactly one typeface — Inter Variable. All diagram roles use it, with the system mono stack for technical labels. Do not reintroduce a serif or a packaged mono (Geist Mono, JetBrains Mono); both read as foreign chrome inside site pages.
 - **Paper is warm-neutral, not pure white**: pure white turns the design sterile. Pick a cream, bone, or light grey with a hint of warmth.
 - **Dot pattern is optional, not default**: the 22×22 dot pattern is an opt-in "dotted paper" variant (good for long-form editorial hero diagrams). The default background is a clean `paper` fill, no pattern. When the pattern is enabled, it should sit at ~10% opacity of `ink` on `paper` — visible but quiet.
 - **Container is clean by default**: the diagram sits directly on the page paper, no secondary container background or border. A framed variant (`paper-2` bg + `rule` border + 8px radius + padding) is available as an opt-in for card-heavy layouts, but don't reach for it by default — the extra chrome fights the figure.
