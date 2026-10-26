@@ -1,28 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import CaseStudy from '../../layouts/CaseStudy.astro';
-import diagram from '../../assets/shum-assistant-diagram.png';
-
-const stack = [
-  'FastAPI',
-  'aiogram',
-  'PostgreSQL 16',
-  'React 19',
-  'Vite',
-  'TypeScript',
-  'Docker',
-  'Caddy',
-  'GitHub Actions',
-  'Google Calendar',
-  'Google Sheets',
-  'Docling',
-  'OCRmyPDF',
-  'Tesseract',
-  'Yandex SpeechKit',
-  'Replicate',
-  'DeepSeek',
-  'OpenRouter',
-];
+import ShumAssistantExplainer from '../../components/ShumAssistantExplainer.astro';
 ---
 
 <CaseStudy
@@ -31,70 +9,7 @@ const stack = [
   status="Production"
   role="I conceived, designed, and built the product end to end using AI agents as my development workflow."
 >
-  <section class="case-section">
-    <h2>Architecture</h2>
-    <div class="case-content">
-      <figure class="case-figure">
-        <Image
-          src={diagram}
-          alt="SHUM Telegram Assistant active functions and production architecture map"
-          class="case-img"
-          widths={[600, 1000, 1400]}
-          sizes="(max-width: 900px) 100vw, 65vw"
-        />
-        <figcaption>Active functions map and production integration pipeline</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="case-section">
-    <h2>What It Is</h2>
-    <div class="case-content">
-      <p>
-        An internal operational assistant for SHUM, my studio, built around a
-        Telegram bot, Google Workspace integrations, and a browser admin panel.
-        It runs in production and handles the studio's daily work: calendar,
-        budgets, HR, client base, PR drafts, documents, and speech.
-      </p>
-    </div>
-  </section>
-
-  <section class="case-section">
-    <h2>What It Does</h2>
-    <div class="case-content">
-      <ul>
-        <li>
-          Captures events into Google Calendar from text, voice, video notes,
-          and web poster links, with multi-turn clarification dialogs.
-        </li>
-        <li>
-          Transcribes voice messages and video notes in production through
-          Yandex SpeechKit.
-        </li>
-        <li>
-          Reads documents and image-heavy PDFs through a Docling, OCRmyPDF,
-          and Tesseract pipeline, then feeds the result into HR and client
-          workflows.
-        </li>
-        <li>
-          Keeps budgets and income history in Google Sheets, including tax
-          calculations and durable, no-replay draft saving.
-        </li>
-        <li>
-          Generates avatar stickers through Replicate inside a dedicated
-          Telegram topic.
-        </li>
-        <li>
-          Tracks every AI call through a unified usage gateway with per-model
-          accounting in the admin panel.
-        </li>
-        <li>
-          Records errors from all bot topics and infrastructure sources into
-          one journal with automatic self-healing.
-        </li>
-      </ul>
-    </div>
-  </section>
+  <ShumAssistantExplainer />
 
   <section class="case-section">
     <h2>How It Was Built</h2>
@@ -113,15 +28,6 @@ const stack = [
         an agentic workflow, with me directing, reviewing, and accepting the
         work.
       </p>
-    </div>
-  </section>
-
-  <section class="case-section">
-    <h2>Stack</h2>
-    <div class="case-content">
-      <ul class="stack-list">
-        {stack.map((item) => <li>{item}</li>)}
-      </ul>
     </div>
   </section>
 </CaseStudy>

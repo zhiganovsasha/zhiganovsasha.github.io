@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHUM Telegram Assistant — System Explainer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper:        #ffffff;
+      --paper-2:      #f5f4f1;
+      --ink:          #0b0b0b;
+      --muted:        rgba(11,11,11,0.56);
+      --muted-solid:  #6f6f6f;
+      --soft:         rgba(11,11,11,0.48);
+      --soft-solid:   #8a8a8a;
+      --rule:         rgba(11,11,11,0.14);
+      --rule-solid:   rgba(11,11,11,0.32);
+      --accent:       #960018;
+      --accent-tint:  rgba(150,0,24,0.06);
+      --accent-mid:   rgba(150,0,24,0.50);
+      --link:         #2e5aa8;
+      --font-sans:   'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+      --font-mono:   ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.55;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 48px 32px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .container { max-width: 1180px; margin: 0 auto; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .header { margin-bottom: 56px; }
+
+    .header-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6.4vw, 88px);
+      font-weight: 680;
+      letter-spacing: -0.04em;
+      line-height: 0.98;
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+
+    .subtitle {
+      font-size: clamp(19px, 1.6vw, 23px);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+      color: var(--muted);
+      max-width: 56ch;
+      text-wrap: pretty;
+    }
+
+    /* ── Sections ───────────────────────────────────────────────── */
+    section.diagram-section { margin-bottom: 88px; }
+
+    .section-head { margin-bottom: 24px; }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: clamp(32px, 4.6vw, 60px);
+      font-weight: 680;
+      letter-spacing: -0.04em;
+      line-height: 1.02;
+      margin-bottom: 12px;
+      text-wrap: balance;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 62ch;
+      text-wrap: pretty;
+    }
+
+    .diagram-container { overflow-x: auto; }
+
+    svg { width: 100%; height: auto; display: block; }
+
+    figcaption {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 78ch;
+    }
+
+    figcaption span {
+      flex: 0 0 auto;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    /* ── Cards ──────────────────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 0.9fr;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .card-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .card-dot.ink   { background: var(--ink); }
+    .card-dot.muted { background: var(--muted-solid); }
+    .card-dot.coral { background: var(--accent); }
+    .card-dot.link  { background: var(--link); }
+
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+
+    .card ul { list-style: none; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .card li { margin-bottom: 5px; padding-left: 14px; position: relative; }
+
+    .card li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--rule-solid);
+      font-size: 12px;
+    }
+
+    .card li strong { color: var(--ink); font-weight: 600; }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--soft);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <p class="header-eyebrow">System Explainer · SHUM Studio · 2026-10-26</p>
+      <h1>SHUM Telegram Assistant</h1>
+      <p class="subtitle">How a Telegram chat becomes the studio's operating system: unstructured messages, voice notes, forwarded portfolios and receipts come in, structured drafts come back for human approval, and only confirmed records reach Google Calendar and the studio's spreadsheets.</p>
+    </div>
+
+    <!-- ================================================================
+         FIG 1 — ARCHITECTURE (type: architecture, zones = trust boundaries)
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">01 · Architecture</p>
+        <h2>What runs where</h2>
+        <p class="section-sub">Everything lives on one European VPS behind Caddy HTTPS. Telegram and the studio website push events in through a webhook; the bot, admin panel and background workers share one PostgreSQL database. External APIs are the only things that leave the machine.</p>
+      </div>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 1160 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="arch-title arch-desc">
+          <title id="arch-title">SHUM Assistant production architecture</title>
+          <desc id="arch-desc">Telegram, a website form and an admin browser enter a single VPS through Caddy HTTPS into a Docker network of six services around PostgreSQL, with external calls to Google, AI providers, Yandex SpeechKit and Replicate.</desc>
+          <defs>
+            <marker id="a-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#6f6f6f"/>
+            </marker>
+            <marker id="a-arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#960018"/>
+            </marker>
+            <marker id="a-arr-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+            </marker>
+          </defs>
+
+          <rect width="100%" height="100%" fill="#ffffff"/>
+
+          <!-- Zones (drawn first) -->
+          <rect x="24" y="52" width="196" height="400" rx="8" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <rect x="60" y="56" width="124" height="12" rx="2" fill="#ffffff"/>
+          <text x="122" y="65" fill="rgba(11,11,11,0.40)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.14em">OUTSIDE THE SERVER</text>
+
+          <rect x="256" y="52" width="564" height="596" rx="8" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <rect x="420" y="56" width="236" height="12" rx="2" fill="#ffffff"/>
+          <text x="538" y="65" fill="rgba(11,11,11,0.40)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.14em">EU VPS · DOCKER COMPOSE · CADDY :443</text>
+
+          <rect x="856" y="52" width="280" height="400" rx="8" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <rect x="920" y="56" width="152" height="12" rx="2" fill="#ffffff"/>
+          <text x="996" y="65" fill="rgba(11,11,11,0.40)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.14em">EXTERNAL APIS</text>
+
+          <!-- ═══ ARROWS (before boxes) ═══ -->
+          <!-- Telegram → Caddy -->
+          <path d="M 220 132 H 264" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="222" y="113" width="46" height="12" rx="2" fill="#ffffff"/>
+          <text x="245" y="122" fill="#2e5aa8" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.04em">WEBHOOK</text>
+
+          <!-- Website form → Caddy -->
+          <path d="M 220 224 H 232 Q 244 224 244 212 V 172 Q 244 160 256 160 H 264" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="224" y="230" width="64" height="12" rx="2" fill="#ffffff"/>
+          <text x="256" y="239" fill="#2e5aa8" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.04em">ENQUIRY POST</text>
+
+          <!-- Browser → Caddy -->
+          <path d="M 220 340 H 232 Q 244 340 244 328 V 200 Q 244 188 256 188 H 264" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="224" y="352" width="34" height="12" rx="2" fill="#ffffff"/>
+          <text x="241" y="361" fill="#2e5aa8" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.04em">HTTPS</text>
+
+          <!-- Caddy → bot -->
+          <path d="M 388 132 H 412 Q 424 132 424 144 V 176 Q 424 188 436 188 H 452" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#a-arr)"/>
+
+          <!-- Caddy → admin -->
+          <path d="M 388 156 H 400 Q 412 156 412 168 V 356 Q 412 368 424 368 H 452" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#a-arr)"/>
+
+          <!-- bot → postgres (left edge y=292; hops over Google arrow at y=220 and Yandex arrow at y=260) -->
+          <path d="M 564 188 H 584 Q 596 188 596 200 V 212 a 8,8 0 0,0 0,16 V 252 a 8,8 0 0,0 0,16 V 280 Q 596 292 608 292 H 620" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#a-arr)"/>
+
+          <!-- admin → postgres (left edge y=332) -->
+          <path d="M 564 332 H 620" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#a-arr)"/>
+
+          <!-- vision-worker → postgres (bottom edge x=628; hops over avatars arrow at y=430) -->
+          <path d="M 570 444 V 438 a 8,8 0 0,1 0,-16 V 384 Q 570 372 582 372 H 616 Q 628 372 628 384 V 376" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a-arr)"/>
+
+          <!-- pdf/ocr worker → postgres (bottom edge x=760, straight) -->
+          <path d="M 760 444 V 376" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a-arr)"/>
+
+          <!-- scheduler → postgres (around the left, into left edge y=356) -->
+          <path d="M 452 612 H 436 Q 424 612 424 600 V 368 Q 424 356 436 356 H 620" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a-arr)"/>
+          <rect x="300" y="474" width="56" height="12" rx="2" fill="#ffffff"/>
+          <text x="328" y="483" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">POLL JOBS</text>
+
+          <!-- hermes → postgres (around the right, into right edge y=352; hops over avatars arrow) -->
+          <path d="M 800 596 H 824 Q 836 596 836 584 V 438 a 8,8 0 0,1 0,-16 V 364 Q 836 352 824 352 H 800" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a-arr)"/>
+
+          <!-- bot → external: Telegram API (reply) -->
+          <path d="M 564 176 H 580 Q 592 176 592 164 V 144 Q 592 132 604 132 H 848" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="636" y="113" width="96" height="12" rx="2" fill="#ffffff"/>
+          <text x="684" y="122" fill="#2e5aa8" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">SEND MESSAGE</text>
+
+          <!-- bot → Google (straight, above Postgres) -->
+          <path d="M 564 220 H 848" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="620" y="201" width="128" height="12" rx="2" fill="#ffffff"/>
+          <text x="684" y="210" fill="#2e5aa8" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CALENDAR · SHEETS</text>
+
+          <!-- bot → Yandex STT (above Postgres, into left edge y=342) -->
+          <path d="M 452 212 H 440 Q 428 212 428 224 V 248 Q 428 260 440 260 H 828 Q 844 260 844 276 V 342 H 856" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="456" y="243" width="88" height="12" rx="2" fill="#ffffff"/>
+          <text x="500" y="252" fill="#2e5aa8" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">VOICE → TEXT</text>
+
+          <!-- vision-worker → AI providers (around the bottom) -->
+          <path d="M 452 476 H 424 Q 408 476 408 492 V 640 Q 408 652 420 652 H 1056 Q 1068 652 1068 640 V 456" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="264" y="633" width="96" height="12" rx="2" fill="#ffffff"/>
+          <text x="312" y="642" fill="#2e5aa8" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">VISION CALLS</text>
+
+          <!-- bot → Replicate -->
+          <path d="M 452 224 H 448 Q 440 224 440 236 V 418 Q 440 430 452 430 H 848" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <rect x="668" y="411" width="60" height="12" rx="2" fill="#ffffff"/>
+          <text x="698" y="420" fill="#2e5aa8" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">AVATARS</text>
+
+          <!-- ═══ BOXES ═══ -->
+          <!-- Left column: outside actors -->
+          <rect x="40" y="104" width="180" height="56" rx="6" fill="#ffffff"/>
+          <rect x="40" y="104" width="180" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="130" y="128" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Studio team in Telegram</text>
+          <text x="130" y="145" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">10 function topics</text>
+
+          <rect x="40" y="196" width="180" height="56" rx="6" fill="#ffffff"/>
+          <rect x="40" y="196" width="180" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="130" y="220" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">studio-shum.ru form</text>
+          <text x="130" y="237" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">client enquiries</text>
+
+          <rect x="40" y="312" width="180" height="56" rx="6" fill="#ffffff"/>
+          <rect x="40" y="312" width="180" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="130" y="336" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Owner's browser</text>
+          <text x="130" y="353" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">admin panel</text>
+
+          <!-- Caddy (focal ingress) -->
+          <rect x="264" y="104" width="124" height="84" rx="6" fill="#ffffff"/>
+          <rect x="264" y="104" width="124" height="84" rx="6" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <rect x="272" y="110" width="34" height="12" rx="2" fill="transparent" stroke="rgba(150,0,24,0.40)" stroke-width="0.8"/>
+          <text x="289" y="119" fill="rgba(150,0,24,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">EDGE</text>
+          <text x="326" y="144" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Caddy</text>
+          <text x="326" y="160" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">HTTPS :443</text>
+          <text x="326" y="176" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">PII-stripped logs</text>
+
+          <!-- bot -->
+          <rect x="452" y="160" width="112" height="76" rx="6" fill="#ffffff"/>
+          <rect x="452" y="160" width="112" height="76" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <rect x="460" y="166" width="26" height="12" rx="2" fill="transparent" stroke="rgba(11,11,11,0.40)" stroke-width="0.8"/>
+          <text x="473" y="175" fill="rgba(11,11,11,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">BOT</text>
+          <text x="508" y="200" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Bot runtime</text>
+          <text x="508" y="216" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">FastAPI · aiogram</text>
+
+          <!-- admin -->
+          <rect x="452" y="332" width="112" height="72" rx="6" fill="#ffffff"/>
+          <rect x="452" y="332" width="112" height="72" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <rect x="460" y="338" width="26" height="12" rx="2" fill="transparent" stroke="rgba(11,11,11,0.40)" stroke-width="0.8"/>
+          <text x="473" y="347" fill="rgba(11,11,11,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
+          <text x="508" y="372" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Admin panel</text>
+          <text x="508" y="388" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">React 19 · Vite</text>
+
+          <!-- postgres -->
+          <rect x="620" y="276" width="180" height="100" rx="6" fill="#ffffff"/>
+          <rect x="620" y="276" width="180" height="100" rx="6" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <rect x="628" y="282" width="22" height="12" rx="2" fill="transparent" stroke="rgba(11,11,11,0.32)" stroke-width="0.8"/>
+          <text x="639" y="291" fill="rgba(11,11,11,0.56)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+          <text x="710" y="316" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">PostgreSQL 16</text>
+          <text x="710" y="333" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">drafts · ledger · incidents</text>
+          <text x="710" y="349" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">ai_usage_events</text>
+          <text x="710" y="365" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">no prompts, no content</text>
+
+          <!-- workers row -->
+          <rect x="452" y="444" width="144" height="64" rx="6" fill="#ffffff"/>
+          <rect x="452" y="444" width="144" height="64" rx="6" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="524" y="470" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">vision-worker</text>
+          <text x="524" y="487" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">images · OCR → VLM</text>
+
+          <rect x="620" y="444" width="180" height="64" rx="6" fill="#ffffff"/>
+          <rect x="620" y="444" width="180" height="64" rx="6" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="710" y="470" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">pdf/ocr worker</text>
+          <text x="710" y="487" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">Docling · OCRmyPDF · Tesseract</text>
+
+          <rect x="452" y="580" width="144" height="64" rx="6" fill="#ffffff"/>
+          <rect x="452" y="580" width="144" height="64" rx="6" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="524" y="606" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">scheduler</text>
+          <text x="524" y="623" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">reminders · cleanups</text>
+
+          <rect x="620" y="580" width="180" height="64" rx="6" fill="#ffffff"/>
+          <rect x="620" y="580" width="180" height="64" rx="6" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="710" y="606" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">hermes + observer</text>
+          <text x="710" y="623" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">client research · read-only</text>
+
+          <!-- External APIs -->
+          <rect x="856" y="104" width="280" height="52" rx="6" fill="#ffffff"/>
+          <rect x="856" y="104" width="280" height="52" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="996" y="126" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Telegram Bot API</text>
+          <text x="996" y="143" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">replies · cards · reactions</text>
+
+          <rect x="856" y="212" width="280" height="60" rx="6" fill="#ffffff"/>
+          <rect x="856" y="212" width="280" height="60" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="996" y="236" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Google Workspace</text>
+          <text x="996" y="253" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">Calendar SHUM · 6 Sheets</text>
+
+          <rect x="856" y="316" width="280" height="52" rx="6" fill="#ffffff"/>
+          <rect x="856" y="316" width="280" height="52" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="996" y="338" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Yandex SpeechKit</text>
+          <text x="996" y="355" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">STT · sync ≤30s / async >30s</text>
+
+          <rect x="856" y="404" width="136" height="52" rx="6" fill="#ffffff"/>
+          <rect x="856" y="404" width="136" height="52" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="924" y="426" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Replicate</text>
+          <text x="924" y="443" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">sticker-maker</text>
+
+          <rect x="1000" y="404" width="136" height="52" rx="6" fill="#ffffff"/>
+          <rect x="1000" y="404" width="136" height="52" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="1068" y="426" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">AI providers</text>
+          <text x="1068" y="443" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">DeepSeek · OpenRouter</text>
+
+          <!-- GitHub Actions deploy strip -->
+          <rect x="256" y="676" width="564" height="52" rx="6" fill="#ffffff"/>
+          <rect x="256" y="676" width="564" height="52" rx="6" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="538" y="698" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">GitHub Actions deploy from main</text>
+          <text x="538" y="715" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">restore credentials · migrate · restart · verify /health</text>
+
+          <!-- Legend -->
+          <line x1="24" y1="752" x2="1136" y2="752" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <text x="24" y="768" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.14em">LEGEND</text>
+
+          <rect x="96" y="758" width="14" height="10" rx="2" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <text x="116" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Trust edge</text>
+
+          <rect x="196" y="758" width="14" height="10" rx="2" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="216" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Service</text>
+
+          <rect x="284" y="758" width="14" height="10" rx="2" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <text x="304" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Store</text>
+
+          <rect x="364" y="758" width="14" height="10" rx="2" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="384" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Background / async</text>
+
+          <line x1="516" y1="763" x2="532" y2="763" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#a-arr-link)"/>
+          <text x="540" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">External API call</text>
+
+          <line x1="668" y1="763" x2="684" y2="763" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#a-arr)"/>
+          <text x="692" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Internal connection</text>
+
+          <line x1="824" y1="763" x2="840" y2="763" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a-arr)"/>
+          <text x="848" y="767" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">DB via job queue</text>
+        </svg>
+      </div>
+
+      <figcaption>
+        <span>Fig. 1</span>
+        One machine, one database, one ingress. The dashed containers are asynchronous workers — they pick jobs up from PostgreSQL instead of blocking the bot's event loop, which is why a slow OCR job can never freeze the chat.
+      </figcaption>
+    </section>
+
+    <!-- ================================================================
+         FIG 2 — DATA FLOW: message → record (semantic pattern:
+         unstructured input → structured artifact)
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">02 · Core Pipeline</p>
+        <h2>Any input becomes a reviewable draft</h2>
+        <p class="section-sub">Whatever the team throws into a topic — text, a voice rant, a forwarded conversation, a photo of a poster, a PDF portfolio — the pipeline normalizes it into text, extracts structured fields with an AI model, and shows a draft card. Nothing reaches a sheet or the calendar before a person presses the button.</p>
+      </div>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 1160 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="pipe-title pipe-desc">
+          <title id="pipe-title">Message-to-record pipeline</title>
+          <desc id="pipe-desc">Five input types are normalized by speech-to-text, OCR and web fetchers into clean text, structured by an AI gateway into a draft, confirmed by a human reviewer, and written to Google Sheets, Calendar or an image output.</desc>
+          <defs>
+            <marker id="p-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#6f6f6f"/>
+            </marker>
+            <marker id="p-arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#960018"/>
+            </marker>
+          </defs>
+
+          <rect width="100%" height="100%" fill="#ffffff"/>
+
+          <!-- Stage eyebrows -->
+          <text x="120" y="52" fill="rgba(11,11,11,0.48)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.18em">INPUT</text>
+          <text x="340" y="52" fill="rgba(11,11,11,0.48)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.18em">NORMALIZE</text>
+          <text x="560" y="52" fill="rgba(11,11,11,0.48)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.18em">STRUCTURE</text>
+          <text x="780" y="52" fill="rgba(11,11,11,0.48)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.18em">DECIDE</text>
+          <text x="1000" y="52" fill="rgba(11,11,11,0.48)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.18em">RECORD</text>
+
+          <!-- ═══ ARROWS ═══ -->
+          <!-- text: straight through -->
+          <path d="M 200 108 H 232 Q 244 108 244 120 V 300 Q 244 312 256 312 H 452" fill="none" stroke="#6f6f6f" stroke-width="1" marker-end="url(#p-arr)"/>
+
+          <!-- voice → STT -->
+          <path d="M 200 196 H 264" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+          <rect x="204" y="177" width="52" height="12" rx="2" fill="#ffffff"/>
+          <text x="230" y="186" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">OGG/MP4</text>
+
+          <!-- image → vision -->
+          <path d="M 200 284 H 216 Q 228 284 228 272 V 232 Q 228 220 240 220 H 264" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+
+          <!-- link → web -->
+          <path d="M 200 372 H 216 Q 228 372 228 360 V 248 Q 228 236 240 236 H 264" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+
+          <!-- pdf → docling -->
+          <path d="M 200 460 H 228 Q 240 460 240 448 V 416 Q 240 404 252 404 H 264" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+
+          <!-- normalizers → merge -->
+          <path d="M 416 208 H 440 Q 452 208 452 220 V 264 Q 452 276 464 276 H 500" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+          <path d="M 416 404 H 428 Q 440 404 440 392 V 340 Q 440 328 452 328 H 500" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+
+          <!-- merge → AI gateway -->
+          <path d="M 612 302 H 664" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+          <rect x="614" y="284" width="46" height="12" rx="2" fill="#ffffff"/>
+          <text x="637" y="293" fill="rgba(11,11,11,0.56)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.04em">CLEAN TEXT</text>
+
+          <!-- AI gateway → draft (focal) -->
+          <path d="M 776 302 H 836" fill="none" stroke="#960018" stroke-width="1.2" marker-end="url(#p-arr-accent)"/>
+          <rect x="780" y="284" width="52" height="12" rx="2" fill="#ffffff"/>
+          <text x="806" y="293" fill="#960018" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.04em">DRAFT CARD</text>
+
+          <!-- draft → reviewer -->
+          <path d="M 948 302 H 980 Q 992 302 992 290 V 252 Q 992 240 1004 240 H 1036" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+
+          <!-- draft → outputs (only after confirm) -->
+          <path d="M 948 326 H 960 Q 972 326 972 338 V 378 Q 972 392 986 392 H 1036" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#p-arr)"/>
+          <rect x="872" y="340" width="90" height="12" rx="2" fill="#ffffff"/>
+          <text x="917" y="349" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CONFIRMED ONLY</text>
+
+          <!-- ═══ BOXES ═══ -->
+          <!-- Input stack -->
+          <rect x="60" y="80" width="140" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="80" width="140" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="130" y="104" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Text</text>
+          <text x="130" y="121" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">message · caption</text>
+
+          <rect x="60" y="168" width="140" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="168" width="140" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="130" y="192" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Voice / video note</text>
+          <text x="130" y="209" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">OggOpus · MP4</text>
+
+          <rect x="60" y="256" width="140" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="256" width="140" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="130" y="280" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Image / screenshot</text>
+          <text x="130" y="297" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">photo · poster · scan</text>
+
+          <rect x="60" y="344" width="140" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="344" width="140" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="130" y="368" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Link</text>
+          <text x="130" y="385" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">event page · article</text>
+
+          <rect x="60" y="432" width="140" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="432" width="140" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="130" y="456" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">PDF / forward</text>
+          <text x="130" y="473" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">portfolio · receipt</text>
+
+          <!-- Normalizers -->
+          <rect x="264" y="176" width="152" height="64" rx="6" fill="#ffffff"/>
+          <rect x="264" y="176" width="152" height="64" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="340" y="200" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Yandex SpeechKit</text>
+          <text x="340" y="217" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">voice → text</text>
+          <text x="340" y="233" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">sync ≤30s · async >30s</text>
+
+          <rect x="264" y="372" width="152" height="64" rx="6" fill="#ffffff"/>
+          <rect x="264" y="372" width="152" height="64" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="340" y="396" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Readers</text>
+          <text x="340" y="413" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">Vision VLM · Docling · OCR</text>
+          <text x="340" y="429" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">JSON-LD link parser (no AI)</text>
+
+          <!-- Merge / batching -->
+          <rect x="500" y="270" width="112" height="64" rx="6" fill="#ffffff"/>
+          <rect x="500" y="270" width="112" height="64" rx="6" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <text x="556" y="294" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Batch</text>
+          <text x="556" y="311" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">3s idle · 15s max</text>
+          <text x="556" y="327" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">durable in Postgres</text>
+
+          <!-- AI gateway -->
+          <rect x="664" y="264" width="112" height="76" rx="6" fill="#ffffff"/>
+          <rect x="664" y="264" width="112" height="76" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <rect x="672" y="270" width="26" height="12" rx="2" fill="transparent" stroke="rgba(11,11,11,0.40)" stroke-width="0.8"/>
+          <text x="685" y="279" fill="rgba(11,11,11,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">AI</text>
+          <text x="720" y="304" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">AI gateway</text>
+          <text x="720" y="320" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">DeepSeek · OpenRouter</text>
+
+          <!-- Draft card (focal) -->
+          <rect x="836" y="264" width="112" height="76" rx="6" fill="#ffffff"/>
+          <rect x="836" y="264" width="112" height="76" rx="6" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <rect x="844" y="270" width="34" height="12" rx="2" fill="transparent" stroke="rgba(150,0,24,0.40)" stroke-width="0.8"/>
+          <text x="861" y="279" fill="rgba(150,0,24,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">DRAFT</text>
+          <text x="892" y="304" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Rich card</text>
+          <text x="892" y="320" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">edit · approve</text>
+
+          <!-- Reviewer -->
+          <rect x="1036" y="196" width="100" height="56" rx="6" fill="#ffffff"/>
+          <rect x="1036" y="196" width="100" height="56" rx="6" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.48)" stroke-width="1"/>
+          <text x="1086" y="220" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Person</text>
+          <text x="1086" y="237" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">one tap</text>
+
+          <!-- Outputs -->
+          <rect x="1036" y="364" width="100" height="56" rx="6" fill="#ffffff"/>
+          <rect x="1036" y="364" width="100" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="1086" y="388" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Sheets</text>
+          <text x="1086" y="405" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">Calendar · PNG</text>
+
+          <!-- Principle strip -->
+          <rect x="500" y="500" width="636" height="56" rx="6" fill="#ffffff"/>
+          <rect x="500" y="500" width="636" height="56" rx="6" fill="rgba(150,0,24,0.05)" stroke="rgba(150,0,24,0.50)" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="818" y="524" fill="#960018" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Product rule: AI prepares, a person decides</text>
+          <text x="818" y="541" fill="rgba(150,0,24,0.7)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">no external write without an explicit confirm callback</text>
+
+          <text x="60" y="524" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Every stage is durable: batches, drafts and jobs</text>
+          <text x="60" y="540" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">survive restarts, retries and worker crashes.</text>
+
+          <!-- Legend -->
+          <line x1="24" y1="592" x2="1136" y2="592" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <text x="24" y="608" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.14em">LEGEND</text>
+          <line x1="96" y1="603" x2="112" y2="603" stroke="#960018" stroke-width="1.2" marker-end="url(#p-arr-accent)"/>
+          <text x="120" y="607" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">The one handoff that matters: model output becomes a human-reviewable draft</text>
+        </svg>
+      </div>
+
+      <figcaption>
+        <span>Fig. 2</span>
+        The pipeline is deliberately boring in the middle: normalize to text, batch, extract, show a card. The interesting engineering is at the edges — five very different input shapes on the left, and a hard rule on the right that nothing writes itself into the studio's records.
+      </figcaption>
+    </section>
+
+    <!-- ================================================================
+         FIG 3 — SEQUENCE: HR forwarded portfolio (type: sequence, 1 ALT)
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">03 · One Real Path</p>
+        <h2>A forwarded portfolio becomes an HR record</h2>
+        <p class="section-sub">The HR flow is the most demanding path in the system: consecutive forwards are collected automatically, a PDF can take minutes of OCR, and the draft must stay editable without ever double-writing to the sheet. This is the actual production sequence, accepted live on 2026-07-21.</p>
+      </div>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 1160 660" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="seq-title seq-desc">
+          <title id="seq-title">HR forwarded portfolio sequence</title>
+          <desc id="seq-desc">A teammate forwards messages and a PDF; the bot batches them, an OCR worker reads the document, a candidate card appears for review, and on approval the HR sheet is written once and confirmed in the chat.</desc>
+          <defs>
+            <marker id="s-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#6f6f6f"/>
+            </marker>
+            <marker id="s-arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#960018"/>
+            </marker>
+            <marker id="s-arr-open" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polyline points="0 0, 8 3, 0 6" fill="none" stroke="#6f6f6f" stroke-width="1.2"/>
+            </marker>
+          </defs>
+
+          <rect width="100%" height="100%" fill="#ffffff"/>
+
+          <!-- Actors -->
+          <g font-family="'Inter Variable', 'Inter', system-ui, sans-serif">
+            <rect x="60" y="32" width="150" height="44" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+            <text x="135" y="59" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">Teammate</text>
+
+            <rect x="285" y="32" width="150" height="44" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+            <text x="360" y="59" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">Bot (HR topic)</text>
+
+            <rect x="510" y="32" width="150" height="44" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+            <text x="585" y="59" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">OCR worker</text>
+
+            <rect x="735" y="32" width="150" height="44" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+            <text x="810" y="59" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">PostgreSQL</text>
+
+            <rect x="960" y="32" width="150" height="44" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+            <text x="1035" y="59" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">Google Sheets</text>
+          </g>
+
+          <!-- Lifelines -->
+          <line x1="135" y1="76" x2="135" y2="612" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="360" y1="76" x2="360" y2="612" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="585" y1="76" x2="585" y2="612" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="810" y1="76" x2="810" y2="612" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="1035" y1="76" x2="1035" y2="612" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="3,3"/>
+
+          <!-- Activation bars -->
+          <rect x="356" y="104" width="8" height="120" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.56)" stroke-width="0.8"/>
+          <rect x="581" y="224" width="8" height="76" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.56)" stroke-width="0.8"/>
+          <rect x="356" y="352" width="8" height="240" fill="rgba(11,11,11,0.06)" stroke="rgba(11,11,11,0.56)" stroke-width="0.8"/>
+
+          <!-- Messages -->
+          <line x1="135" y1="104" x2="352" y2="104" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#s-arr)"/>
+          <rect x="180" y="82" width="120" height="12" rx="2" fill="#ffffff"/>
+          <text x="240" y="91" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">FORWARD ×3 + PDF</text>
+
+          <line x1="360" y1="144" x2="803" y2="144" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#s-arr)"/>
+          <rect x="480" y="122" width="200" height="12" rx="2" fill="#ffffff"/>
+          <text x="580" y="131" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">OPEN BATCH · 3S IDLE / 15S MAX</text>
+
+          <line x1="360" y1="184" x2="803" y2="184" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#s-arr)"/>
+          <rect x="480" y="162" width="200" height="12" rx="2" fill="#ffffff"/>
+          <text x="580" y="171" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">ATTACHMENT JOB + CONTINUATION</text>
+
+          <line x1="585" y1="224" x2="803" y2="224" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#s-arr)"/>
+          <rect x="640" y="202" width="100" height="12" rx="2" fill="#ffffff"/>
+          <text x="690" y="211" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CLAIM JOB</text>
+
+          <path d="M 585 252 H 640 Q 652 252 652 264 V 268 Q 652 280 640 280 H 593" fill="none" stroke="#6f6f6f" stroke-width="1" marker-end="url(#s-arr)"/>
+          <rect x="592" y="232" width="124" height="12" rx="2" fill="#ffffff"/>
+          <text x="654" y="241" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">DOCLING → OCR FALLBACK</text>
+
+          <line x1="803" y1="300" x2="593" y2="300" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#s-arr)"/>
+          <rect x="640" y="278" width="116" height="12" rx="2" fill="#ffffff"/>
+          <text x="698" y="287" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">FULL PDF TEXT</text>
+
+          <line x1="803" y1="352" x2="368" y2="352" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#s-arr)"/>
+          <rect x="500" y="330" width="170" height="12" rx="2" fill="#ffffff"/>
+          <text x="585" y="339" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">BATCH COMPLETE · TEXT READY</text>
+
+          <line x1="360" y1="392" x2="142" y2="392" stroke="#960018" stroke-width="1.2" marker-end="url(#s-arr-accent)"/>
+          <rect x="168" y="370" width="170" height="12" rx="2" fill="#ffffff"/>
+          <text x="253" y="379" fill="#960018" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CANDIDATE CARD · EDIT / APPROVE</text>
+
+          <!-- ALT fragment -->
+          <rect x="110" y="420" width="960" height="160" rx="4" fill="rgba(11,11,11,0.02)" stroke="rgba(11,11,11,0.22)" stroke-width="1"/>
+          <rect x="110" y="420" width="40" height="16" rx="2" fill="#ffffff" stroke="rgba(11,11,11,0.22)" stroke-width="1"/>
+          <text x="130" y="432" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.12em">ALT</text>
+
+          <text x="122" y="456" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.04em">[approve]</text>
+          <line x1="360" y1="472" x2="1028" y2="472" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#s-arr)"/>
+          <rect x="560" y="450" width="220" height="12" rx="2" fill="#ffffff"/>
+          <text x="670" y="459" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">ATOMIC CLAIM · VERSION++ · WRITE ROW</text>
+          <line x1="360" y1="504" x2="142" y2="504" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#s-arr)"/>
+          <rect x="180" y="482" width="140" height="12" rx="2" fill="#ffffff"/>
+          <text x="250" y="491" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CONFIRMATION + 👌</text>
+
+          <line x1="118" y1="524" x2="1062" y2="524" stroke="rgba(11,11,11,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="122" y="548" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.04em">[correct]</text>
+          <path d="M 360 560 H 420 Q 432 560 432 572 Q 432 584 420 584 H 368" fill="none" stroke="#6f6f6f" stroke-width="1" marker-end="url(#s-arr)"/>
+          <rect x="436" y="548" width="200" height="12" rx="2" fill="#ffffff"/>
+          <text x="536" y="557" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">CORRECTION MODE · REGENERATE CARD</text>
+
+          <!-- Footer note -->
+          <text x="60" y="640" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Timeout, cancel or parser failure → the card is never sent. Drafts are durable for 7 days; one draft per user per topic.</text>
+        </svg>
+      </div>
+
+      <figcaption>
+        <span>Fig. 3</span>
+        Three properties carry this flow: batching is automatic (no "done" button), the PDF read is asynchronous (the chat never blocks), and the final write is an atomic claim — a retry or a double-tap cannot create a duplicate row.
+      </figcaption>
+    </section>
+
+    <!-- ================================================================
+         FIG 4 — STATE MACHINE: Budget draft No-Replay
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">04 · Safety-Critical State</p>
+        <h2>Budget drafts can't be replayed</h2>
+        <p class="section-sub">Money writes get the strictest treatment in the system. A budget draft moves through a small state machine designed so that double taps, webhook retries and Telegram reconnects cannot produce a duplicate expense row.</p>
+      </div>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 1160 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="state-title state-desc">
+          <title id="state-title">Budget draft No-Replay state machine</title>
+          <desc id="state-desc">A budget draft goes from created to claimed on the first save tap, then to saved or to a quarantine state on ambiguous timeout, from which a background reconciler recovers it; duplicate taps hit single-use tokens and are discarded.</desc>
+          <defs>
+            <marker id="st-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#6f6f6f"/>
+            </marker>
+            <marker id="st-arr-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#960018"/>
+            </marker>
+          </defs>
+
+          <rect width="100%" height="100%" fill="#ffffff"/>
+
+          <!-- Start dot -->
+          <circle cx="80" cy="240" r="6" fill="#0b0b0b"/>
+          <line x1="86" y1="240" x2="148" y2="240" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#st-arr)"/>
+
+          <!-- States -->
+          <rect x="148" y="208" width="160" height="64" rx="8" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="228" y="234" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">draft</text>
+          <text x="228" y="251" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">editable · versioned</text>
+
+          <rect x="420" y="208" width="160" height="64" rx="8" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <text x="500" y="234" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">claimed</text>
+          <text x="500" y="251" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">row lock held</text>
+
+          <rect x="700" y="120" width="160" height="64" rx="8" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <text x="780" y="146" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">saved</text>
+          <text x="780" y="163" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">row written once</text>
+
+          <rect x="700" y="300" width="190" height="72" rx="8" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="795" y="328" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">reconciliation</text>
+          <text x="795" y="345" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">ambiguous timeout</text>
+          <text x="795" y="360" fill="rgba(11,11,11,0.48)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">fingerprint ±5 rows</text>
+
+          <rect x="980" y="208" width="150" height="64" rx="8" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <text x="1055" y="234" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">recovered</text>
+          <text x="1055" y="251" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">sweeper &gt;300s</text>
+
+          <!-- End ring -->
+          <circle cx="952" cy="152" r="8" fill="none" stroke="#0b0b0b" stroke-width="1.2"/>
+          <circle cx="952" cy="152" r="5" fill="#0b0b0b"/>
+
+          <!-- Transitions -->
+          <line x1="308" y1="240" x2="412" y2="240" stroke="#960018" stroke-width="1.2" marker-end="url(#st-arr-accent)"/>
+          <rect x="308" y="212" width="106" height="12" rx="2" fill="#ffffff"/>
+          <text x="361" y="221" fill="#960018" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">SAVE TAP · ATOMIC</text>
+
+          <path d="M 540 208 H 560 Q 580 208 580 192 V 176 Q 580 160 596 160 H 692" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#st-arr)"/>
+          <rect x="556" y="128" width="124" height="12" rx="2" fill="#ffffff"/>
+          <text x="618" y="137" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">SHEETS WRITE OK</text>
+
+          <path d="M 500 272 V 296 Q 500 312 516 312 H 692" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#st-arr)"/>
+          <rect x="500" y="284" width="150" height="12" rx="2" fill="#ffffff"/>
+          <text x="575" y="293" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">TIMEOUT · UNKNOWN OUTCOME</text>
+
+          <path d="M 890 336 H 940 Q 960 336 960 316 V 272 H 972" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#st-arr)"/>
+          <rect x="900" y="290" width="116" height="12" rx="2" fill="#ffffff"/>
+          <text x="958" y="284" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">ROW FOUND BY HASH</text>
+
+          <line x1="860" y1="152" x2="940" y2="152" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#st-arr)"/>
+
+          <!-- Self-loop: duplicate tap discarded -->
+          <path d="M 460 208 C 460 168 540 168 540 208" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#st-arr)"/>
+          <rect x="404" y="152" width="192" height="12" rx="2" fill="#ffffff"/>
+          <text x="500" y="161" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">DUPLICATE TAP · TOKEN SPENT · DISCARD</text>
+
+          <!-- Self-loop: draft edits -->
+          <path d="M 188 208 C 188 168 268 168 268 208" fill="none" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#st-arr)"/>
+          <rect x="140" y="152" width="176" height="12" rx="2" fill="#ffffff"/>
+          <text x="228" y="161" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">EDIT / MERGE / APPEND CHOICE</text>
+
+          <!-- Side notes -->
+          <text x="148" y="420" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Why taps can't double-write</text>
+          <text x="148" y="442" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">The first tap flips draft → claimed inside a row lock and spends a</text>
+          <text x="148" y="458" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">single-use token. Telegram retries and impatient second taps arrive</text>
+          <text x="148" y="474" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">with an already-spent token and are dropped before any Sheets I/O.</text>
+          <text x="148" y="498" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">The user hears "Сохраняю…" immediately — the button answers first,</text>
+          <text x="148" y="514" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">the network happens after.</text>
+
+          <!-- Legend -->
+          <line x1="24" y1="528" x2="1136" y2="528" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <text x="24" y="544" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.14em">LEGEND</text>
+          <rect x="96" y="534" width="14" height="10" rx="4" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <text x="116" y="543" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Point of no return</text>
+          <line x1="240" y1="539" x2="256" y2="539" stroke="#6f6f6f" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#st-arr)"/>
+          <text x="264" y="543" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Discarded / idempotent retry</text>
+        </svg>
+      </div>
+
+      <figcaption>
+        <span>Fig. 4</span>
+        The same claim-then-write pattern protects every money-adjacent action in the bot. If the Sheets call times out mid-write, the draft goes to quarantine instead of being retried blind — a sweeper later fingerprints nearby rows to learn whether the write landed.
+      </figcaption>
+    </section>
+
+    <!-- ================================================================
+         FIG 5 — AI GATEWAY / OBSERVABILITY (data flow)
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">05 · Cost Control</p>
+        <h2>Every AI call goes through one gate</h2>
+        <p class="section-sub">No feature calls a model provider directly. Avatar prompts, voice transcription, vision enrichment, HR extraction — all of it passes through a single gateway that logs provider, model, function and tokens into one ledger, which is what the admin panel's cost page reads.</p>
+      </div>
+
+      <div class="diagram-container">
+        <svg viewBox="0 0 1160 548" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="gw-title gw-desc">
+          <title id="gw-title">Unified AI usage gateway</title>
+          <desc id="gw-desc">Five feature areas call model providers through one AI gateway, which logs usage events to PostgreSQL; the admin panel reads the ledger for the costs page and provider health, while prompts and image content are never stored.</desc>
+          <defs>
+            <marker id="g-arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#6f6f6f"/>
+            </marker>
+            <marker id="g-arr-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+            </marker>
+          </defs>
+
+          <rect width="100%" height="100%" fill="#ffffff"/>
+
+          <!-- ═══ ARROWS ═══ -->
+          <path d="M 280 108 H 292 Q 304 108 304 120 V 200 Q 304 212 316 212 H 480" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+          <path d="M 280 196 H 480" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+          <path d="M 280 284 H 292 Q 304 284 304 272 V 236 Q 304 224 316 224 H 480" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+          <path d="M 280 372 H 316 Q 328 372 328 360 V 252 Q 328 240 340 240 H 480" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+          <path d="M 280 460 H 340 Q 352 460 352 448 V 276 Q 352 264 364 264 H 480" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+
+          <!-- gateway → providers -->
+          <path d="M 656 208 H 668 Q 680 208 680 196 V 120 Q 680 108 692 108 H 860" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#g-arr-link)"/>
+          <path d="M 656 224 H 860" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#g-arr-link)"/>
+          <path d="M 656 240 H 668 Q 680 240 680 252 V 324 Q 680 336 692 336 H 860" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#g-arr-link)"/>
+
+          <!-- gateway → ledger -->
+          <path d="M 568 296 V 356 Q 568 368 580 368 H 640" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+          <rect x="524" y="320" width="92" height="12" rx="2" fill="#ffffff"/>
+          <text x="570" y="329" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">USAGE EVENT</text>
+
+          <!-- ledger → admin -->
+          <path d="M 820 396 H 860" fill="none" stroke="#6f6f6f" stroke-width="1.2" marker-end="url(#g-arr)"/>
+
+          <!-- ═══ BOXES: features ═══ -->
+          <rect x="60" y="80" width="220" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="80" width="220" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="170" y="104" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Extraction (HR · Budget · PR)</text>
+          <text x="170" y="121" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">text → structured fields</text>
+
+          <rect x="60" y="168" width="220" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="168" width="220" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="170" y="192" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Voice transcription</text>
+          <text x="170" y="209" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">billed per second of audio</text>
+
+          <rect x="60" y="256" width="220" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="256" width="220" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="170" y="280" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Vision enrichment</text>
+          <text x="170" y="297" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">images · screenshots → text</text>
+
+          <rect x="60" y="344" width="220" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="344" width="220" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="170" y="368" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Avatar generation</text>
+          <text x="170" y="385" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">prompt adapt + sticker model</text>
+
+          <rect x="60" y="432" width="220" height="56" rx="6" fill="#ffffff"/>
+          <rect x="60" y="432" width="220" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="170" y="456" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Hermes client research</text>
+          <text x="170" y="473" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">read-only observer import</text>
+
+          <!-- Gateway (focal) -->
+          <rect x="480" y="180" width="176" height="116" rx="6" fill="#ffffff"/>
+          <rect x="480" y="180" width="176" height="116" rx="6" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <rect x="488" y="186" width="44" height="12" rx="2" fill="transparent" stroke="rgba(150,0,24,0.40)" stroke-width="0.8"/>
+          <text x="510" y="195" fill="rgba(150,0,24,0.8)" font-size="7" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.08em">GATEWAY</text>
+          <text x="568" y="226" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">AI gateway</text>
+          <text x="568" y="243" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">provider · model · function</text>
+          <text x="568" y="259" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">tokens / audio seconds</text>
+          <text x="568" y="281" fill="rgba(150,0,24,0.7)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle" letter-spacing="0.06em">NEVER STORES PROMPTS</text>
+
+          <!-- Providers -->
+          <rect x="860" y="80" width="276" height="56" rx="6" fill="#ffffff"/>
+          <rect x="860" y="80" width="276" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="998" y="104" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">DeepSeek · OpenRouter</text>
+          <text x="998" y="121" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">wallet balances via API</text>
+
+          <rect x="860" y="196" width="276" height="56" rx="6" fill="#ffffff"/>
+          <rect x="860" y="196" width="276" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="998" y="220" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Yandex SpeechKit</text>
+          <text x="998" y="237" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">JWT → IAM → Cloud Billing</text>
+
+          <rect x="860" y="308" width="276" height="56" rx="6" fill="#ffffff"/>
+          <rect x="860" y="308" width="276" height="56" rx="6" fill="rgba(11,11,11,0.03)" stroke="rgba(11,11,11,0.30)" stroke-width="1"/>
+          <text x="998" y="332" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Replicate</text>
+          <text x="998" y="349" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">image models</text>
+
+          <!-- Ledger -->
+          <rect x="640" y="368" width="180" height="56" rx="6" fill="#ffffff"/>
+          <rect x="640" y="368" width="180" height="56" rx="6" fill="rgba(11,11,11,0.05)" stroke="rgba(11,11,11,0.56)" stroke-width="1"/>
+          <text x="730" y="392" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">ai_usage_events</text>
+          <text x="730" y="409" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">append-only ledger</text>
+
+          <!-- Admin -->
+          <rect x="860" y="368" width="276" height="56" rx="6" fill="#ffffff"/>
+          <rect x="860" y="368" width="276" height="56" rx="6" fill="#ffffff" stroke="#0b0b0b" stroke-width="1"/>
+          <text x="998" y="392" fill="#0b0b0b" font-size="12" font-weight="600" font-family="'Inter Variable', 'Inter', system-ui, sans-serif" text-anchor="middle">Admin · AI и расходы</text>
+          <text x="998" y="409" fill="rgba(11,11,11,0.56)" font-size="9" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" text-anchor="middle">spend · charts · provider health</text>
+
+          <!-- Side note -->
+          <text x="60" y="524" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Key metadata (last-4, probe results) is stored</text>
+          <text x="60" y="538" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">but deliberately hidden from the UI.</text>
+
+          <!-- Legend -->
+          <line x1="24" y1="500" x2="1136" y2="500" stroke="rgba(11,11,11,0.10)" stroke-width="0.8"/>
+          <text x="560" y="524" fill="rgba(11,11,11,0.56)" font-size="8" font-family="ui-monospace, 'Cascadia Code', Consolas, monospace" letter-spacing="0.14em">LEGEND</text>
+          <line x1="628" y1="519" x2="644" y2="519" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#g-arr-link)"/>
+          <text x="652" y="523" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Billable API call</text>
+          <rect x="788" y="513" width="14" height="10" rx="2" fill="rgba(150,0,24,0.06)" stroke="#960018" stroke-width="1"/>
+          <text x="808" y="522" fill="rgba(11,11,11,0.56)" font-size="9" font-family="'Inter Variable', 'Inter', system-ui, sans-serif">Single choke point</text>
+        </svg>
+      </div>
+
+      <figcaption>
+        <span>Fig. 5</span>
+        One gateway means one place to add a provider, one place to enforce logging, and one honest answer to "what did the AI cost this month" — per function, per model, per user, with content never touching the ledger.
+      </figcaption>
+    </section>
+
+    <!-- ================================================================
+         CARDS — What's left
+         ================================================================ -->
+    <section class="diagram-section">
+      <div class="section-head">
+        <p class="section-eyebrow">06 · What This Buys</p>
+        <h2>The properties that matter</h2>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-dot coral"></span>
+            <h3>Human control is structural</h3>
+          </div>
+          <ul>
+            <li><strong>Draft-first everywhere</strong> — Calendar, HR, Budget, PR and Client Base all stop at a review card before any write.</li>
+            <li><strong>Access per topic</strong> — each Telegram user sees only the functions the owner approved for them.</li>
+            <li><strong>Personal data is read-only</strong> — passports and vehicles are shown to two authorized IDs, tap-to-copy, never written.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-dot ink"></span>
+            <h3>Built to survive failure</h3>
+          </div>
+          <ul>
+            <li><strong>Durable batches and drafts</strong> — work survives restarts, retries and worker crashes.</li>
+            <li><strong>Webhook self-healing</strong> — a 50s handler budget returns 200 to Telegram; 5 clean runs auto-resolve the incident.</li>
+            <li><strong>Non-blocking event loop</strong> — all Google I/O runs in worker threads; a slow sheet can't freeze the chat.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-dot link"></span>
+            <h3>Observable end to end</h3>
+          </div>
+          <ul>
+            <li><strong>16 error sources, one registry</strong> — every domain and worker reports incidents into the same admin surface.</li>
+            <li><strong>Real costs only</strong> — the spend page reads the gateway ledger, never estimates.</li>
+            <li><strong>Health on one screen</strong> — Postgres, webhook, Google, STT, Vision and OCR workers.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span>SHUM Telegram Assistant · System Explainer</span>
+      <span>2026-10-26 · draft for review — cut freely</span>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,1701 @@
+<div class="shum-explainer">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ve-ah" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0L10 5L0 10z" fill="context-stroke"/></marker>
+    <linearGradient id="ve-node" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--node-top)"/><stop offset="1" style="stop-color:var(--surface)"/></linearGradient>
+    <pattern id="ve-w-on" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="1" y="1" width="8" height="8" rx="1.5" style="fill:var(--accent)"/></pattern>
+    <pattern id="ve-w-off" width="10" height="10" patternUnits="userSpaceOnUse"><rect x="1.5" y="1.5" width="7" height="7" rx="1.5" style="fill:none;stroke:var(--text-dim)"/></pattern>
+  </defs>
+</svg>
+
+<div class="explainer-intro">
+  <p class="lead">Messy messages, voice notes, screenshots, links, and PDFs go in. <b>Human-approved records</b> come out in Google Calendar and Google Sheets. This page explains the whole machine: nine topic windows, one webhook, three media pipelines, five AI providers, and the admin panel that watches all of it.</p>
+  <p class="meta">Production system, reviewed 26 October 2026 / Repository: shum-telegram-assistant / Live at assistant.studio-shum.ru</p>
+  <nav class="toc" aria-label="Sections">
+  <span class="toc-label">Read</span>
+  <a href="#premise">Premise</a>
+  <a href="#topics">Topics</a>
+  <a href="#lifecycle">Lifecycle</a>
+  <a href="#runtime">Runtime</a>
+  <a href="#media">Media</a>
+  <a href="#ai">AI gateway</a>
+  <a href="#reliability">Reliability</a>
+  <a href="#admin">Admin</a>
+  <a href="#data">System of record</a>
+</nav>
+</div>
+
+<figure>
+  <div class="lead-map" role="img" aria-label="Text, voice, image, link and PDF inputs enter the assistant. It routes them, builds a draft with AI and media workers, shows a review card to a human, and writes only approved results to Google Calendar, Google Sheets, image files or a Telegram reply.">
+    <div class="in-stack" aria-hidden="true">
+      <span>Text</span>
+      <span>Voice</span>
+      <span>Image</span>
+      <span>Link</span>
+      <span>PDF</span>
+    </div>
+    <span class="lead-conn" aria-hidden="true"></span>
+    <div class="lead-node" aria-hidden="true">
+      <span class="node-kind">Ingest</span>
+      <strong>Route and gate</strong>
+      <small>topic, chat, permission</small>
+    </div>
+    <span class="lead-conn" aria-hidden="true"></span>
+    <div class="lead-node" aria-hidden="true">
+      <span class="node-kind">Draft</span>
+      <strong>AI plus workers</strong>
+      <small>extract, OCR, VLM, STT</small>
+    </div>
+    <span class="lead-conn" aria-hidden="true"></span>
+    <div class="lead-node lead-node--signal" aria-hidden="true">
+      <span class="node-kind">Human</span>
+      <strong>Review card</strong>
+      <small>approve, correct, cancel</small>
+    </div>
+    <span class="lead-conn" aria-hidden="true"></span>
+    <div class="out-stack" aria-hidden="true">
+      <span>Calendar</span>
+      <span>Sheets</span>
+      <span>PNG</span>
+      <span>Reply</span>
+    </div>
+  </div>
+  <figcaption><span class="fig-n">Fig. 1</span><span class="fig-text">The assistant fits the studio’s existing habits. It does not ask the team to learn a new database, a new form, or a new chat app.</span></figcaption>
+</figure>
+
+<section aria-label="At a glance">
+  <p class="ve-label">At a glance</p>
+  <div class="kpis">
+    <div class="kpi"><span class="ve-label">Bot topics</span><span class="val"><span data-count="9">9</span></span><span class="kpi-note">Nine function windows inside Telegram.</span></div>
+    <div class="kpi"><span class="ve-label">Error sources</span><span class="val"><span data-count="16">16</span></span><span class="kpi-note">One incident registry across functions and infrastructure.</span></div>
+    <div class="kpi"><span class="ve-label">AI providers</span><span class="val"><span data-count="5">5</span></span><span class="kpi-note">Text, vision, speech, and image generation.</span></div>
+    <div class="kpi"><span class="ve-label">Backend test files</span><span class="val"><span data-count="149">149</span></span><span class="kpi-note">149 test modules at review time. Historical snapshots mention 843 and 1,102 tests.</span></div>
+    <div class="kpi"><span class="ve-label">Migrations</span><span class="val"><span data-count="43">43</span></span><span class="kpi-note">Durable schema history, not an in-memory prototype.</span></div>
+  </div>
+</section>
+
+<section id="premise">
+  <div class="sec-head">
+    <p class="ve-label">Premise</p>
+    <h2>The input is never clean. The system is built for that.</h2>
+  </div>
+  <div class="split">
+    <div>
+      <p>Studio work does not arrive as a tidy form. A client sends a poster link. A candidate sends a portfolio PDF inside a forwarded conversation. A teammate photographs a receipt. Someone records a voice note while walking. The original material is the only reliable source, so the assistant accepts it as it is and does the normalizing itself.</p>
+      <p>The product rule is simple: <b>AI prepares, a person decides.</b> The bot may read, classify, extract, and draft. Writes that change the studio’s system of record stay explicit, reviewable, and reversible.</p>
+    </div>
+    <div class="note-box">
+      <h3>What makes it a product, not a chatbot</h3>
+      <p>Durable state in PostgreSQL, permission-gated topics, idempotent writes, background workers for slow media, one ledger for AI spend, and an admin panel that shows services, costs, and recoverable errors.</p>
+    </div>
+  </div>
+</section>
+
+<section id="topics">
+  <div class="sec-head">
+    <p class="ve-label">Product surface</p>
+    <h2>Nine topics are the product.</h2>
+  </div>
+  <figure>
+    <div class="topic-map">
+      <article class="topic">
+        <div class="topic-head"><h3>Calendar</h3><span class="chip ok">live</span></div>
+        <p class="io">Text / voice / image / link → event draft → Google Calendar</p>
+        <p>Extracts date, time, place, guests, and recurrence. Parses poster links through JSON-LD without spending AI tokens. Holds clarification context for up to three rounds.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>HR</h3><span class="chip ok">live</span></div>
+        <p class="io">Text / forward / PDF / image → candidate card → HR Sheets</p>
+        <p>Collects forwarded material into one batch, reads PDFs with Docling and OCR, deduplicates candidates, and writes one person to one primary profile sheet.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Avatars</h3><span class="chip ok">live</span></div>
+        <p class="io">Text / voice idea → adapted prompt → 1024×1024 PNG</p>
+        <p>Translates and adapts the idea through Surplus, generates a sticker through Replicate, and composites the exact SHUM background color #F3AC03.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Budget</h3><span class="chip ok">live</span></div>
+        <p class="io">Receipt / text / voice → expense or income draft → finance Sheets</p>
+        <p>Handles monthly expenses, income history with the 8% AUSN tax, expected receipts, safe arithmetic formulas, and a knowledge base of recurring merchants.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>PR and marketing</h3><span class="chip ok">live</span></div>
+        <p class="io">Link / screenshot / text → publication draft → PR Sheets</p>
+        <p>Deduplicates by URL, updates rows in place, reads browser address bars from screenshots, and enriches links with SSRF-safe web fetching.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Client base</h3><span class="chip ok">live</span></div>
+        <p class="io">Text / link / media / PDF → company card → five client sheets</p>
+        <p>Deduplicates by website and domain, accepts media and forwarded input, and adds human-only comments after a successful save.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Personal data</h3><span class="chip warn">owner-only</span></div>
+        <p class="io">Button → read-only document card → Telegram only</p>
+        <p>Reads RU passports, foreign passports, and vehicles from a dedicated workbook. Data never reaches AI providers, logs, or PostgreSQL. Cards are formatted for one-tap copy.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Enquiries</h3><span class="chip ok">live</span></div>
+        <p class="io">Website form → minimized receipt → Telegram topic</p>
+        <p>A protected ingress accepts enquiries from studio-shum.ru, uses a no-replay protocol, and anonymizes cards after 30 days.</p>
+      </article>
+      <article class="topic">
+        <div class="topic-head"><h3>Estimates</h3><span class="chip warn">reserved</span></div>
+        <p class="io">Brief → estimate → estimate workbook</p>
+        <p>The topic exists in the catalog, but the business slice is not built. It needs a separate owner-run OAuth bootstrap before file creation can work.</p>
+      </article>
+    </div>
+    <figcaption><span class="fig-n">Fig. 2</span><span class="fig-text">Each topic ends in the system that already owns the data. The bot is an interface, not a second database.</span></figcaption>
+  </figure>
+  <details class="deep">
+    <summary>Why topics instead of one chat</summary>
+    <div class="deep-body">
+      <p>Telegram topics give each function a stable routing key. The bot stores <code>chat_id + function_key → message_thread_id</code> in <code>bot_owned_topics</code> and resolves the function from the thread, never from the topic title or the first words of a message. If an unknown topic is used, the bot refuses to guess. If a permission was revoked, the bot sends an explicit refusal instead of falling back to a default function.</p>
+      <p>This matters because the same bot serves several people with different access. The topic is the boundary between “a message” and “an operation with consequences”.</p>
+    </div>
+  </details>
+</section>
+
+<section id="lifecycle">
+  <div class="sec-head">
+    <p class="ve-label">One request, end to end</p>
+    <h2>The webhook is the only synchronous door.</h2>
+  </div>
+  <figure class="lifecycle-figure">
+    <div class="lifecycle">
+      <div class="stage-track" role="group" aria-label="Request lifecycle stages">
+        <button class="stage" type="button" data-stage="1" aria-pressed="true"><span class="n">01</span><strong>Update arrives</strong></button>
+        <button class="stage" type="button" data-stage="2" aria-pressed="false"><span class="n">02</span><strong>Edge and budget</strong></button>
+        <button class="stage" type="button" data-stage="3" aria-pressed="false"><span class="n">03</span><strong>Route and gate</strong></button>
+        <button class="stage" type="button" data-stage="4" aria-pressed="false"><span class="n">04</span><strong>Normalize</strong></button>
+        <button class="stage" type="button" data-stage="5" aria-pressed="false"><span class="n">05</span><strong>Enrich media</strong></button>
+        <button class="stage" type="button" data-stage="6" aria-pressed="false"><span class="n">06</span><strong>Draft with AI</strong></button>
+        <button class="stage" type="button" data-stage="7" aria-pressed="false"><span class="n">07</span><strong>Human decision</strong></button>
+        <button class="stage" type="button" data-stage="8" aria-pressed="false"><span class="n">08</span><strong>Controlled write</strong></button>
+        <button class="stage" type="button" data-stage="9" aria-pressed="false"><span class="n">09</span><strong>Record and observe</strong></button>
+      </div>
+      <div class="stage-copy" aria-live="polite">
+        <p data-stage-copy="1">Telegram sends a signed POST to <code>/webhook/telegram</code>. The same bot token must not be used by local polling and the production webhook at the same time.</p>
+        <p data-stage-copy="2" hidden>Caddy terminates HTTPS and proxies the request. Its write timeout is 60 seconds. The handler keeps a 5-second safety margin, so the application budget is 50 seconds.</p>
+        <p data-stage-copy="3" hidden>The router reads <code>chat_id</code> and <code>message_thread_id</code>, finds the function, and checks <code>FunctionPermission</code>. Unknown topics and revoked users get an explicit refusal.</p>
+        <p data-stage-copy="4" hidden>The ingest layer normalizes text, captions, forwarded provenance, entities, hidden links, and attachment descriptors. Diagnostic logs stay metadata-only.</p>
+        <p data-stage-copy="5" hidden>Voice goes to Yandex SpeechKit. Images go to the Vision worker. PDFs go to Docling and OCR. Durable batches survive retries, restarts, and slow documents.</p>
+        <p data-stage-copy="6" hidden>The matching function turns evidence into a typed draft. Every real model call goes through the AI gateway and writes a usage event with tokens or audio seconds.</p>
+        <p data-stage-copy="7" hidden>A Telegram Rich Card shows the draft. The human can approve, correct, or cancel. HR and Budget add durable drafts, interaction-mode gates, and one-use tokens.</p>
+        <p data-stage-copy="8" hidden>On approval, Google Calendar or Sheets writes run in a worker thread. Idempotency, row fingerprints, and no-replay tokens prevent double saves after a repeated tap.</p>
+        <p data-stage-copy="9" hidden>The journal records safe before and after values. Failures become deduplicated incidents. Spend lands in AI usage. The admin panel reads all of it without prompts or private content.</p>
+      </div>
+      <div class="stage-controls">
+        <button type="button" data-previous aria-label="Previous stage">←</button>
+        <button type="button" class="replay" data-replay>Replay</button>
+        <span class="stage-position" aria-hidden="true">1 / 9</span>
+        <button type="button" data-next aria-label="Next stage">→</button>
+      </div>
+    </div>
+    <figcaption><span class="fig-n">Fig. 3</span><span class="fig-text">Slow work leaves the request immediately. If a handler exceeds 50 seconds, the bot records an incident and returns HTTP 200 so Telegram does not retry in a storm.</span></figcaption>
+  </figure>
+</section>
+
+<section id="runtime">
+  <div class="sec-head">
+    <p class="ve-label">Runtime</p>
+    <h2>One public edge, one internal network, a small set of containers.</h2>
+  </div>
+  <figure>
+    <div class="frame">
+      <svg class="ve-svg" viewBox="0 0 1200 840" role="img" aria-label="Telegram and the team browser go through Caddy to the bot and admin containers. The bot and admin share PostgreSQL. The bot pushes image and PDF jobs to workers. Scheduler and Hermes run beside them. Outbound Google, Yandex, Replicate and language-model calls leave through HTTPS." style="--ve-min: 1029px">
+        <rect class="ve-bnd" x="30" y="20" width="1140" height="270"/>
+        <text class="ve-bnd-t" x="50" y="46">PUBLIC EDGE</text>
+
+        <g class="ve-n">
+          <rect class="sh" x="70" y="60" width="200" height="76"/>
+          <text x="170" y="92">Telegram</text>
+          <text class="sub" x="170" y="114">updates, files, voice</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="930" y="60" width="200" height="76"/>
+          <text x="1030" y="92">Team browser</text>
+          <text class="sub" x="1030" y="114">admin panel</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="470" y="180" width="260" height="80"/>
+          <text x="600" y="212">Caddy</text>
+          <text class="sub" x="600" y="234">HTTPS / reverse proxy</text>
+        </g>
+
+        <path class="ve-e is-hot" d="M270 98 H500 V180"/>
+        <text class="ve-el" x="385" y="88">webhook</text>
+        <path class="ve-e" d="M930 98 H700 V180"/>
+        <text class="ve-el" x="815" y="88">admin</text>
+
+        <rect class="ve-bnd" x="30" y="290" width="1140" height="350"/>
+        <text class="ve-bnd-t" x="50" y="316">INTERNAL DOCKER NETWORK</text>
+
+        <path class="ve-e is-hot" d="M520 260 V300 H300 V345"/>
+        <text class="ve-el" x="360" y="291">webhook</text>
+        <path class="ve-e" d="M680 260 V300 H700 V345"/>
+        <text class="ve-el r" x="690" y="291">admin API</text>
+
+        <g class="ve-n is-key">
+          <rect class="sh" x="90" y="345" width="220" height="88"/>
+          <text x="200" y="381">Bot container</text>
+          <text class="sub" x="200" y="403">FastAPI + aiogram</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="350" y="345" width="200" height="88"/>
+          <text x="450" y="381">PostgreSQL 16</text>
+          <text class="sub" x="450" y="403">drafts, journal, usage</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="590" y="345" width="220" height="88"/>
+          <text x="700" y="381">Admin container</text>
+          <text class="sub" x="700" y="403">React SPA + /api/admin</text>
+        </g>
+
+        <path class="ve-e" d="M310 389 H350"/>
+        <text class="ve-el" x="330" y="379">state</text>
+        <path class="ve-e" d="M590 389 H550"/>
+        <text class="ve-el" x="570" y="379">reads</text>
+
+        <g class="ve-n">
+          <rect class="sh" x="110" y="500" width="220" height="80"/>
+          <text x="220" y="534">Vision worker</text>
+          <text class="sub" x="220" y="556">media batches, VLM</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="350" y="500" width="220" height="80"/>
+          <text x="460" y="534">PDF/OCR worker</text>
+          <text class="sub" x="460" y="556">Docling, OCRmyPDF</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="590" y="500" width="220" height="80"/>
+          <text x="700" y="534">Scheduler</text>
+          <text class="sub" x="700" y="556">reminders, digest</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="830" y="500" width="220" height="80"/>
+          <text x="940" y="534">Hermes</text>
+          <text class="sub" x="940" y="556">opt-in, read-only</text>
+        </g>
+
+        <path class="ve-e is-async" d="M200 433 V500"/>
+        <text class="ve-el r" x="210" y="470">images</text>
+        <path class="ve-e is-async" d="M290 433 V465 H460 V500"/>
+        <text class="ve-el r" x="300" y="457">PDFs</text>
+
+        <rect class="ve-bnd" x="30" y="680" width="1140" height="150"/>
+        <text class="ve-bnd-t" x="50" y="706">EXTERNAL APIS</text>
+        <path class="ve-e" d="M600 640 V680"/>
+        <text class="ve-el r" x="610" y="666">HTTPS out</text>
+
+        <g class="ve-n">
+          <rect class="sh" x="60" y="720" width="190" height="76"/>
+          <text x="155" y="752">Google Calendar</text>
+          <text class="sub" x="155" y="774">events, guests</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="280" y="720" width="190" height="76"/>
+          <text x="375" y="752">Google Sheets</text>
+          <text class="sub" x="375" y="774">the studio’s rows</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="500" y="720" width="190" height="76"/>
+          <text x="595" y="752">Yandex SpeechKit</text>
+          <text class="sub" x="595" y="774">voice to text</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="720" y="720" width="190" height="76"/>
+          <text x="815" y="752">Replicate</text>
+          <text class="sub" x="815" y="774">avatar stickers</text>
+        </g>
+        <g class="ve-n">
+          <rect class="sh" x="940" y="720" width="200" height="76"/>
+          <text x="1040" y="752">Language models</text>
+          <text class="sub" x="1040" y="774">LLM providers</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><span class="fig-n">Fig. 4</span><span class="fig-text">Telegram traffic has one synchronous entry point. Every slow job is pushed out of it into PostgreSQL-backed workers.</span></figcaption>
+  </figure>
+  <div class="split">
+    <div>
+      <p>The bot and the admin API are separate FastAPI processes built from the same image. They share PostgreSQL but not a request path. The bot owns Telegram updates and business writes. The admin panel is a read surface for state, access, services, journal, errors, and AI spend. Access is the main write surface, with a few explicit recovery actions.</p>
+      <p>Deployment is one `main` branch, GitHub Actions, Docker Compose, and Caddy. Migrations run as a one-shot service before the app starts. The deploy workflow builds the Vision profile, restores Google service-account credentials from a GitHub secret when needed, and verifies public `/health` after restart.</p>
+    </div>
+    <ul class="stack-list" aria-label="Stack">
+      <li>FastAPI</li><li>aiogram</li><li>PostgreSQL 16</li><li>React 19</li><li>Vite</li><li>TypeScript</li><li>Docker Compose</li><li>Caddy</li><li>GitHub Actions</li><li>Google Calendar API</li><li>Google Sheets API</li><li>Docling</li><li>OCRmyPDF</li><li>Tesseract</li><li>Yandex SpeechKit</li><li>Replicate</li><li>DeepSeek</li><li>Surplus</li><li>OpenRouter</li>
+    </ul>
+  </div>
+  <details class="deep">
+    <summary>Container contracts</summary>
+    <div class="deep-body">
+      <div class="ve-table">
+        <table>
+          <thead><tr><th>Service</th><th>Role</th><th>Network</th><th>Restart</th></tr></thead>
+          <tbody>
+            <tr><th>postgres</th><td>State for drafts, permissions, journal, errors, AI usage, batches, sessions.</td><td>internal</td><td>unless-stopped</td></tr>
+            <tr><th>migrate</th><td>One-shot <code>alembic upgrade head</code> before the app starts.</td><td>internal</td><td>profile</td></tr>
+            <tr><th>admin</th><td><code>shum_assistant.api:app</code>, serves the React build and <code>/api/admin</code>.</td><td>internal</td><td>unless-stopped</td></tr>
+            <tr><th>bot</th><td><code>shum_assistant.webhook_app:app</code>, Telegram updates, media workers, business flows.</td><td>internal</td><td>unless-stopped</td></tr>
+            <tr><th>scheduler</th><td>Calendar reminders and the Monday digest.</td><td>internal</td><td>profile</td></tr>
+            <tr><th>hermes</th><td>Opt-in internal research container. Read-only observer imports usage.</td><td>internal</td><td>unless-stopped</td></tr>
+            <tr><th>caddy</th><td>Public TLS, routing, and reverse proxy.</td><td>public + internal</td><td>unless-stopped</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">The Vision worker is built and started through the deploy profile. PDF/OCR runs as a durable worker runtime next to the bot. Both write their state to PostgreSQL, so a restart does not lose an accepted job.</p>
+    </div>
+  </details>
+</section>
+
+<section id="media">
+  <div class="sec-head">
+    <p class="ve-label">Media</p>
+    <h2>Three pipelines carry the material AI cannot read directly.</h2>
+  </div>
+  <figure>
+    <div class="pipelines">
+      <article class="pipeline">
+        <h3>Voice and video notes</h3>
+        <div class="pipe-steps">
+          <div class="pipe-step"><span class="dot"></span><span>Telegram sends OggOpus for voice, MP4 for a video note.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>MP4 is converted to MP3 by FFmpeg through a short-lived seekable file in <code>/dev/shm</code>.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Yandex SpeechKit transcribes. Recognition routes by duration: ≤ 30 s synchronous, longer asynchronous.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>The recognized text is injected into the topic as a normal text message.</span></div>
+        </div>
+        <p class="pipe-note">Header-only MP3 output is rejected. The temporary input is deleted in <code>finally</code>.</p>
+      </article>
+      <article class="pipeline">
+        <h3>Images and screenshots</h3>
+        <div class="pipe-steps">
+          <div class="pipe-step"><span class="dot"></span><span>Images enter a durable media batch, not the webhook’s request path.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Safety checks and OCR run first. A VLM reads the visual content when needed.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Function adapters shape the result for Calendar, HR, PR, or Client Base.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>A single terminal notification resumes the waiting flow.</span></div>
+        </div>
+        <p class="pipe-note">The HR Vision adapter always drops the human-only <code>Comment</code> field.</p>
+      </article>
+      <article class="pipeline">
+        <h3>PDF and documents</h3>
+        <div class="pipe-steps">
+          <div class="pipe-step"><span class="dot"></span><span>Eligible PDFs create attachment jobs and a continuation batch before any HR card is sent.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Docling extracts text. Image-heavy pages escalate to OCRmyPDF and Tesseract.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>Follow-up messages in the same topic append to the active batch instead of being discarded.</span></div>
+          <div class="pipe-step"><span class="dot"></span><span>The resumed card sees the combined text, captions, attachments, and full extracted PDF text.</span></div>
+        </div>
+        <p class="pipe-note">Background timeout is 300 s. Worker lease is <code>max(90, timeout × 2)</code>.</p>
+      </article>
+    </div>
+    <figcaption><span class="fig-n">Fig. 5</span><span class="fig-text">The slowest material never blocks the bot. Each pipeline stores enough state to finish after a restart.</span></figcaption>
+  </figure>
+  <details class="deep">
+    <summary>Why the document path is the riskiest part</summary>
+    <div class="deep-body">
+      <p>A PDF is not a message. It can be 200 pages, scanned, rotated, or mostly images. It can arrive in five forwarded parts. The original Telegram file may keep the MP4 <code>moov</code> atom at the end, which makes naive streaming fail. OCR can take minutes. A worker can die mid-job.</p>
+      <p>The system answers with durable jobs, a continuation batch, an adaptive lease, and fail-closed behavior. If the PDF times out, is cancelled, or cannot be parsed, the HR card is not sent. The bot does not invent a candidate from half a document.</p>
+    </div>
+  </details>
+</section>
+
+<section id="ai">
+  <div class="sec-head">
+    <p class="ve-label">AI gateway</p>
+    <h2>Every model call becomes an accounted event.</h2>
+  </div>
+  <figure>
+    <div class="frame">
+      <svg class="ve-svg" viewBox="0 0 1100 560" role="img" aria-label="Five providers, Surplus, DeepSeek, OpenRouter, Replicate and Yandex SpeechKit, call through one AI gateway. Each call writes a usage event with tokens, seconds and cost. The admin panel reads costs from that ledger." style="--ve-min: 943px">
+        <g class="ve-n"><rect class="sh" x="30" y="30" width="220" height="64"/><text x="140" y="56">Surplus Intelligence</text><text class="sub" x="140" y="78">text + vision</text></g>
+        <g class="ve-n"><rect class="sh" x="30" y="120" width="220" height="64"/><text x="140" y="146">DeepSeek</text><text class="sub" x="140" y="168">extraction</text></g>
+        <g class="ve-n"><rect class="sh" x="30" y="210" width="220" height="64"/><text x="140" y="236">OpenRouter</text><text class="sub" x="140" y="258">fallback models</text></g>
+        <g class="ve-n"><rect class="sh" x="30" y="300" width="220" height="64"/><text x="140" y="326">Replicate</text><text class="sub" x="140" y="348">avatar stickers</text></g>
+        <g class="ve-n"><rect class="sh" x="30" y="390" width="220" height="64"/><text x="140" y="416">Yandex SpeechKit</text><text class="sub" x="140" y="438">speech to text</text></g>
+
+        <path class="ve-e" d="M250 62 C310 62 310 236 370 245"/>
+        <text class="ve-el" x="300" y="120">text</text>
+        <path class="ve-e" d="M250 152 C310 152 310 248 370 254"/>
+        <text class="ve-el" x="300" y="178">extract</text>
+        <path class="ve-e" d="M250 242 C310 242 310 260 370 263"/>
+        <text class="ve-el" x="300" y="235">fallback</text>
+        <path class="ve-e" d="M250 332 C310 332 310 272 370 272"/>
+        <text class="ve-el" x="300" y="292">avatar</text>
+        <path class="ve-e" d="M250 422 C310 422 310 284 370 281"/>
+        <text class="ve-el" x="300" y="348">audio</text>
+
+        <g class="ve-n is-key"><rect class="sh" x="370" y="210" width="200" height="100"/><text x="470" y="248">AI gateway</text><text class="sub" x="470" y="270">one call path</text></g>
+        <path class="ve-e is-hot" d="M570 260 H650"/>
+        <text class="ve-el" x="610" y="240">records</text>
+        <g class="ve-n"><rect class="sh" x="650" y="210" width="190" height="100"/><text x="745" y="248">ai_usage_events</text><text class="sub" x="745" y="270">tokens, seconds, cost</text></g>
+        <path class="ve-e" d="M840 260 H920"/>
+        <text class="ve-el" x="880" y="240">reads</text>
+        <g class="ve-n"><rect class="sh" x="920" y="210" width="150" height="100"/><text x="995" y="248">Admin</text><text class="sub" x="995" y="270">AI and spend</text></g>
+      </svg>
+    </div>
+    <figcaption><span class="fig-n">Fig. 6</span><span class="fig-text">The gateway is the only place a model is called, so the ledger cannot miss a billable event. Prompt and image content are never stored.</span></figcaption>
+  </figure>
+  <div class="ve-table">
+    <table>
+      <thead><tr><th>Provider</th><th>Used for</th><th>Billing unit</th><th>Balance view</th></tr></thead>
+      <tbody>
+        <tr><th>Surplus Intelligence</th><td>Text and VLM calls. The avatar flow uses <code>gpt-5.4</code> to translate and adapt a Russian idea into an English object concept.</td><td>Tokens</td><td>Honest unsupported state</td></tr>
+        <tr><th>DeepSeek</th><td>Structured extraction for Calendar, HR, Budget, PR, and Client Base.</td><td>Tokens</td><td>Live wallet API</td></tr>
+        <tr><th>OpenRouter</th><td>Additional model access and fallback paths.</td><td>Tokens</td><td>Live credits API</td></tr>
+        <tr><th>Replicate</th><td><code>fofr/sticker-maker</code> avatars, composited to the exact <code>#F3AC03</code> background.</td><td>Predictions</td><td>Honest unsupported state</td></tr>
+        <tr><th>Yandex SpeechKit</th><td>Voice and video-note transcription. Sync at 30 s or less, async above 30 s.</td><td>Audio seconds</td><td>JWT → IAM → Cloud Billing</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="deep">
+    <summary>What the cost page actually proves</summary>
+    <div class="deep-body">
+      <p>Cost is computed from real gateway calls joined to a pricing loader built from LiteLLM’s model price catalog plus local overrides. A model appears in “used models” only after a product call, not because a provider’s <code>/models</code> endpoint listed it. The page can show spend by model, function, and user, a daily chart, a 24-hour rolling window, and an owner-only ZIP export with JSON, CSV, and schema notes.</p>
+      <p>Micro-spend is not rounded away. Amounts below one cent display up to ten decimal places. Balances and thresholds use the same USD→RUB context as spend, so switching currency changes the amount, not only the symbol.</p>
+    </div>
+  </details>
+</section>
+
+<section id="reliability">
+  <div class="sec-head">
+    <p class="ve-label">Reliability</p>
+    <h2>The hard part is not the model. It is the second attempt.</h2>
+  </div>
+  <figure>
+    <div class="budget-frame">
+      <svg class="ve-bars" viewBox="0 0 240 108" role="img" aria-label="The webhook budget is 50 seconds. Web fetch is 14 seconds. STT sync is 30 seconds. OCR gets 300 seconds in a background worker."><text y="12">Web fetch</text><rect x="84" y="5" width="4.67" height="14" rx="2"/><text x="96.67" y="12">14s</text><text y="40">STT sync</text><rect x="84" y="33" width="10" height="14" rx="2"/><text x="102" y="40">30s</text><text y="68">Webhook</text><rect class="hot" x="84" y="61" width="16.67" height="14" rx="2"/><text x="108.67" y="68">50s</text><text y="96">OCR</text><rect x="84" y="89" width="100" height="14" rx="2"/><text x="192" y="96">300s</text></svg>
+      <div class="budget-notes">
+        <p><b>Synchronous, 50 s or less.</b> Web fetch, speech-to-text for short clips, and the webhook itself protect one shared budget. The bot must answer Telegram inside it.</p>
+        <p><b>Background, 300 s.</b> OCR is a separate worker with a separate lease. A long PDF can finish after the webhook has already returned.</p>
+      </div>
+    </div>
+    <figcaption><span class="fig-n">Fig. 7</span><span class="fig-text">Most limits protect the 50-second synchronous webhook. OCR is allowed 300 seconds only because it runs out of band.</span></figcaption>
+  </figure>
+  <div class="ve-table">
+    <table>
+      <thead><tr><th>Failure mode</th><th>Mechanism that answers it</th><th>Visible result</th></tr></thead>
+      <tbody>
+        <tr><th>Telegram retry storm</th><td>A 50 s handler budget. On expiry: record <code>telegram_webhook:timeout:TimeoutError</code> and return HTTP 200. Five fast successful updates recover the incident.</td><td><span class="chip ok">self-healing</span></td></tr>
+        <tr><th>Double tap on Save</th><td>Atomic claim with <code>with_for_update()</code>, version increment, one-use sibling tokens, and <code>reconciliation_required</code> after an ambiguous timeout.</td><td><span class="chip ok">no replay</span></td></tr>
+        <tr><th>Google call blocks the bot</th><td>Synchronous Sheets and Calendar calls are offloaded to worker threads with <code>asyncio.to_thread</code> or <code>_run_blocking</code>.</td><td><span class="chip ok">no frozen loop</span></td></tr>
+        <tr><th>Worker dies on a long OCR</th><td>Adaptive lease <code>max(90, timeout × 2)</code>, explicit state transitions, and a stale-claim sweep on the next loop.</td><td><span class="chip ok">durable job</span></td></tr>
+        <tr><th>Duplicate candidate or client</th><td>Deduplication by phone, site, domain, or URL. Preview before write. HR writes one person to one primary sheet.</td><td><span class="chip ok">one row</span></td></tr>
+        <tr><th>WAF or DDoS-Guard tarpit</th><td>Chrome 142 headers, TCP/TLS connect cap, bounded fast retry, one 14 s deadline per URL, 5 MB cap.</td><td><span class="chip ok">bounded fetch</span></td></tr>
+        <tr><th>PII leaks into AI or logs</th><td>Personal Data is read-only, never sent to AI, never stored in PostgreSQL or incidents. Incidents carry metadata only. HR and Budget comments are human-only.</td><td><span class="chip ok">contained</span></td></tr>
+        <tr><th>Restart during a write</th><td>Durable drafts, media batches, continuation batches, idempotency keys, and a startup recovery sweep for stale saving drafts.</td><td><span class="chip ok">recoverable</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details class="deep">
+    <summary>The exact constants</summary>
+    <div class="deep-body">
+      <div class="ve-table">
+        <table>
+          <thead><tr><th>Constant</th><th>Value</th><th>What it protects</th></tr></thead>
+          <tbody>
+            <tr><th><code>TELEGRAM_HANDLER_BUDGET_SECONDS</code></th><td class="num">50</td><td>The synchronous webhook response. Never applied to background tasks.</td></tr>
+            <tr><th><code>ATTACHMENT_ENRICHMENT_TIMEOUT_SECONDS</code></th><td class="num">300</td><td>The OCR worker. Cutting it to 50 s would kill valid PDFs.</td></tr>
+            <tr><th><code>WEB_FETCH_TIMEOUT_SECONDS</code></th><td class="num">14</td><td>One URL across HR, PR, Client Base, and Calendar. Validator ceiling is 18 s.</td></tr>
+            <tr><th><code>PENDING_HR_BATCH_TTL_SECONDS</code></th><td class="num">1 800</td><td>The HR preview confirmation token: 30 minutes.</td></tr>
+            <tr><th>Saving-draft lease</th><td class="num">300</td><td>Recovery of writes stuck in <code>saving</code> for five minutes.</td></tr>
+            <tr><th>Vision work directory</th><td>tmpfs</td><td><code>/tmp/shum-vision-work</code>, outside the persistent volume.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small">One number is deliberately missing: there is no single “AI timeout” for everything. Each provider and each worker has its own contract because text, speech, images, and OCR fail in different ways.</p>
+    </div>
+  </details>
+</section>
+
+<section id="admin">
+  <div class="sec-head">
+    <p class="ve-label">Control room</p>
+    <h2>The admin panel shows state, not secrets.</h2>
+  </div>
+  <figure>
+    <div class="admin-grid">
+      <article class="admin-card">
+        <div class="topic-head"><h3>Overview</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/overview</p>
+        <p>System state, service counts, active errors, and live queue counters for Vision images and OCR documents.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Access</h3><span class="chip warn">write</span></div>
+        <p class="cmd">/access</p>
+        <p>Users, function permissions, topic synchronization status, and a retry action. The main write surface; the other pages stay read-only.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Services</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/services</p>
+        <p>PostgreSQL, Telegram, Google Calendar, Google Sheets, Yandex STT, Replicate, PDF/OCR, Vision, Hermes, and credentials.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Journal</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/journal</p>
+        <p>Human event labels, Moscow timestamps, safe before and after values, and copyable JSON for agent handoff.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Error logs</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/errors</p>
+        <p>Sixteen sources, domain filters, repeat counts, last-seen time, expandable technical context, and self-healing incidents.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>AI and spend</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/ai-costs</p>
+        <p>Provider status, balances where supported, spend for a chosen period, daily chart, breakdowns by model, function, and user.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Onboarding</h3><span class="chip ok">read</span></div>
+        <p class="cmd">/tutorial</p>
+        <p>A twelve-step onboarding wizard for new team members: the bot, each function, the admin panel, and the backlog.</p>
+      </article>
+      <article class="admin-card">
+        <div class="topic-head"><h3>Design rule</h3><span class="chip ok">visible</span></div>
+        <p>Dark, calm, technical. Status always has a shape and a word, never color alone. The admin never duplicates Sheets and never exposes prompts, document content, or API keys.</p>
+      </article>
+    </div>
+    <figcaption><span class="fig-n">Fig. 8</span><span class="fig-text">The panel answers operational questions: is it up, who has access, what changed, what failed, and what did it cost.</span></figcaption>
+  </figure>
+</section>
+
+<section id="data">
+  <div class="sec-head">
+    <p class="ve-label">System of record</p>
+    <h2>Google stays the source of truth. The bot is the entrance.</h2>
+  </div>
+  <div class="ve-table">
+    <table>
+      <thead><tr><th>Function</th><th>System of record</th><th>Write policy</th><th>Safety detail</th></tr></thead>
+      <tbody>
+        <tr><th>Calendar</th><td>Google Calendar SHUM</td><td>Create, update, delete, restore</td><td>Preview, duplicate detection, JSON-LD poster parsing, external guests through a service account with a 403 fallback.</td></tr>
+        <tr><th>HR</th><td>HR workbook, ten profile sheets</td><td>One primary sheet per person</td><td>Candidate deduplication, PDF continuation, human-only <code>Comment</code>, one-click save state machine.</td></tr>
+        <tr><th>Client Base</th><td>Five active client sheets</td><td>Append or update one row</td><td>Website and domain deduplication, media and PDF input, durable post-save comment.</td></tr>
+        <tr><th>Budget</th><td>Finance workbook, three active sheets</td><td>Expenses, income, expected receipts</td><td>8% AUSN tax, safe arithmetic formulas, raw-cell reads, no-replay save.</td></tr>
+        <tr><th>PR and Marketing</th><td>PR workbook</td><td>Append or update in place</td><td>URL deduplication, text-only HTML cards, SSRF-safe enrichment, edit-in-place.</td></tr>
+        <tr><th>Personal Data</th><td>Dedicated personal-data workbook</td><td>Read-only</td><td>Never sent to AI, never persisted, never logged. One-tap copy cards.</td></tr>
+        <tr><th>Website Enquiries</th><td>Telegram topic plus admin receipts</td><td>Ingress and anonymize</td><td>Protected endpoint, minimized receipt, no-replay protocol, 30-day anonymization.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="split" style="margin-top:28px">
+    <div>
+      <p>This is why the admin panel is not a spreadsheet editor. It shows the state of the machine around the data: health, access, events, failures, and cost. The rows themselves stay in Google Sheets, where the team already works and where the formulas and sharing rules already live.</p>
+    </div>
+    <div class="note-box">
+      <h3>The product boundary</h3>
+      <p>Google Sheets is the system of record. PostgreSQL is the system of memory: drafts, tokens, locks, incidents, usage, and audit. The two have different jobs and are never allowed to silently become each other.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+const explainer = document.querySelector('.lifecycle');
+  if (explainer) {
+    const stages = Array.from(explainer.querySelectorAll('[data-stage]'));
+    const copies = Array.from(explainer.querySelectorAll('[data-stage-copy]'));
+    const position = explainer.querySelector('.stage-position');
+    const previous = explainer.querySelector('[data-previous]');
+    const next = explainer.querySelector('[data-next]');
+    const replay = explainer.querySelector('[data-replay]');
+    let current = 1;
+    let timer;
+
+    const show = (value) => {
+      current = Math.min(Math.max(value, 1), stages.length);
+      stages.forEach((stage) => {
+        const stageNumber = Number(stage.dataset.stage);
+        const state = stageNumber === current ? 'current' : stageNumber < current ? 'complete' : 'future';
+        stage.dataset.state = state;
+        stage.setAttribute('aria-pressed', String(stageNumber === current));
+      });
+      copies.forEach((copy) => {
+        copy.hidden = Number(copy.dataset.stageCopy) !== current;
+      });
+      if (position) position.textContent = current + ' / ' + stages.length;
+      if (previous) previous.disabled = current === 1;
+      if (next) next.disabled = current === stages.length;
+    };
+
+    const stop = () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+      if (replay) replay.textContent = 'Replay';
+    };
+
+    stages.forEach((stage) => {
+      stage.addEventListener('click', () => {
+        stop();
+        show(Number(stage.dataset.stage));
+      });
+    });
+    previous?.addEventListener('click', () => { stop(); show(current - 1); });
+    next?.addEventListener('click', () => { stop(); show(current + 1); });
+    replay?.addEventListener('click', () => {
+      if (timer !== undefined) { stop(); return; }
+      show(1);
+      replay.textContent = 'Pause';
+      timer = window.setInterval(() => {
+        if (current === stages.length) { stop(); return; }
+        show(current + 1);
+      }, 1600);
+    });
+
+    show(1);
+  }
+</script>
+
+<style>
+.shum-explainer {
+  --signal-soft: #f6e8ea;
+  --ok: #1f7443;
+  --warn: #7a5e00;
+  --risk: #960018;
+  --info: #1a5f86;
+  --bg: var(--paper);
+  --surface: var(--paper);
+  --border: var(--rule);
+  --border-bright: var(--rule-strong);
+  --text: var(--ink);
+  --text-dim: var(--mute);
+  --accent: var(--signal);
+  --accent-dim: var(--signal-soft);
+  --node-top: #ffffff;
+  --lift: rgb(11 11 11 / 0.1);
+  --halo: 16%;
+  --font-body: var(--font);
+  --font-display: var(--font-body);
+  --display-weight: 680;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', 'Segoe UI Mono',
+    monospace;
+  --t-label: 0.75rem;
+  --t-small: 0.875rem;
+  --t-body: 1rem;
+  --t-lead: 1.25rem;
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+  --r-1: 0;
+  --r-2: 0;
+  --ease: var(--ease-out);
+  --fast: var(--dur-fast);
+  --med: 300ms;
+  --slow: 500ms;
+  grid-column: 1 / -1;
+  display: grid;
+  gap: clamp(56px, 8vw, 104px);
+  min-width: 0;
+  overflow-x: clip;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.shum-explainer :where(h2, h3, h4, p, figure, figcaption, ul, ol) {
+  margin: 0;
+}
+
+.shum-explainer p {
+  max-width: 68ch;
+}
+
+.shum-explainer .sec-head h2 {
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.4vw, 54px);
+  font-weight: var(--display-weight);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.shum-explainer h3 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.shum-explainer a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+.shum-explainer code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+.shum-explainer button {
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--rule-strong);
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 var(--t-small) var(--font-mono);
+  cursor: pointer;
+}
+
+.shum-explainer section {
+  min-width: 0;
+  padding-top: clamp(32px, 4vw, 54px);
+  border-top: 1px solid var(--rule);
+}
+
+.ve-label {
+  font: 500 var(--t-label) var(--font-mono);
+  color: var(--text-dim);
+}
+
+.explainer-intro {
+  display: grid;
+  gap: 18px;
+}
+
+.explainer-intro + figure {
+  margin-top: calc(var(--s-6) - var(--s-8));
+}
+
+.lead {
+  max-width: 66ch;
+  color: var(--ink);
+  font-size: clamp(19px, 1.6vw, 23px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.lead b {
+  font-weight: 650;
+}
+
+.meta {
+  max-width: none;
+  font: 500 12px/1.6 var(--font-mono);
+  letter-spacing: 0.01em;
+  color: var(--mute);
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 20px;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font: 500 12px/1.4 var(--font-mono);
+}
+
+.toc-label {
+  color: var(--mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.toc a {
+  padding: 6px 0;
+  color: var(--mute);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.toc a:hover {
+  color: var(--signal);
+  border-color: var(--signal);
+}
+
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin-bottom: clamp(24px, 3vw, 40px);
+  padding-top: 0;
+  border-top: 0;
+}
+
+.sec-head h2 {
+  max-width: 22ch;
+}
+
+.sec-head .ve-label {
+  padding-top: 0;
+}
+
+figure {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.shum-explainer figure figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  max-width: none;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  color: var(--mute);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.shum-explainer figure figcaption .fig-n {
+  flex: none;
+  color: var(--ink);
+}
+
+.fig-text {
+  max-width: 65ch;
+}
+
+.lead-map {
+  display: grid;
+  grid-template-columns:
+    minmax(106px, 0.85fr) 28px minmax(0, 1fr) 28px minmax(0, 1fr) 28px
+    minmax(0, 1.08fr) 28px minmax(88px, 0.78fr);
+  align-items: center;
+  padding: clamp(18px, 3vw, 32px);
+  border: 1px solid var(--rule-strong);
+  background: var(--field);
+}
+
+.in-stack,
+.out-stack {
+  display: grid;
+  gap: 6px;
+}
+
+.in-stack span,
+.out-stack span {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  padding: 6px 8px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.out-stack span {
+  border-color: var(--signal);
+}
+
+.lead-node {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  min-height: 142px;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  text-align: center;
+}
+
+.lead-node strong {
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 1.2;
+}
+
+.lead-node small {
+  color: var(--mute);
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.node-kind {
+  font: 600 10px/1.2 var(--font-mono);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+.lead-node--signal {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: #fff;
+}
+
+.lead-node--signal .node-kind,
+.lead-node--signal small {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.lead-conn {
+  position: relative;
+  display: block;
+  height: 2px;
+  background: var(--ink);
+}
+
+.lead-conn::after {
+  position: absolute;
+  top: 50%;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  content: '';
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.kpis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--rule-strong);
+  background: var(--rule-strong);
+}
+
+.kpi {
+  display: grid;
+  flex: 1 1 11rem;
+  grid-template-rows: auto auto 1fr;
+  gap: 10px;
+  min-width: 0;
+  padding: clamp(16px, 2vw, 24px);
+  background: var(--paper);
+}
+
+.kpi .val {
+  font: 600 clamp(2rem, 3vw, 2.8rem) / 1 var(--font-body);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  text-box: trim-both cap alphabetic;
+}
+
+.kpi-note {
+  color: var(--mute);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+section > .ve-label:has(+ .kpis) {
+  margin-bottom: 12px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 28px 40px;
+  align-items: start;
+}
+
+.note-box {
+  display: grid;
+  gap: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--rule-strong);
+  background: var(--field);
+}
+
+.note-box h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.note-box p {
+  margin: 0;
+  color: var(--mute);
+  font-size: 14px;
+}
+
+.topic-map {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--rule-strong);
+}
+
+.topic {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: clamp(16px, 2vw, 22px);
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.topic:nth-child(3n) {
+  border-right: 0;
+}
+
+.topic:nth-last-child(-n + 3) {
+  border-bottom: 0;
+}
+
+.topic-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.topic h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.topic p {
+  margin: 0;
+  color: var(--mute);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.topic .io {
+  color: var(--mute);
+  font: 500 12px/1.45 var(--font-mono);
+  letter-spacing: 0.01em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  justify-self: start;
+  padding: 2px var(--s-2);
+  border: 1px solid currentColor;
+  border-radius: 0;
+  font: 600 11px var(--font-mono);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.chip::before {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: currentColor;
+  content: '';
+}
+
+.chip.ok {
+  color: var(--ok);
+}
+
+.chip.ok::before {
+  border-radius: 50%;
+}
+
+.chip.warn {
+  color: var(--warn);
+}
+
+.chip.warn::before {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.chip.risk {
+  color: var(--risk);
+}
+
+details {
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--rule);
+  color: var(--mute);
+  font-size: var(--t-body);
+}
+
+summary {
+  margin-bottom: var(--s-2);
+  font: 500 var(--t-label) var(--font-mono);
+  cursor: pointer;
+}
+
+details.deep {
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+}
+
+details.deep summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  color: var(--mute);
+  font: 600 12px/1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+
+details.deep summary::-webkit-details-marker {
+  display: none;
+}
+
+details.deep summary::after {
+  color: var(--signal);
+  font-size: 18px;
+  line-height: 1;
+  content: '+';
+}
+
+details.deep[open] summary::after {
+  content: '−';
+}
+
+details.deep .deep-body {
+  padding: 0 18px 20px;
+  border-top: 1px solid var(--rule);
+}
+
+details.deep .deep-body > *:first-child {
+  margin-top: 16px;
+}
+
+.stage-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule-strong);
+  background: var(--rule-strong);
+}
+
+.stage {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-content: space-between;
+  gap: 8px;
+  min-height: 96px;
+  padding: 12px 10px;
+  border: 0;
+  background: var(--paper);
+  color: var(--mute);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    background var(--dur-normal, 220ms)
+      var(--ease, cubic-bezier(0.16, 1, 0.3, 1)),
+    color var(--dur-normal, 220ms) var(--ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.stage .n {
+  color: var(--mute);
+  font: 600 11px/1 var(--font-mono);
+}
+
+.stage strong {
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.stage[data-state='complete'] {
+  background: var(--field);
+}
+
+.stage[data-state='current'] {
+  background: var(--signal);
+}
+
+.stage[data-state='current'] .n {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.stage[data-state='current'] strong {
+  color: #fff;
+}
+
+.stage-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 92px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.stage-copy p {
+  max-width: 74ch;
+  margin: 0;
+}
+
+.stage-controls {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-controls button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stage-controls button:hover:not(:disabled) {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: #fff;
+}
+
+.stage-controls button:disabled {
+  border-color: var(--rule);
+  color: var(--faint);
+  cursor: default;
+}
+
+.stage-position {
+  min-width: 42px;
+  color: var(--mute);
+  font: 500 12px var(--font-mono);
+  text-align: center;
+}
+
+.frame {
+  overflow-x: auto;
+  padding: clamp(16px, 2.5vw, 32px);
+  border: 1px solid var(--rule-strong);
+  background: var(--field);
+}
+
+.ve-svg {
+  display: block;
+  width: 100%;
+  min-width: var(--ve-min, 700px);
+  height: auto;
+  font: 500 17px var(--font-body);
+}
+
+.ve-n .sh {
+  fill: url(#ve-node);
+  stroke: var(--border-bright);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 6px 14px var(--lift));
+}
+
+.ve-n.is-key .sh {
+  fill: color-mix(in srgb, var(--accent) 11%, var(--surface));
+  stroke: var(--accent);
+  stroke-width: 2;
+  filter: drop-shadow(
+    0 0 16px color-mix(in srgb, var(--accent) var(--halo), transparent)
+  );
+}
+
+.ve-n text {
+  fill: var(--text);
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.ve-n .sub {
+  fill: var(--text-dim);
+  font: 500 14px var(--font-mono);
+}
+
+.ve-e {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.75;
+  marker-end: url(#ve-ah);
+}
+
+.ve-e.is-hot {
+  stroke: var(--accent);
+  stroke-width: 2.75;
+  filter: drop-shadow(
+    0 0 5px color-mix(in srgb, var(--accent) 55%, transparent)
+  );
+}
+
+.ve-e.is-async {
+  stroke-dasharray: 6 5;
+}
+
+.ve-el {
+  fill: var(--text-dim);
+  font: 500 14px var(--font-mono);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.ve-el.r {
+  text-anchor: start;
+}
+
+.ve-bnd {
+  fill: none;
+  stroke: var(--border-bright);
+  stroke-width: 1;
+  stroke-dasharray: 6 5;
+}
+
+.ve-bnd-t {
+  fill: var(--text-dim);
+  font: 600 14px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ve-bars {
+  align-self: end;
+  width: 100%;
+  max-width: 16rem;
+  height: auto;
+  overflow: visible;
+  font: 500 13px var(--font-mono);
+}
+
+.ve-bars text {
+  fill: var(--text-dim);
+  dominant-baseline: central;
+}
+
+.ve-bars rect {
+  fill: var(--border-bright);
+  transform-box: fill-box;
+  transform-origin: left;
+  transition: transform 900ms var(--ease) 150ms;
+}
+
+.ve-bars .hot {
+  fill: var(--accent);
+}
+
+.ve-bars .hot + text {
+  fill: var(--text);
+}
+
+.pipelines {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule-strong);
+  background: var(--rule-strong);
+}
+
+.pipeline {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: clamp(16px, 2vw, 22px);
+  background: var(--paper);
+}
+
+.pipeline h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.pipe-steps {
+  display: grid;
+  gap: 9px;
+}
+
+.pipe-step {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.pipe-step .dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 4px;
+  border: 1.5px solid var(--signal);
+}
+
+.pipe-note {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--rule);
+  color: var(--mute);
+  font: 500 12px/1.5 var(--font-mono);
+}
+
+.budget-frame {
+  display: grid;
+  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  gap: 28px 40px;
+  align-items: end;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid var(--rule-strong);
+  background: var(--field);
+}
+
+.budget-notes {
+  display: grid;
+  gap: 12px;
+}
+
+.budget-notes p {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--mute);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.budget-notes b {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.ve-table {
+  overflow-x: auto;
+  border: 1px solid var(--rule-strong);
+  border-radius: 0;
+}
+
+.ve-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--t-body);
+  font-variant-numeric: tabular-nums;
+}
+
+.ve-table th,
+.ve-table td {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.ve-table thead th {
+  background: var(--field);
+  color: var(--mute);
+  font: 600 var(--t-label) / 1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ve-table tbody th {
+  font-weight: 600;
+}
+
+.ve-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.ve-table .num {
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--rule-strong);
+  background: var(--rule-strong);
+}
+
+.admin-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: clamp(16px, 2vw, 22px);
+  background: var(--paper);
+}
+
+.admin-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.admin-card p {
+  margin: 0;
+  color: var(--mute);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.admin-card .cmd {
+  color: var(--mute);
+  font: 500 11px/1.3 var(--font-mono);
+}
+
+.small {
+  color: var(--mute);
+  font-size: 13px;
+}
+
+.small p {
+  max-width: 60ch;
+}
+
+.stack-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stack-list li {
+  padding: 5px 8px;
+  border: 1px solid var(--rule-strong);
+  color: var(--mute);
+  font: 500 11px/1.2 var(--font-mono);
+}
+
+.shum-explainer a:focus-visible,
+.shum-explainer button:focus-visible,
+.shum-explainer summary:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.stage[data-state='current']:focus-visible {
+  outline-color: var(--paper);
+}
+
+@media (max-width: 1100px) {
+  .lead-map {
+    grid-template-columns:
+      minmax(96px, 0.8fr) 22px minmax(0, 1fr) 22px minmax(0, 1fr) 22px
+      minmax(0, 1.05fr) 22px minmax(82px, 0.75fr);
+    padding: 18px;
+  }
+
+  .admin-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1040px) {
+  .kpi {
+    flex: 1 1 calc(33.333% - 1px);
+  }
+}
+
+@media (max-width: 900px) {
+  .lead-map {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .in-stack {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .out-stack {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .lead-conn {
+    justify-self: center;
+    width: 2px;
+    height: 26px;
+  }
+
+  .lead-conn::after {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    border-top: 0;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .budget-frame {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topic-map {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topic {
+    border-right: 0;
+  }
+
+  .topic:nth-last-child(-n + 3) {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .topic:last-child {
+    border-bottom: 0;
+  }
+
+  .pipelines {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage-copy {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stage-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 620px) {
+  .in-stack {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .in-stack span:last-child {
+    grid-column: span 2;
+  }
+
+  .out-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kpi {
+    flex-basis: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shum-explainer {
+    scroll-behavior: auto;
+  }
+
+  .stage,
+  .stage-controls button {
+    transition: none;
+  }
+}
+</style>
