@@ -37,6 +37,23 @@ agent working in this repository.
 - Stage only files that belong to the current task. Never discard unrelated
   changes to make the worktree clean.
 
+## Dependencies, Node.js, and Google Drive
+
+- The working tree is located inside Google Drive. Google Drive's background
+  sync aggressively locks files and directories when many small files change.
+- Never run `npm install`, `npm ci`, `npm update`, or delete/move `node_modules`
+  inside the Google Drive folder without explicit approval from the owner. Doing
+  so causes sync conflicts, file locking errors (`EPERM`, `ENOTEMPTY`, `TAR_ENTRY_ERROR`),
+  and hangs the agent session indefinitely.
+- Production builds and package installations are handled automatically by
+  GitHub Actions (`.github/workflows/deploy.yml`) on Ubuntu runners upon push to
+  `main`. Do not assume that a missing or broken local tool binary (like `astro`)
+  requires reinstalling packages locally.
+- If a local build or tool command fails with missing binaries or module errors,
+  do not attempt destructive "fixes" (such as wiping `node_modules` or running
+  `npm install` with long timeouts). Report the issue clearly to the owner in plain
+  language and ask how to proceed.
+
 ## Publication
 
 - Public repository: https://github.com/zhiganovsasha/zhiganovsasha.github.io
@@ -73,6 +90,9 @@ agent working in this repository.
   behavior before reporting completion.
 - Do not use the middle dot character as a separator anywhere in the project.
   Use commas, colons, slashes, dashes, or separate lines instead.
+- Never add local filesystem paths from the owner's PC (for example `G:\...` or
+  `E:\...`) to website articles, explainers, or published pages. Refer to files
+  by repository-relative paths instead.
 
 ## Windows, paths, and text encoding
 
