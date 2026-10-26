@@ -410,6 +410,7 @@ AI Video Production остаётся разделом внутри `/development
 
 - `https://youtu.be/GHEVjcgCb8M`
 - `https://youtu.be/eEAHjD6OBbI`
+- `https://youtu.be/8Ad_SmF3bGE`
 
 Видео встраиваются через `youtube-nocookie.com`.
 
