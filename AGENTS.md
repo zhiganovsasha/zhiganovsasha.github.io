@@ -23,6 +23,10 @@ agent working in this repository.
 
 ## Git workflow
 
+- The git directory is relocated outside Google Drive to `E:\gitdirs\my-personal-website.git`
+  for performance. The `.git` file in this project is a gitfile pointer.
+  Git tools work transparently, but plain file sync through Drive no longer
+  backs up the repository history. Do not delete `E:\gitdirs\my-personal-website.git`.
 - `main` is the stable branch. `dev` is the normal working branch.
 - Start work by checking `git status --short --branch`. Preserve changes that
   are already present and may belong to the owner or another agent.
