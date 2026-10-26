@@ -90,6 +90,12 @@ agent working in this repository.
   behavior before reporting completion.
 - Do not use the middle dot character as a separator anywhere in the project.
   Use commas, colons, slashes, dashes, or separate lines instead.
+- Do not convert editorial section headings in case studies and visual explainers
+  to Chicago Title Case. Keep the owner's sentence-case narrative headlines (e.g.
+  "The input is never clean. The system is built for that.").
+- Preserve authentic first-person statements ("I conceived, designed, and built...",
+  "with me directing, reviewing...") in case study role descriptions and personal
+  portfolio copy. Do not rewrite them into impersonal or documentation-style third person.
 - Never add local filesystem paths from the owner's PC (for example `G:\...` or
   `E:\...`) to website articles, explainers, or published pages. Refer to files
   by repository-relative paths instead.
