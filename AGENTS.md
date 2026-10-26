@@ -37,6 +37,28 @@ agent working in this repository.
 - Stage only files that belong to the current task. Never discard unrelated
   changes to make the worktree clean.
 
+## Publication
+
+- Public repository: https://github.com/zhiganovsasha/zhiganovsasha.github.io
+- Live site: https://zhiganovsasha.github.io
+- The site is built by GitHub Actions (workflow `.github/workflows/deploy.yml`)
+  on every push to `main` and deployed to GitHub Pages. The Pages source is set
+  to GitHub Actions, not to legacy branch publishing. Do not change it back:
+  the legacy Jekyll pipeline fails on this repository and sends failure emails
+  to the owner.
+- Normal release path: commit on `dev`, push `dev`, merge `dev` into `main`,
+  push `main`. Never commit release work directly on `main`.
+- When the owner asks you to publish or deploy, the task is not done when the
+  push finishes. You MUST wait for the `Deploy to GitHub Pages` workflow run
+  to complete (for example `gh run watch` or polling `gh run list`), then
+  verify the live site responds correctly (HTTP 200 on the affected pages)
+  before reporting success. If the run fails, investigate, fix, re-run, and
+  only then report. Never report "deployed" while the workflow is still
+  running or after it failed.
+- GitHub sends failure emails to the owner for every failed run. An unfinished
+  or unverified deploy means the owner learns about problems from an automated
+  email instead of from you. That is a process failure.
+
 ## Working style
 
 - The owner is not a programmer. Explain outcomes and any required manual steps
