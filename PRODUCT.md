@@ -89,12 +89,12 @@ The binding color palette is white, black, and a dark restrained burgundy. Brigh
 signal red is not used. The exact proportions, typography, motion language, and
 component system remain open design decisions.
 
-The home hero uses the owner-prepared transparent cutout at
-`C:\Users\1234\Pictures\userpic-remover-bg.png`; the source file remains
+The home hero uses the portrait photograph at
+`C:\Users\1234\Pictures\userpic.jpg`; the source file remains
 unchanged and the site receives separate optimized versions. The public
 portrait must use those literal source pixels. The face, hair, skin, pose, and
 clothing must not be generated, redrawn, beautified, retouched, color-edited, or
-reinterpreted. Layout may only scale, crop, and position the cutout.
+reinterpreted. Layout may only scale, crop, and position the portrait.
 
 The visual system must avoid typical AI design, AI slop, vibe-coding aesthetics,
 graphic-designer portfolio cues, art-gallery cues, stereotypical creative-coding
