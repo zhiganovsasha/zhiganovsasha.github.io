@@ -202,7 +202,8 @@
     <h2>One public edge, one internal network, a small set of containers.</h2>
   </div>
   <figure>
-    <div class="frame">
+    <div class="frame" tabindex="0" role="region" aria-label="Runtime architecture diagram. Scroll horizontally to explore.">
+      <p class="scroll-hint" aria-hidden="true">Swipe horizontally to explore →</p>
       <svg class="ve-svg" viewBox="0 0 1200 840" role="img" aria-label="Telegram and the team browser go through Caddy to the bot and admin containers. The bot and admin share PostgreSQL. The bot pushes image and PDF jobs to workers. Scheduler and Hermes run beside them. Outbound Google, Yandex, Replicate and language-model calls leave through HTTPS." style="--ve-min: 1029px">
         <rect class="ve-bnd" x="30" y="20" width="1140" height="270"/>
         <text class="ve-bnd-t" x="50" y="46">PUBLIC EDGE</text>
@@ -329,7 +330,8 @@
   <details class="deep">
     <summary>Container contracts</summary>
     <div class="deep-body">
-      <div class="ve-table">
+      <div class="ve-table" tabindex="0" role="region" aria-label="Container contracts comparison. Scroll horizontally to explore.">
+        <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
         <table>
           <thead><tr><th>Service</th><th>Role</th><th>Network</th><th>Restart</th></tr></thead>
           <tbody>
@@ -403,7 +405,8 @@
     <h2>Every model call becomes an accounted event.</h2>
   </div>
   <figure>
-    <div class="frame">
+    <div class="frame" tabindex="0" role="region" aria-label="AI gateway diagram. Scroll horizontally to explore.">
+      <p class="scroll-hint" aria-hidden="true">Swipe horizontally to explore →</p>
       <svg class="ve-svg" viewBox="0 0 1100 560" role="img" aria-label="Five providers, Surplus, DeepSeek, OpenRouter, Replicate and Yandex SpeechKit, call through one AI gateway. Each call writes a usage event with tokens, seconds and cost. The admin panel reads costs from that ledger." style="--ve-min: 943px">
         <g class="ve-n"><rect class="sh" x="30" y="30" width="220" height="64"/><text x="140" y="56">Surplus Intelligence</text><text class="sub" x="140" y="78">text + vision</text></g>
         <g class="ve-n"><rect class="sh" x="30" y="120" width="220" height="64"/><text x="140" y="146">DeepSeek</text><text class="sub" x="140" y="168">extraction</text></g>
@@ -433,7 +436,8 @@
     </div>
     <figcaption><span class="fig-n">Fig. 6</span><span class="fig-text">The gateway is the only place a model is called, so the ledger cannot miss a billable event. Prompt and image content are never stored.</span></figcaption>
   </figure>
-  <div class="ve-table">
+  <div class="ve-table" tabindex="0" role="region" aria-label="AI provider comparison. Scroll horizontally to explore.">
+    <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
     <table>
       <thead><tr><th>Provider</th><th>Used for</th><th>Billing unit</th><th>Balance view</th></tr></thead>
       <tbody>
@@ -469,7 +473,8 @@
     </div>
     <figcaption><span class="fig-n">Fig. 7</span><span class="fig-text">Most limits protect the 50-second synchronous webhook. OCR is allowed 300&nbsp;seconds only because it runs out of band.</span></figcaption>
   </figure>
-  <div class="ve-table">
+  <div class="ve-table" tabindex="0" role="region" aria-label="Reliability safeguards comparison. Scroll horizontally to explore.">
+    <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
     <table>
       <thead><tr><th>Failure mode</th><th>Mechanism that answers it</th><th>Visible result</th></tr></thead>
       <tbody>
@@ -487,7 +492,8 @@
   <details class="deep">
     <summary>The exact constants</summary>
     <div class="deep-body">
-      <div class="ve-table">
+      <div class="ve-table" tabindex="0" role="region" aria-label="Reliability constants comparison. Scroll horizontally to explore.">
+        <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
         <table>
           <thead><tr><th>Constant</th><th>Value</th><th>What it protects</th></tr></thead>
           <tbody>
@@ -561,7 +567,8 @@
     <p class="ve-label">System of record</p>
     <h2>Google stays the source of truth. The bot is the entrance.</h2>
   </div>
-  <div class="ve-table">
+  <div class="ve-table" tabindex="0" role="region" aria-label="Systems of record comparison. Scroll horizontally to explore.">
+    <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
     <table>
       <thead><tr><th>Function</th><th>System of record</th><th>Write policy</th><th>Safety detail</th></tr></thead>
       <tbody>
@@ -740,7 +747,8 @@ const explainer = document.querySelector('.lifecycle');
   font-size: clamp(28px, 4.4vw, 54px);
   font-weight: var(--display-weight);
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
+  text-transform: none;
 }
 
 .shum-explainer h3 {
@@ -832,6 +840,7 @@ const explainer = document.querySelector('.lifecycle');
 .toc a {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 500;
@@ -839,7 +848,7 @@ const explainer = document.querySelector('.lifecycle');
   color: var(--ink);
   background: var(--field);
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 0;
   text-decoration: none;
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -1026,7 +1035,7 @@ figure {
 
 .kpi-note {
   color: var(--mute);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -1057,7 +1066,7 @@ section > .ve-label:has(+ .kpis) {
 .note-box p {
   margin: 0;
   color: var(--mute);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .topic-map {
@@ -1100,7 +1109,7 @@ section > .ve-label:has(+ .kpis) {
 .topic p {
   margin: 0;
   color: var(--mute);
-  font-size: 13.5px;
+  font-size: 15px;
   line-height: 1.45;
 }
 
@@ -1328,6 +1337,9 @@ details.deep .deep-body > *:first-child {
 
 .frame {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--rule-strong) transparent;
+  -webkit-overflow-scrolling: touch;
   padding: clamp(16px, 2.5vw, 32px);
   border: 1px solid var(--rule-strong);
   background: var(--field);
@@ -1476,7 +1488,7 @@ details.deep .deep-body > *:first-child {
   grid-template-columns: 12px minmax(0, 1fr);
   gap: 9px;
   align-items: start;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -1492,7 +1504,7 @@ details.deep .deep-body > *:first-child {
   padding-top: 10px;
   border-top: 1px solid var(--rule);
   color: var(--mute);
-  font: 500 12px/1.5 var(--font-mono);
+  font: 500 13px/1.5 var(--font-mono);
 }
 
 .budget-frame {
@@ -1525,12 +1537,16 @@ details.deep .deep-body > *:first-child {
 
 .ve-table {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--rule-strong) transparent;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--rule-strong);
   border-radius: 0;
 }
 
 .ve-table table {
   width: 100%;
+  min-width: 760px;
   border-collapse: collapse;
   font-size: var(--t-body);
   font-variant-numeric: tabular-nums;
@@ -1589,7 +1605,7 @@ details.deep .deep-body > *:first-child {
 .admin-card p {
   margin: 0;
   color: var(--mute);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.45;
 }
 
@@ -1623,6 +1639,10 @@ details.deep .deep-body > *:first-child {
   font: 500 11px/1.2 var(--font-mono);
 }
 
+.scroll-hint {
+  display: none;
+}
+
 .shum-explainer a:focus-visible,
 .shum-explainer button:focus-visible,
 .shum-explainer summary:focus-visible {
@@ -1654,6 +1674,21 @@ details.deep .deep-body > *:first-child {
 }
 
 @media (max-width: 900px) {
+  .scroll-hint {
+    position: sticky;
+    left: 0;
+    display: block;
+    width: max-content;
+    margin: 0 0 12px;
+    color: var(--signal);
+    font: 600 12px/1.3 var(--font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  .ve-table .scroll-hint {
+    padding: 12px 16px 0;
+  }
+
   .lead-map {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
