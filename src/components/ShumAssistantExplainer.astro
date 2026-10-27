@@ -100,47 +100,47 @@
   <figure>
     <div class="topic-map">
       <article class="topic">
-        <div class="topic-head"><h3>Calendar</h3><span class="chip ok">live</span></div>
+        <h3>Calendar</h3>
         <p class="io">Text / voice / image / link → event draft → Google Calendar</p>
         <p>Extracts date, time, place, guests, and recurrence. Parses poster links through JSON-LD without spending AI tokens. Holds clarification context for up to three rounds.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>HR</h3><span class="chip ok">live</span></div>
+        <h3>HR</h3>
         <p class="io">Text / forward / PDF / image → candidate card → HR Sheets</p>
         <p>Collects forwarded material into one batch, reads PDFs with Docling and OCR, deduplicates candidates, and writes one person to one primary profile sheet.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Avatars</h3><span class="chip ok">live</span></div>
+        <h3>Avatars</h3>
         <p class="io">Text / voice idea → adapted prompt → 1024×1024&nbsp;PNG</p>
-        <p>Translates and adapts the idea through Surplus, generates a sticker through Replicate, and composites the exact SHUM background color #F3AC03.</p>
+        <p>The confidential model gateway translates and adapts the idea, Replicate generates the sticker, and the bot composites the exact SHUM background color #F3AC03.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Budget</h3><span class="chip ok">live</span></div>
+        <h3>Budget</h3>
         <p class="io">Receipt / text / voice → expense or income draft → finance Sheets</p>
         <p>Handles monthly expenses, income history with the 8%&nbsp;AUSN tax, expected receipts, safe arithmetic formulas, and a knowledge base of recurring merchants.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>PR and marketing</h3><span class="chip ok">live</span></div>
+        <h3>PR and marketing</h3>
         <p class="io">Link / screenshot / text → publication draft → PR Sheets</p>
         <p>Deduplicates by URL, updates rows in place, reads browser address bars from screenshots, and enriches links with SSRF-safe web fetching.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Client base</h3><span class="chip ok">live</span></div>
+        <h3>Client base</h3>
         <p class="io">Text / link / media / PDF → company card → five client sheets</p>
         <p>Deduplicates by website and domain, accepts media and forwarded input, and adds human-only comments after a successful save.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Personal data</h3><span class="chip warn">owner-only</span></div>
+        <h3>Personal data</h3>
         <p class="io">Button → read-only document card → Telegram only</p>
-        <p>Reads RU passports, foreign passports, and vehicles from a dedicated workbook. Data never reaches AI providers, logs, or PostgreSQL. Cards are formatted for one-tap copy.</p>
+        <p>Owner-only and read-only. Reads RU passports, foreign passports, and vehicles from a dedicated workbook. Data never reaches AI providers, logs, or PostgreSQL. Cards are formatted for one-tap copy.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Enquiries</h3><span class="chip ok">live</span></div>
+        <h3>Enquiries</h3>
         <p class="io">Website form → minimized receipt → Telegram topic</p>
         <p>A protected ingress accepts enquiries from studio-shum.ru, uses a no-replay protocol, and anonymizes cards after 30&nbsp;days.</p>
       </article>
       <article class="topic">
-        <div class="topic-head"><h3>Estimates</h3><span class="chip warn">reserved</span></div>
+        <h3>Estimates</h3>
         <p class="io">Brief → estimate → estimate workbook</p>
         <p>The topic exists in the catalog, but the business slice is not built. It needs a separate owner-run OAuth bootstrap before file creation can work.</p>
       </article>
@@ -324,7 +324,7 @@
       <p>Deployment is one <code>main</code> branch, GitHub Actions, Docker Compose, and Caddy. Migrations run as a one-shot service before the app starts. The deploy workflow builds the Vision profile, restores Google service-account credentials from a GitHub secret when needed, and verifies public <code>/health</code> after restart.</p>
     </div>
     <ul class="stack-list" aria-label="Stack" translate="no">
-      <li>FastAPI</li><li>aiogram</li><li>PostgreSQL 16</li><li>React 19</li><li>Vite</li><li>TypeScript</li><li>Docker Compose</li><li>Caddy</li><li>GitHub Actions</li><li>Google Calendar API</li><li>Google Sheets API</li><li>Docling</li><li>OCRmyPDF</li><li>Tesseract</li><li>Yandex SpeechKit</li><li>Replicate</li><li>DeepSeek</li><li>Surplus</li><li>OpenRouter</li>
+      <li>FastAPI</li><li>aiogram</li><li>PostgreSQL 16</li><li>React 19</li><li>Vite</li><li>TypeScript</li><li>Docker Compose</li><li>Caddy</li><li>GitHub Actions</li><li>Google Calendar API</li><li>Google Sheets API</li><li>Docling</li><li>OCRmyPDF</li><li>Tesseract</li><li>Yandex SpeechKit</li><li>Replicate</li><li>DeepSeek</li><li>Confidential model gateway</li><li>OpenRouter</li>
     </ul>
   </div>
   <details class="deep">
@@ -360,30 +360,30 @@
       <article class="pipeline">
         <h3>Voice and video notes</h3>
         <div class="pipe-steps">
-          <div class="pipe-step"><span class="dot"></span><span>Telegram sends OggOpus for voice, MP4 for a video note.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>MP4 is converted to MP3 by FFmpeg through a short-lived seekable file in <code>/dev/shm</code>.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Yandex SpeechKit transcribes. Recognition routes by duration: ≤&nbsp;30&nbsp;s synchronous, longer asynchronous.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>The recognized text is injected into the topic as a normal text message.</span></div>
+          <div class="pipe-step">Telegram sends OggOpus for voice, MP4 for a video note.</div>
+          <div class="pipe-step">MP4 is converted to MP3 by FFmpeg through a short-lived seekable file in <code>/dev/shm</code>.</div>
+          <div class="pipe-step">Yandex SpeechKit transcribes. Recognition routes by duration: ≤&nbsp;30&nbsp;s synchronous, longer asynchronous.</div>
+          <div class="pipe-step">The recognized text is injected into the topic as a normal text message.</div>
         </div>
         <p class="pipe-note">Header-only MP3 output is rejected. The temporary input is deleted in <code>finally</code>.</p>
       </article>
       <article class="pipeline">
         <h3>Images and screenshots</h3>
         <div class="pipe-steps">
-          <div class="pipe-step"><span class="dot"></span><span>Images enter a durable media batch, not the webhook’s request path.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Safety checks and OCR run first. A VLM reads the visual content when needed.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Function adapters shape the result for Calendar, HR, PR, or Client Base.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>A single terminal notification resumes the waiting flow.</span></div>
+          <div class="pipe-step">Images enter a durable media batch, not the webhook’s request path.</div>
+          <div class="pipe-step">Safety checks and OCR run first. A VLM reads the visual content when needed.</div>
+          <div class="pipe-step">Function adapters shape the result for Calendar, HR, PR, or Client Base.</div>
+          <div class="pipe-step">A single terminal notification resumes the waiting flow.</div>
         </div>
         <p class="pipe-note">The HR Vision adapter always drops the human-only <code>Comment</code> field.</p>
       </article>
       <article class="pipeline">
         <h3>PDF and documents</h3>
         <div class="pipe-steps">
-          <div class="pipe-step"><span class="dot"></span><span>Eligible PDFs create attachment jobs and a continuation batch before any HR card is sent.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Docling extracts text. Image-heavy pages escalate to OCRmyPDF and Tesseract.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>Follow-up messages in the same topic append to the active batch instead of being discarded.</span></div>
-          <div class="pipe-step"><span class="dot"></span><span>The resumed card sees the combined text, captions, attachments, and full extracted PDF text.</span></div>
+          <div class="pipe-step">Eligible PDFs create attachment jobs and a continuation batch before any HR card is sent.</div>
+          <div class="pipe-step">Docling extracts text. Image-heavy pages escalate to OCRmyPDF and Tesseract.</div>
+          <div class="pipe-step">Follow-up messages in the same topic append to the active batch instead of being discarded.</div>
+          <div class="pipe-step">The resumed card sees the combined text, captions, attachments, and full extracted PDF text.</div>
         </div>
         <p class="pipe-note">Background timeout is 300&nbsp;s. Worker lease is <code>max(90, timeout × 2)</code>.</p>
       </article>
@@ -407,8 +407,8 @@
   <figure>
     <div class="frame" tabindex="0" role="region" aria-label="AI gateway diagram. Scroll horizontally to explore.">
       <p class="scroll-hint" aria-hidden="true">Swipe horizontally to explore →</p>
-      <svg class="ve-svg" viewBox="0 0 1100 560" role="img" aria-label="Five providers, Surplus, DeepSeek, OpenRouter, Replicate and Yandex SpeechKit, call through one AI gateway. Each call writes a usage event with tokens, seconds and cost. The admin panel reads costs from that ledger." style="--ve-min: 943px">
-        <g class="ve-n"><rect class="sh" x="30" y="30" width="220" height="64"/><text x="140" y="56">Surplus Intelligence</text><text class="sub" x="140" y="78">text + vision</text></g>
+      <svg class="ve-svg" viewBox="0 0 1100 560" role="img" aria-label="A private model router, DeepSeek, OpenRouter, Replicate and Yandex SpeechKit call through one AI gateway. Each call writes a usage event with tokens, seconds and cost. The admin panel reads costs from that ledger." style="--ve-min: 943px">
+        <g class="ve-n"><rect class="sh" x="30" y="30" width="220" height="64"/><text x="140" y="56">Private model router</text><text class="sub" x="140" y="78">text + vision</text></g>
         <g class="ve-n"><rect class="sh" x="30" y="120" width="220" height="64"/><text x="140" y="146">DeepSeek</text><text class="sub" x="140" y="168">extraction</text></g>
         <g class="ve-n"><rect class="sh" x="30" y="210" width="220" height="64"/><text x="140" y="236">OpenRouter</text><text class="sub" x="140" y="258">fallback models</text></g>
         <g class="ve-n"><rect class="sh" x="30" y="300" width="220" height="64"/><text x="140" y="326">Replicate</text><text class="sub" x="140" y="348">avatar stickers</text></g>
@@ -441,7 +441,7 @@
     <table>
       <thead><tr><th>Provider</th><th>Used for</th><th>Billing unit</th><th>Balance view</th></tr></thead>
       <tbody>
-        <tr><th>Surplus Intelligence</th><td>Text and VLM calls. The avatar flow uses <code>gpt-5.4</code> to translate and adapt a Russian idea into an English object concept.</td><td>Tokens</td><td>Honest unsupported state</td></tr>
+        <tr><th><details class="provider-disclosure"><summary title="Provider details withheld. Routes text and vision requests through one controlled interface." aria-label="Confidential provider. Provider details withheld. Routes text and vision requests through one controlled interface.">Confidential provider</summary><p>Provider details withheld. Routes text and vision requests through one controlled interface.</p></details></th><td>Text and VLM calls, including translation and prompt adaptation for the avatar flow.</td><td>Tokens</td><td>Honest unsupported state</td></tr>
         <tr><th>DeepSeek</th><td>Structured extraction for Calendar, HR, Budget, PR, and Client Base.</td><td>Tokens</td><td>Live wallet API</td></tr>
         <tr><th>OpenRouter</th><td>Additional model access and fallback paths.</td><td>Tokens</td><td>Live credits API</td></tr>
         <tr><th>Replicate</th><td><code>fofr/sticker-maker</code> avatars, composited to the exact <code>#F3AC03</code> background.</td><td>Predictions</td><td>Honest unsupported state</td></tr>
@@ -1480,23 +1480,19 @@ details.deep .deep-body > *:first-child {
 
 .pipe-steps {
   display: grid;
-  gap: 9px;
+  gap: 0;
 }
 
 .pipe-step {
-  display: grid;
-  grid-template-columns: 12px minmax(0, 1fr);
-  gap: 9px;
-  align-items: start;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
   font-size: 15px;
   line-height: 1.4;
 }
 
-.pipe-step .dot {
-  width: 9px;
-  height: 9px;
-  margin-top: 4px;
-  border: 1.5px solid var(--signal);
+.pipe-step:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .pipe-note {
@@ -1579,6 +1575,44 @@ details.deep .deep-body > *:first-child {
 .ve-table .num {
   font-family: var(--font-mono);
   text-align: right;
+}
+
+.provider-disclosure {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.provider-disclosure summary {
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline dotted var(--signal);
+  text-underline-offset: 3px;
+  list-style: none;
+  cursor: help;
+}
+
+.provider-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.provider-disclosure summary::after {
+  color: var(--signal);
+  content: ' +';
+}
+
+.provider-disclosure[open] summary::after {
+  content: ' −';
+}
+
+.provider-disclosure p {
+  margin: 8px 0 0;
+  color: var(--mute);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
 }
 
 .admin-grid {
