@@ -1,3 +1,5 @@
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
 @import '@fontsource-variable/inter';
 
 :root {
@@ -42,6 +44,7 @@
   --maxw: 1360px;
   --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial,
     sans-serif;
+  --font-code: 'IBM Plex Mono', monospace;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 200ms;
   --dur-normal: 260ms;
@@ -101,6 +104,11 @@ body {
   text-rendering: optimizeLegibility;
   overflow-wrap: break-word;
   caret-color: var(--signal);
+}
+
+code {
+  font-family: var(--font-code);
+  font-variant-ligatures: none;
 }
 
 h1,
