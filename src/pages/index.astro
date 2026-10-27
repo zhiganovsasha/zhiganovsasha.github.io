@@ -15,7 +15,7 @@ import portrait from '../assets/portrait.jpg';
           The producer among artists. The artist among producers.
         </p>
         <p class="hero-sub muted">
-          Working at the intersection of art, technology, and AI. I build with
+          Working at the intersection of <span class="gradient-accent">art, technology, and AI</span>. I build with
           AI already, as a habit rather than an experiment.
         </p>
         <p class="hero-relocation">
@@ -76,6 +76,40 @@ import portrait from '../assets/portrait.jpg';
     font-size: 16px;
   }
 
+  .gradient-accent {
+    font-weight: 650;
+    background: var(--grad-spectrum);
+    background-size: 280% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: rainbow-shimmer 14s ease-in-out infinite;
+    animation-delay: var(--rand-delay, 0s);
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  @keyframes rainbow-shimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gradient-accent {
+      animation: none;
+      background-position: 50% 50%;
+    }
+  }
+
   .hero-relocation {
     margin: 28px 0 0;
     font-size: 15px;
@@ -111,6 +145,8 @@ import portrait from '../assets/portrait.jpg';
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: center 20%;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--rule);
   }
 
   @media (max-width: 900px) {

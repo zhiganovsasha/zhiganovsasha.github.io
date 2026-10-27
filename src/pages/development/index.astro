@@ -382,6 +382,8 @@ const projects = [
   .video-frame {
     aspect-ratio: 16 / 9;
     border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
     background: var(--ink);
   }
 
@@ -408,7 +410,9 @@ const projects = [
     font-size: 20px;
     background: none;
     color: var(--ink);
+    background: var(--bg-surface);
     border: 1px solid var(--rule);
+    box-shadow: var(--shadow-xs);
     cursor: pointer;
     transition:
       background var(--dur-fast) var(--ease-out),
@@ -442,8 +446,9 @@ const projects = [
   }
 
   .statement {
-    background: var(--field);
+    background: var(--bg-sunken);
     border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
   }
 
   .statement-text {

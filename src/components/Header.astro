@@ -8,15 +8,16 @@ const { current } = Astro.props;
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="/" translate="no">Alexander Zhiganov</a>
+    <a class="brand" href="/" translate="no" data-text="Alexander Zhiganov">Alexander Zhiganov</a>
     <nav class="main-nav" aria-label="Primary">
-      <a href="/" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
+      <a href="/" data-text="Home" aria-current={current === 'home' ? 'page' : undefined}>Home</a>
       <a
         href="/development"
+        data-text="AI Development"
         aria-current={current === 'development' ? 'page' : undefined}
         >AI Development</a
       >
-      <a href="#contact" aria-current={current === 'contact' ? 'page' : undefined}
+      <a href="#contact" data-text="Contact" aria-current={current === 'contact' ? 'page' : undefined}
         >Contact</a
       >
       <div class="cv">

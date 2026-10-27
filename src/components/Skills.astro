@@ -97,18 +97,22 @@ const skills = [
   }
 
   .skill-card {
+    background: var(--bg-surface);
     border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
     padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     transition:
       border-color var(--dur-normal) var(--ease-out),
+      box-shadow var(--dur-normal) var(--ease-out),
       transform var(--dur-normal) var(--ease-out);
   }
 
   .skill-card:hover {
-    border-color: var(--ink);
+    border-color: rgba(11, 11, 11, 0.2);
+    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
   }
 
@@ -141,7 +145,7 @@ const skills = [
     color: #1f2328;
     background: #f6f8fa;
     border: 1px solid rgba(31, 35, 40, 0.15);
-    border-radius: 6px;
+    box-shadow: var(--shadow-xs);
     min-height: 44px;
     padding: 10px 16px;
     transition:

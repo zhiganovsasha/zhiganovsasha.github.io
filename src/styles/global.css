@@ -2,21 +2,49 @@
 
 :root {
   color-scheme: light;
+  /* Surface & Tonal Elevation (Instrumental Style) */
+  --bg-canvas: #f6f6f7;
+  --bg-surface: #ffffff;
+  --bg-sunken: #ececee;
   --paper: #ffffff;
   --ink: #0b0b0b;
   --signal: #960018;
-  --mute: rgba(11, 11, 11, 0.56);
-  --faint: rgba(11, 11, 11, 0.48);
-  --rule: rgba(11, 11, 11, 0.14);
-  --rule-strong: rgba(11, 11, 11, 0.32);
-  --field: #f5f4f1;
+  --signal-subtle: rgba(150, 0, 24, 0.08);
+  --mute: rgba(11, 11, 11, 0.60);
+  --faint: rgba(11, 11, 11, 0.44);
+  --rule: rgba(11, 11, 11, 0.08);
+  --rule-strong: rgba(11, 11, 11, 0.16);
+  --field: #ececee;
+  /* Spectrum Theme Variables (Randomized per session/load) */
+  --grad-1: #4f5bd5;
+  --grad-2: #962fbf;
+  --grad-3: #d62976;
+  --grad-4: #fa7e1e;
+  --grad-5: #feda75;
+  --grad-6: #38bdf8;
+  --grad-7: #4f5bd5;
+  --grad-angle: 115deg;
+  --grad-spectrum: linear-gradient(
+    var(--grad-angle, 115deg),
+    var(--grad-1) 0%,
+    var(--grad-2) 16%,
+    var(--grad-3) 34%,
+    var(--grad-4) 52%,
+    var(--grad-5) 68%,
+    var(--grad-6) 84%,
+    var(--grad-7) 100%
+  );
+  --shadow-xs: 0 1px 2px rgba(11, 11, 11, 0.04);
+  --shadow-sm: 0 1px 3px rgba(11, 11, 11, 0.05), 0 1px 2px rgba(11, 11, 11, 0.02);
+  --shadow-md: 0 4px 14px -2px rgba(11, 11, 11, 0.07), 0 2px 4px -1px rgba(11, 11, 11, 0.03);
+  --shadow-lg: 0 14px 34px -4px rgba(11, 11, 11, 0.12), 0 4px 8px -2px rgba(11, 11, 11, 0.04);
   --gutter: clamp(16px, 4vw, 56px);
   --maxw: 1360px;
   --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial,
     sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-fast: 160ms;
-  --dur-normal: 220ms;
+  --dur-fast: 200ms;
+  --dur-normal: 260ms;
 }
 
 *,
@@ -64,7 +92,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--bg-canvas);
   color: var(--ink);
   font-family: var(--font);
   font-size: 17px;
@@ -99,6 +127,7 @@ section:focus:not(:focus-visible) {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
@@ -215,8 +244,9 @@ summary,
   position: sticky;
   top: 0;
   z-index: 60;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
+  background: rgba(246, 246, 247, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top, 0px);
 }
@@ -230,18 +260,47 @@ summary,
 }
 
 .brand {
+  position: relative;
   font-weight: 700;
   letter-spacing: -0.02em;
   text-decoration: none;
   font-size: 17px;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
   transition:
-    color var(--dur-fast) var(--ease-out),
+    color var(--dur-normal) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
-.brand:hover {
-  color: var(--signal);
+.brand::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  background: var(--grad-spectrum);
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-shimmer 14s ease-in-out infinite;
+  animation-delay: var(--hover-delay, -4s);
+  opacity: 0;
+  transition: opacity var(--dur-normal) var(--ease-out);
+  pointer-events: none;
+}
+
+.brand:hover::after {
+  opacity: 1;
+}
+
+@supports (-webkit-background-clip: text) {
+  .brand:hover {
+    color: transparent;
+  }
 }
 
 .brand:active {
@@ -256,6 +315,7 @@ summary,
 }
 
 .main-nav a {
+  position: relative;
   text-decoration: none;
   color: var(--mute);
   padding: 6px 0;
@@ -264,13 +324,57 @@ summary,
   align-items: center;
   min-height: 44px;
   transition:
-    color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-normal) var(--ease-out),
+    border-color var(--dur-normal) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
-.main-nav a:hover {
+.main-nav a::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  background: var(--grad-spectrum);
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-shimmer 14s ease-in-out infinite;
+  animation-delay: var(--hover-delay, -4s);
+  opacity: 0;
+  transition: opacity var(--dur-normal) var(--ease-out);
+  pointer-events: none;
+}
+
+.main-nav a:hover,
+.main-nav a[aria-current='page']:hover {
   color: var(--ink);
+}
+
+@supports (-webkit-background-clip: text) {
+  .main-nav a:hover,
+  .main-nav a[aria-current='page']:hover {
+    color: transparent;
+  }
+}
+
+.main-nav a:hover::after,
+.main-nav a[aria-current='page']:hover::after {
+  opacity: 1;
+}
+
+@keyframes rainbow-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .main-nav a:active {
@@ -299,6 +403,7 @@ summary,
   background: var(--ink);
   color: #fff;
   border: 1px solid var(--ink);
+  box-shadow: var(--shadow-xs);
   cursor: pointer;
   white-space: nowrap;
   transition:
@@ -333,9 +438,9 @@ summary,
   margin: 0;
   padding: 6px;
   list-style: none;
-  background: #fff;
+  background: var(--bg-surface);
   border: 1px solid var(--rule-strong);
-  box-shadow: 0 12px 32px rgba(11, 11, 11, 0.12);
+  box-shadow: var(--shadow-lg);
   overscroll-behavior: contain;
   display: none;
   opacity: 0;
@@ -377,7 +482,7 @@ summary,
 }
 
 .cv-menu a:hover {
-  background: var(--field);
+  background: var(--bg-sunken);
 }
 
 .cv-menu a:active {
@@ -431,16 +536,21 @@ summary,
 .btn-primary {
   background: var(--ink);
   color: #fff;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background: var(--signal);
   border-color: var(--signal);
+  box-shadow: 0 4px 12px rgba(150, 0, 24, 0.25);
 }
 
+
 .btn-ghost {
-  background: transparent;
+  background: var(--bg-surface);
   color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-ghost:hover {
@@ -585,13 +695,14 @@ summary,
 /* ---------- dialog ---------- */
 
 dialog.dir-dialog {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--rule-strong);
   padding: 0;
   max-width: 480px;
   width: calc(100vw - 40px);
   background: var(--paper);
   color: var(--ink);
-  box-shadow: 0 20px 48px rgba(11, 11, 11, 0.18);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-lg);
   overscroll-behavior: contain;
 }
 
@@ -714,4 +825,18 @@ dialog.dir-dialog[open]::backdrop {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+.rainbow-gradient {
+  display: inline;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background: var(--grad-spectrum);
+  background-size: 280% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-shimmer 14s ease-in-out infinite;
+  animation-delay: var(--rand-delay, 0s);
 }

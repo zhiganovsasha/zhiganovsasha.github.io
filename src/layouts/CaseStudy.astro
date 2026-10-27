@@ -6,9 +6,10 @@ interface Props {
   role: string;
   status?: string;
   pageTitle: string;
+  rainbowTitle?: boolean;
 }
 
-const { title, role, status, pageTitle } = Astro.props;
+const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
 ---
 
 <Base title={pageTitle} current="development">
@@ -22,7 +23,7 @@ const { title, role, status, pageTitle } = Astro.props;
           Case Study
           {status && <span class="status">{status}</span>}
         </p>
-        <h1 class="display case-title">{title}</h1>
+        <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
         <p class="lede case-role">{role}</p>
       </div>
     </header>
@@ -35,6 +36,7 @@ const { title, role, status, pageTitle } = Astro.props;
 <style>
   .case-head {
     padding-block: clamp(40px, 6vw, 88px) clamp(32px, 4vw, 56px);
+    background: var(--bg-surface);
     border-bottom: 1px solid var(--rule);
   }
 
@@ -79,6 +81,20 @@ const { title, role, status, pageTitle } = Astro.props;
   .case-title {
     font-size: clamp(44px, 6.4vw, 88px);
     margin-top: 18px;
+  }
+
+  .case-title.rainbow-gradient {
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    background: var(--grad-spectrum);
+    background-size: 280% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: rainbow-shimmer 14s ease-in-out infinite;
+    animation-delay: var(--rand-delay, 0s);
   }
 
   .case-role {

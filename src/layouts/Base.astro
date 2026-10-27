@@ -26,6 +26,42 @@ const {
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title}</title>
+    <script is:inline>
+      (function() {
+        var palettes = [
+          /* Theme 1: Apple Intelligence / Siri */
+          ['#4f5bd5', '#962fbf', '#d62976', '#fa7e1e', '#feda75', '#38bdf8', '#4f5bd5'],
+          /* Theme 2: Instagram Sunset / Aurora */
+          ['#5851db', '#833ab4', '#c13584', '#e1306c', '#fd1d1d', '#f77737', '#fcaf45'],
+          /* Theme 3: Cyber Prismatic / Neon Opal */
+          ['#3b82f6', '#8b5cf6', '#ec4899', '#f43f5e', '#fb923c', '#06b6d4', '#10b981']
+        ];
+        var chosen = palettes[Math.floor(Math.random() * palettes.length)];
+        var root = document.documentElement;
+        chosen.forEach(function(c, i) {
+          root.style.setProperty('--grad-' + (i + 1), c);
+        });
+        var angle = Math.floor(108 + Math.random() * 18) + 'deg';
+        root.style.setProperty('--grad-angle', angle);
+        var baseDelay = -(Math.random() * 14).toFixed(2) + 's';
+        root.style.setProperty('--rand-delay', baseDelay);
+
+        function initHoverRandomizer() {
+          var items = document.querySelectorAll('.brand, .main-nav a');
+          items.forEach(function(item) {
+            item.addEventListener('pointerenter', function() {
+              var hoverDelay = -(Math.random() * 14).toFixed(2) + 's';
+              item.style.setProperty('--hover-delay', hoverDelay);
+            });
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initHoverRandomizer);
+        } else {
+          initHoverRandomizer();
+        }
+      })();
+    </script>
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to main content</a>

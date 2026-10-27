@@ -61,16 +61,20 @@ const groups = [
 
   .toolkit-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 1px;
-    background: var(--rule);
-    border: 1px solid var(--rule);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    background: transparent;
+    border: none;
     margin: 0;
   }
 
   .toolkit-group {
-    background: var(--paper);
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
     padding: 24px;
+    display: flex;
+    flex-direction: column;
   }
 
   .toolkit-group dt {
@@ -98,7 +102,8 @@ const groups = [
   .chip {
     font-size: 14px;
     padding: 6px 12px;
-    border: 1px solid var(--rule-strong);
+    background: var(--bg-sunken);
+    border: 1px solid transparent;
     white-space: nowrap;
     transition:
       border-color var(--dur-fast) var(--ease-out),
@@ -107,6 +112,8 @@ const groups = [
 
   .chip:hover {
     border-color: var(--ink);
-    background-color: var(--field);
+    background-color: #ffffff;
+    box-shadow: var(--shadow-xs);
+    transform: translateY(-1px);
   }
 </style>
