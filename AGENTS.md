@@ -100,6 +100,32 @@ agent working in this repository.
   `E:\...`) to website articles, explainers, or published pages. Refer to files
   by repository-relative paths instead.
 
+## Visual system and design rules
+
+- Visual style: Instrumental Style (approved 2026-10-27). Tonal elevation uses
+  `#f6f6f7` for page canvas (`--bg-canvas`), `#ffffff` for elevated cards and
+  surfaces (`--bg-surface`), and `#ececee` for sunken fields/wells (`--bg-sunken`).
+- Accent color: `#960018` (crimson) and subtle accent `--signal-subtle: rgba(150, 0, 24, 0.08)`.
+- Sharp 90-degree corners: keep `border-radius: 0` across all interface components,
+  including buttons, project cards, dialogue boxes, menus, chips, and the hero portrait.
+  Do not introduce rounded corners or default radii.
+- Rainbow / spectrum gradients:
+  - Allowed placements:
+    1. Home hero statement accent (`art, technology, and AI`).
+    2. Case study titles in `/development/*` via `rainbowTitle: true`.
+    3. Header brand and navigation links on hover via `data-text` overlay.
+  - Prohibited placements:
+    - Never apply rainbow gradients or rainbow borders to catalog project cards or direction
+      cards in "What Would You Like to Explore?". Keep them crisp white surfaces.
+  - Hover animation: two-layer cross-fade (`opacity: 0 -> 1`) with duration
+    `260ms cubic-bezier(0.16, 1, 0.3, 1)`. Under `-webkit-background-clip: text`,
+    the underlying base text must transition to `color: transparent` on hover to
+    eliminate dark glyph anti-aliasing outlines/fringes.
+- Spectrum randomizer:
+  - Generative inline script in `Base.astro` rotates between three themes
+    (Apple Intelligence, Instagram Sunset, Cyber Prismatic), varies gradient angles,
+    and sets random initial phases and hover delays on `pointerenter`.
+
 ## Windows, paths, and text encoding
 
 - This repository is used on Windows and may contain Cyrillic paths and text.
