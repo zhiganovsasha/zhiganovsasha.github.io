@@ -4,12 +4,11 @@ import Base from '../layouts/Base.astro';
 interface Props {
   title: string;
   role: string;
-  status?: string;
   pageTitle: string;
   rainbowTitle?: boolean;
 }
 
-const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
+const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
 ---
 
 <Base title={pageTitle} current="development">
@@ -19,10 +18,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
         <a class="back" href="/development"
           ><span aria-hidden="true">←</span> Back to AI Development</a
         >
-        <p class="case-meta">
-          Case Study
-          {status && <span class="status">{status}</span>}
-        </p>
+        <p class="case-meta">Case Study</p>
         <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
         <p class="lede case-role">{role}</p>
       </div>
@@ -64,21 +60,10 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-meta {
-    display: flex;
-    align-items: center;
-    gap: 14px;
     margin: 0;
     color: var(--signal);
     font-size: var(--type-small);
     font-weight: 600;
-  }
-
-  .status {
-    font-size: var(--type-small);
-    letter-spacing: 0;
-    color: var(--signal);
-    border: 1px solid var(--signal);
-    padding: 4px 10px;
   }
 
   .case-title {
