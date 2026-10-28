@@ -95,8 +95,8 @@ const { title, result, code, href, action = 'View case study', status, image } =
     position: absolute;
     top: 14px;
     left: 16px;
-    font-size: 11px;
-    letter-spacing: 0.22em;
+    font-size: var(--type-small);
+    letter-spacing: 0.04em;
     color: rgba(11, 11, 11, 0.75);
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(4px);
@@ -126,7 +126,7 @@ const { title, result, code, href, action = 'View case study', status, image } =
 
   .title-row h3 {
     margin: 0;
-    font-size: 22px;
+    font-size: var(--type-lead);
     font-weight: 650;
     letter-spacing: -0.02em;
     overflow-wrap: break-word;
@@ -134,9 +134,8 @@ const { title, result, code, href, action = 'View case study', status, image } =
   }
 
   .status {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: var(--type-small);
+    letter-spacing: 0.01em;
     color: var(--signal);
     border: 1px solid var(--signal);
     padding: 4px 10px;
@@ -145,13 +144,14 @@ const { title, result, code, href, action = 'View case study', status, image } =
 
   .result {
     margin: 0;
-    font-size: 15px;
+    font-size: var(--type-body);
+    line-height: 1.5;
     color: var(--mute);
     flex: 1;
   }
 
   .case-link {
-    font-size: 15px;
+    font-size: var(--type-small);
     font-weight: 550;
     text-decoration: none;
     color: var(--ink);

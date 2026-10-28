@@ -45,6 +45,10 @@
   --font: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Arial,
     sans-serif;
   --font-code: 'IBM Plex Mono', monospace;
+  --type-small: clamp(13px, 0.8rem + 0.1vw, 14px);
+  --type-body: clamp(17px, 1.02rem + 0.15vw, 18px);
+  --type-lead: clamp(20px, 1.1rem + 0.55vw, 23px);
+  --type-heading: clamp(28px, 2.6vw, 36px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 200ms;
   --dur-normal: 260ms;
@@ -98,7 +102,7 @@ body {
   background: var(--bg-canvas);
   color: var(--ink);
   font-family: var(--font);
-  font-size: 17px;
+  font-size: var(--type-body);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -182,7 +186,7 @@ summary,
   background: var(--ink);
   color: #fff;
   padding: 12px 20px;
-  font-size: 15px;
+  font-size: var(--type-small);
   font-weight: 600;
   text-decoration: none;
   z-index: 100;
@@ -219,15 +223,6 @@ summary,
 
 /* ---------- typography ---------- */
 
-.kicker {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--signal);
-  margin: 0;
-}
-
 .display {
   font-weight: 680;
   letter-spacing: -0.04em;
@@ -236,7 +231,7 @@ summary,
 }
 
 .lede {
-  font-size: clamp(19px, 1.6vw, 23px);
+  font-size: var(--type-lead);
   line-height: 1.45;
   letter-spacing: -0.01em;
   margin: 0;
@@ -272,7 +267,7 @@ summary,
   font-weight: 700;
   letter-spacing: -0.02em;
   text-decoration: none;
-  font-size: 17px;
+  font-size: var(--type-body);
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
@@ -319,7 +314,7 @@ summary,
   display: flex;
   align-items: center;
   gap: clamp(16px, 2.6vw, 40px);
-  font-size: 15px;
+  font-size: var(--type-small);
 }
 
 .main-nav a {
@@ -402,7 +397,7 @@ summary,
 
 .cv-trigger {
   font: inherit;
-  font-size: 15px;
+  font-size: var(--type-small);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -480,7 +475,7 @@ summary,
   min-height: 44px;
   padding: 10px 12px;
   text-decoration: none;
-  font-size: 15px;
+  font-size: var(--type-small);
 }
 
 .cv-menu a {
@@ -500,7 +495,7 @@ summary,
 
 .cv-menu a .get {
   color: var(--signal);
-  font-size: 13px;
+  font-size: var(--type-small);
 }
 
 .cv-menu span {
@@ -509,9 +504,8 @@ summary,
 }
 
 .cv-menu .cv-status {
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--type-small);
+  letter-spacing: 0;
   color: var(--faint);
   border: 1px solid var(--rule);
   padding: 2px 6px;
@@ -524,7 +518,7 @@ summary,
   align-items: center;
   gap: 10px;
   font: inherit;
-  font-size: 16px;
+  font-size: var(--type-body);
   font-weight: 550;
   text-decoration: none;
   padding: 14px 22px;
@@ -640,10 +634,9 @@ summary,
 
 .copy-btn {
   font: inherit;
-  font-size: 12px;
+  font-size: var(--type-small);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   min-height: 48px;
   min-width: 48px;
   padding: 10px 18px;
@@ -773,7 +766,7 @@ dialog.dir-dialog[open]::backdrop {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+  font-size: var(--type-small);
   font-weight: 550;
   text-decoration: none;
   min-height: 44px;
@@ -798,7 +791,7 @@ dialog.dir-dialog[open]::backdrop {
 
 .dir-dialog .close {
   font: inherit;
-  font-size: 14px;
+  font-size: var(--type-small);
   min-height: 44px;
   padding: 10px 18px;
   background: transparent;

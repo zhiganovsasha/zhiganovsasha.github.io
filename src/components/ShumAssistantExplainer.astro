@@ -164,15 +164,15 @@
   <figure class="lifecycle-figure">
     <div class="lifecycle">
       <div class="stage-track" role="group" aria-label="Request lifecycle stages">
-        <button class="stage" type="button" data-stage="1" aria-pressed="true"><span class="n">01</span><strong>Update arrives</strong></button>
-        <button class="stage" type="button" data-stage="2" aria-pressed="false"><span class="n">02</span><strong>Edge and budget</strong></button>
-        <button class="stage" type="button" data-stage="3" aria-pressed="false"><span class="n">03</span><strong>Route and gate</strong></button>
-        <button class="stage" type="button" data-stage="4" aria-pressed="false"><span class="n">04</span><strong>Normalize</strong></button>
-        <button class="stage" type="button" data-stage="5" aria-pressed="false"><span class="n">05</span><strong>Enrich media</strong></button>
-        <button class="stage" type="button" data-stage="6" aria-pressed="false"><span class="n">06</span><strong>Draft with AI</strong></button>
-        <button class="stage" type="button" data-stage="7" aria-pressed="false"><span class="n">07</span><strong>Human decision</strong></button>
-        <button class="stage" type="button" data-stage="8" aria-pressed="false"><span class="n">08</span><strong>Controlled write</strong></button>
-        <button class="stage" type="button" data-stage="9" aria-pressed="false"><span class="n">09</span><strong>Record and observe</strong></button>
+        <button class="stage" type="button" data-stage="1" aria-pressed="true"><span class="n">1</span><strong>Update arrives</strong></button>
+        <button class="stage" type="button" data-stage="2" aria-pressed="false"><span class="n">2</span><strong>Edge and budget</strong></button>
+        <button class="stage" type="button" data-stage="3" aria-pressed="false"><span class="n">3</span><strong>Route and gate</strong></button>
+        <button class="stage" type="button" data-stage="4" aria-pressed="false"><span class="n">4</span><strong>Normalize</strong></button>
+        <button class="stage" type="button" data-stage="5" aria-pressed="false"><span class="n">5</span><strong>Enrich media</strong></button>
+        <button class="stage" type="button" data-stage="6" aria-pressed="false"><span class="n">6</span><strong>Draft with AI</strong></button>
+        <button class="stage" type="button" data-stage="7" aria-pressed="false"><span class="n">7</span><strong>Human decision</strong></button>
+        <button class="stage" type="button" data-stage="8" aria-pressed="false"><span class="n">8</span><strong>Controlled write</strong></button>
+        <button class="stage" type="button" data-stage="9" aria-pressed="false"><span class="n">9</span><strong>Record and observe</strong></button>
       </div>
       <div class="stage-copy" aria-live="polite">
         <p data-stage-copy="1">Telegram sends a signed POST to <code>/webhook/telegram</code>. The same bot token must not be used by local polling and the production webhook at the same time.</p>
@@ -199,14 +199,14 @@
 <section id="runtime">
   <div class="sec-head">
     <p class="ve-label">Runtime</p>
-    <h2>One public edge, one internal network, a small set of containers.</h2>
+    <h2>One public edge. Everything else stays inside.</h2>
   </div>
   <figure>
     <div class="frame" tabindex="0" role="region" aria-label="Runtime architecture diagram. Scroll horizontally to explore.">
       <p class="scroll-hint" aria-hidden="true">Swipe horizontally to explore →</p>
       <svg class="ve-svg" viewBox="0 0 1200 840" role="img" aria-label="Telegram and the team browser go through Caddy to the bot and admin containers. The bot and admin share PostgreSQL. The bot pushes image and PDF jobs to workers. Scheduler and Hermes run beside them. Outbound Google, Yandex, Replicate and language-model calls leave through HTTPS." style="--ve-min: 1029px">
         <rect class="ve-bnd" x="30" y="20" width="1140" height="270"/>
-        <text class="ve-bnd-t" x="50" y="46">PUBLIC EDGE</text>
+        <text class="ve-bnd-t" x="50" y="46">Public edge</text>
 
         <g class="ve-n">
           <rect class="sh" x="70" y="60" width="200" height="76"/>
@@ -230,7 +230,7 @@
         <text class="ve-el" x="815" y="88">admin</text>
 
         <rect class="ve-bnd" x="30" y="290" width="1140" height="350"/>
-        <text class="ve-bnd-t" x="50" y="316">INTERNAL DOCKER NETWORK</text>
+        <text class="ve-bnd-t" x="50" y="316">Internal Docker network</text>
 
         <path class="ve-e is-hot" d="M520 260 V300 H300 V345"/>
         <text class="ve-el" x="360" y="291">webhook</text>
@@ -285,7 +285,7 @@
         <text class="ve-el r" x="300" y="457">PDFs</text>
 
         <rect class="ve-bnd" x="30" y="680" width="1140" height="150"/>
-        <text class="ve-bnd-t" x="50" y="706">EXTERNAL APIS</text>
+        <text class="ve-bnd-t" x="50" y="706">External APIs</text>
         <path class="ve-e" d="M600 640 V680"/>
         <text class="ve-el r" x="610" y="666">HTTPS out</text>
 
@@ -353,7 +353,7 @@
 <section id="media">
   <div class="sec-head">
     <p class="ve-label">Media</p>
-    <h2>Three pipelines carry the material AI cannot read directly.</h2>
+    <h2>Three pipelines carry what AI cannot read.</h2>
   </div>
   <figure>
     <div class="pipelines">
@@ -461,7 +461,7 @@
 <section id="reliability">
   <div class="sec-head">
     <p class="ve-label">Reliability</p>
-    <h2>The hard part is not the model. It is the second attempt.</h2>
+    <h2>The hard part is the second attempt.</h2>
   </div>
   <figure>
     <div class="budget-frame">
@@ -565,7 +565,7 @@
 <section id="data">
   <div class="sec-head">
     <p class="ve-label">System of record</p>
-    <h2>Google stays the source of truth. The bot is the entrance.</h2>
+    <h2>Google is the source of truth. The bot is the entrance.</h2>
   </div>
   <div class="ve-table" tabindex="0" role="region" aria-label="Systems of record comparison. Scroll horizontally to explore.">
     <p class="scroll-hint" aria-hidden="true">Swipe horizontally to compare →</p>
@@ -703,10 +703,10 @@ const explainer = document.querySelector('.lifecycle');
   --font-body: var(--font);
   --font-display: var(--font-body);
   --display-weight: 680;
-  --t-label: 0.75rem;
-  --t-small: 0.875rem;
-  --t-body: 1rem;
-  --t-lead: 1.25rem;
+  --t-label: 13px;
+  --t-small: 14px;
+  --t-body: 17px;
+  --t-lead: 20px;
   --s-1: 0.25rem;
   --s-2: 0.5rem;
   --s-3: 0.75rem;
@@ -727,7 +727,7 @@ const explainer = document.querySelector('.lifecycle');
   min-width: 0;
   overflow-x: clip;
   color: var(--ink);
-  font-size: 17px;
+  font-size: var(--t-body);
   line-height: 1.55;
 }
 
@@ -736,13 +736,13 @@ const explainer = document.querySelector('.lifecycle');
 }
 
 .shum-explainer p {
-  max-width: 68ch;
+  max-width: 62ch;
 }
 
 .shum-explainer .sec-head h2 {
-  max-width: 22ch;
+  max-width: 30ch;
   font-family: var(--font-display);
-  font-size: clamp(28px, 4.4vw, 54px);
+  font-size: clamp(28px, 3.8vw, 52px);
   font-weight: var(--display-weight);
   line-height: 1.02;
   letter-spacing: -0.025em;
@@ -750,7 +750,7 @@ const explainer = document.querySelector('.lifecycle');
 }
 
 .shum-explainer h3 {
-  font-size: 16px;
+  font-size: var(--t-body);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.3;
@@ -800,7 +800,7 @@ const explainer = document.querySelector('.lifecycle');
 .lead {
   max-width: 66ch;
   color: var(--ink);
-  font-size: clamp(19px, 1.6vw, 23px);
+  font-size: var(--t-lead);
   line-height: 1.45;
   letter-spacing: -0.01em;
 }
@@ -821,11 +821,11 @@ const explainer = document.querySelector('.lifecycle');
 }
 
 .toc-label {
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   color: var(--mute);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .toc-links {
@@ -840,7 +840,7 @@ const explainer = document.querySelector('.lifecycle');
   align-items: center;
   min-height: 44px;
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 500;
   line-height: 1.3;
   color: var(--ink);
@@ -876,7 +876,7 @@ const explainer = document.querySelector('.lifecycle');
 }
 
 .sec-head h2 {
-  max-width: 22ch;
+  max-width: 30ch;
 }
 
 .sec-head .ve-label {
@@ -897,7 +897,7 @@ figure {
   padding-top: 10px;
   border-top: 1px solid var(--rule);
   color: var(--mute);
-  font-size: 14px;
+  font-size: var(--t-small);
   line-height: 1.5;
 }
 
@@ -935,7 +935,7 @@ figure {
   padding: 6px 8px;
   border: 1px solid var(--rule-strong);
   background: var(--paper);
-  font-size: 12px;
+  font-size: var(--t-label);
   font-weight: 600;
   line-height: 1.2;
   text-align: center;
@@ -958,20 +958,20 @@ figure {
 }
 
 .lead-node strong {
-  font-size: clamp(14px, 1.3vw, 17px);
+  font-size: var(--t-body);
   line-height: 1.2;
 }
 
 .lead-node small {
   color: var(--mute);
-  font-size: 11.5px;
+  font-size: var(--t-label);
   line-height: 1.35;
 }
 
 .node-kind {
-  font: 600 10px/1.2 var(--font-body);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
+  font: 600 var(--t-label) / 1.2 var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--signal);
 }
 
@@ -1033,7 +1033,7 @@ figure {
 
 .kpi-note {
   color: var(--mute);
-  font-size: 14px;
+  font-size: var(--t-small);
   line-height: 1.4;
 }
 
@@ -1058,13 +1058,13 @@ section > .ve-label:has(+ .kpis) {
 
 .note-box h3 {
   margin: 0;
-  font-size: 15px;
+  font-size: var(--t-body);
 }
 
 .note-box p {
   margin: 0;
   color: var(--mute);
-  font-size: 15px;
+  font-size: var(--t-body);
 }
 
 .topic-map {
@@ -1100,21 +1100,21 @@ section > .ve-label:has(+ .kpis) {
 
 .topic h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--t-body);
   line-height: 1.2;
 }
 
 .topic p {
   margin: 0;
   color: var(--mute);
-  font-size: 15px;
+  font-size: var(--t-body);
   line-height: 1.45;
 }
 
 .topic .io {
   color: var(--mute);
-  font: 500 12px/1.45 var(--font-body);
-  letter-spacing: 0.01em;
+  font: 500 var(--t-label) / 1.45 var(--font-body);
+  letter-spacing: 0;
 }
 
 .chip {
@@ -1125,8 +1125,8 @@ section > .ve-label:has(+ .kpis) {
   padding: 2px var(--s-2);
   border: 1px solid currentColor;
   border-radius: 0;
-  font: 600 11px var(--font-body);
-  letter-spacing: 0.02em;
+  font: 600 var(--t-label) var(--font-body);
+  letter-spacing: 0;
   white-space: nowrap;
 }
 
@@ -1182,9 +1182,9 @@ details.deep summary {
   gap: 16px;
   padding: 14px 18px;
   color: var(--mute);
-  font: 600 12px/1.3 var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 600 var(--t-label) / 1.3 var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
   list-style: none;
   cursor: pointer;
 }
@@ -1200,7 +1200,7 @@ details.deep summary::-webkit-details-marker {
 
 details.deep summary::after {
   color: var(--signal);
-  font-size: 18px;
+  font-size: var(--t-lead);
   line-height: 1;
   content: '+';
 }
@@ -1248,13 +1248,13 @@ details.deep .deep-body > *:first-child {
 
 .shum-explainer button.stage .n {
   color: var(--mute);
-  font: 600 11px/1 var(--font-body);
+  font: 600 var(--t-label) / 1 var(--font-body);
   font-variant-numeric: tabular-nums;
 }
 
 .shum-explainer button.stage strong {
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--t-small);
   line-height: 1.25;
 }
 
@@ -1291,7 +1291,7 @@ details.deep .deep-body > *:first-child {
 }
 
 .stage-copy p {
-  max-width: 74ch;
+  max-width: 62ch;
   margin: 0;
 }
 
@@ -1310,7 +1310,7 @@ details.deep .deep-body > *:first-child {
   background: var(--paper);
   color: var(--ink);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 600;
   cursor: pointer;
 }
@@ -1330,7 +1330,7 @@ details.deep .deep-body > *:first-child {
 .stage-position {
   min-width: 42px;
   color: var(--mute);
-  font: 500 12px var(--font-body);
+  font: 500 var(--t-label) var(--font-body);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
@@ -1350,7 +1350,7 @@ details.deep .deep-body > *:first-child {
   width: 100%;
   min-width: var(--ve-min, 700px);
   height: auto;
-  font: 500 17px var(--font-body);
+  font: 500 var(--t-body) var(--font-body);
 }
 
 .ve-n .sh {
@@ -1378,7 +1378,7 @@ details.deep .deep-body > *:first-child {
 
 .ve-n .sub {
   fill: var(--text-dim);
-  font: 500 14px var(--font-body);
+  font: 500 var(--t-small) var(--font-body);
 }
 
 .ve-e {
@@ -1402,7 +1402,7 @@ details.deep .deep-body > *:first-child {
 
 .ve-el {
   fill: var(--text-dim);
-  font: 500 14px var(--font-body);
+  font: 500 var(--t-small) var(--font-body);
   text-anchor: middle;
   paint-order: stroke;
   stroke: var(--bg);
@@ -1423,9 +1423,9 @@ details.deep .deep-body > *:first-child {
 
 .ve-bnd-t {
   fill: var(--text-dim);
-  font: 600 14px var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font: 600 var(--t-small) var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .ve-bars {
@@ -1434,7 +1434,7 @@ details.deep .deep-body > *:first-child {
   max-width: 16rem;
   height: auto;
   overflow: visible;
-  font: 500 13px var(--font-body);
+  font: 500 var(--t-label) var(--font-body);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1476,7 +1476,7 @@ details.deep .deep-body > *:first-child {
 
 .pipeline h3 {
   margin: 0;
-  font-size: 17px;
+  font-size: var(--t-body);
 }
 
 .pipe-steps {
@@ -1487,7 +1487,7 @@ details.deep .deep-body > *:first-child {
 .pipe-step {
   padding: 10px 0;
   border-top: 1px solid var(--rule);
-  font-size: 15px;
+  font-size: var(--t-body);
   line-height: 1.4;
 }
 
@@ -1501,7 +1501,7 @@ details.deep .deep-body > *:first-child {
   padding-top: 10px;
   border-top: 1px solid var(--rule);
   color: var(--mute);
-  font: 500 13px/1.5 var(--font-body);
+  font: 500 var(--t-label) / 1.5 var(--font-body);
 }
 
 .budget-frame {
@@ -1523,7 +1523,7 @@ details.deep .deep-body > *:first-child {
   max-width: 52ch;
   margin: 0;
   color: var(--mute);
-  font-size: 14px;
+  font-size: var(--t-body);
   line-height: 1.5;
 }
 
@@ -1561,8 +1561,8 @@ details.deep .deep-body > *:first-child {
   background: var(--field);
   color: var(--mute);
   font: 600 var(--t-label) / 1.3 var(--font-body);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .ve-table tbody th {
@@ -1611,7 +1611,7 @@ details.deep .deep-body > *:first-child {
 .provider-disclosure p {
   margin: 8px 0 0;
   color: var(--mute);
-  font-size: 13px;
+  font-size: var(--t-label);
   font-weight: 400;
   line-height: 1.45;
 }
@@ -1634,25 +1634,25 @@ details.deep .deep-body > *:first-child {
 
 .admin-card h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: var(--t-body);
 }
 
 .admin-card p {
   margin: 0;
   color: var(--mute);
-  font-size: 15px;
+  font-size: var(--t-body);
   line-height: 1.45;
 }
 
 .admin-card .cmd {
   color: var(--mute);
-  font: 500 11px/1.3 var(--font-code);
+  font: 500 var(--t-label) / 1.3 var(--font-code);
   font-variant-ligatures: none;
 }
 
 .small {
   color: var(--mute);
-  font-size: 13px;
+  font-size: var(--t-label);
 }
 
 .small p {
@@ -1672,7 +1672,7 @@ details.deep .deep-body > *:first-child {
   padding: 5px 8px;
   border: 1px solid var(--rule-strong);
   color: var(--mute);
-  font: 500 11px/1.2 var(--font-body);
+  font: 500 var(--t-label) / 1.2 var(--font-body);
 }
 
 .scroll-hint {
@@ -1717,8 +1717,8 @@ details.deep .deep-body > *:first-child {
     width: max-content;
     margin: 0 0 12px;
     color: var(--signal);
-    font: 600 12px/1.3 var(--font-body);
-    letter-spacing: 0.02em;
+    font: 600 var(--t-label) / 1.3 var(--font-body);
+    letter-spacing: 0;
   }
 
   .ve-table .scroll-hint {
@@ -1799,6 +1799,30 @@ details.deep .deep-body > *:first-child {
 }
 
 @media (max-width: 620px) {
+  .shum-explainer .sec-head h2 {
+    max-width: 100%;
+    font-size: 26px;
+    line-height: 1.05;
+  }
+
+  .frame {
+    padding: 12px;
+    scroll-padding-inline: 12px;
+  }
+
+  .ve-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 1px solid var(--rule-strong);
+    background: var(--paper);
+  }
+
+  .ve-table thead th:first-child {
+    z-index: 2;
+    background: var(--field);
+  }
+
   .in-stack {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

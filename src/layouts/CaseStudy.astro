@@ -19,7 +19,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
         <a class="back" href="/development"
           ><span aria-hidden="true">←</span> Back to AI Development</a
         >
-        <p class="kicker case-kicker">
+        <p class="case-meta">
           Case Study
           {status && <span class="status">{status}</span>}
         </p>
@@ -46,7 +46,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
     gap: 6px;
     min-height: 44px;
     padding-block: 4px;
-    font-size: 14px;
+    font-size: var(--type-small);
     color: var(--mute);
     text-decoration: none;
     margin-bottom: 24px;
@@ -63,16 +63,19 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
     transform: translateX(-2px);
   }
 
-  .case-kicker {
+  .case-meta {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
+    margin: 0;
+    color: var(--signal);
+    font-size: var(--type-small);
+    font-weight: 600;
   }
 
   .status {
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: var(--type-small);
+    letter-spacing: 0;
     color: var(--signal);
     border: 1px solid var(--signal);
     padding: 4px 10px;
@@ -105,18 +108,18 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
   .case-body {
     padding-block: clamp(40px, 5vw, 72px) clamp(64px, 8vw, 120px);
     display: grid;
-    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1.38fr);
     gap: 24px clamp(32px, 5vw, 80px);
   }
 
   .case-body :global(h2) {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--mute);
+    max-width: 18ch;
+    font-size: var(--type-heading);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--ink);
     margin: 0;
-    padding-top: 6px;
   }
 
   .case-body :global(.case-section) {
@@ -124,7 +127,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-body :global(.case-content) {
-    max-width: 72ch;
+    max-width: 62ch;
     padding-bottom: clamp(32px, 4vw, 56px);
   }
 
@@ -166,7 +169,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-body :global(.stack-list li) {
-    font-size: 14px;
+    font-size: var(--type-small);
     padding: 6px 12px;
     border: 1px solid var(--rule-strong);
     margin: 0;
@@ -206,7 +209,7 @@ const { title, role, status, pageTitle, rainbowTitle = true } = Astro.props;
 
   .case-body :global(figcaption) {
     padding: 10px 16px;
-    font-size: 13px;
+    font-size: var(--type-small);
     color: var(--mute);
     border-top: 1px solid var(--rule);
     background: var(--bg);

@@ -130,7 +130,7 @@ const { current } = Astro.props;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      font-size: 14px;
+      font-size: var(--type-small);
     }
 
     .main-nav a {
@@ -141,7 +141,7 @@ const { current } = Astro.props;
     }
 
     .cv-trigger {
-      font-size: 13px;
+      font-size: var(--type-small);
       min-height: 44px;
       padding: 8px 10px;
     }
@@ -150,11 +150,11 @@ const { current } = Astro.props;
   @media (max-width: 360px) {
     .main-nav {
       gap: 6px;
-      font-size: 13px;
+      font-size: var(--type-small);
     }
 
     .cv-trigger {
-      font-size: 12px;
+      font-size: var(--type-small);
       padding: 8px 8px;
       gap: 4px;
     }
