@@ -3,9 +3,11 @@ import Base from '../../layouts/Base.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Toolkit from '../../components/Toolkit.astro';
 import Skills from '../../components/Skills.astro';
-import assistantDiagram from '../../assets/shum-assistant-diagram.png';
-import studioShumCover from '../../assets/studio-shum-cover.jpg';
-import blobTrackerCover from '../../assets/blob-tracker-cover.jpg';
+import assistantCover from '../../assets/shum-telegram-assistant-cover.webp';
+import studioShumCover from '../../assets/studio-shum-ru-cover.webp';
+import blobTrackerCover from '../../assets/blob-tracker-cover.webp';
+import shumBrainCover from '../../assets/shum-brain-cover.webp';
+import aiVideoProductionCover from '../../assets/ai-video-production-cover.webp';
 
 const projects = [
   {
@@ -13,7 +15,7 @@ const projects = [
     result:
       "A production assistant and admin panel that runs SHUM studio's daily operations: calendar, budgets, HR, client base, documents, and speech.",
     href: '/development/shum-telegram-assistant',
-    image: assistantDiagram,
+    image: assistantCover,
   },
   {
     title: 'studio-shum.ru',
@@ -34,6 +36,7 @@ const projects = [
     result:
       'A knowledge system for the studio: hybrid search, source-anchored answers, a wiki, and a knowledge graph.',
     href: '/development/shum-brain',
+    image: shumBrainCover,
   },
   {
     title: 'AI Video Production',
@@ -41,6 +44,7 @@ const projects = [
       'Production AI video pipelines: models, compute, and teams organized until the final video ships.',
     href: '#ai-video-production',
     action: 'Jump to Section',
+    image: aiVideoProductionCover,
   },
 ];
 ---
