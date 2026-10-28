@@ -17,6 +17,12 @@
   --rule: rgba(11, 11, 11, 0.08);
   --rule-strong: rgba(11, 11, 11, 0.16);
   --field: #ececee;
+  --signal-soft: #f6e8ea;
+  /* Status & Diagnostic Tones */
+  --ok: #1f7443;
+  --warn: #7a5e00;
+  --risk: #960018;
+  --info: #1a5f86;
   /* Spectrum Theme Variables (Randomized per session/load) */
   --grad-1: #4f5bd5;
   --grad-2: #962fbf;
@@ -556,8 +562,9 @@ summary,
 }
 
 .btn-ghost:hover {
-  background: var(--ink);
-  color: #fff;
+  background: var(--bg-sunken);
+  border-color: rgba(11, 11, 11, 0.32);
+  color: var(--ink);
 }
 
 /* ---------- sections ---------- */

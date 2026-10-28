@@ -22,6 +22,7 @@
       <a href="#reliability">Reliability</a>
       <a href="#admin">Admin</a>
       <a href="#data">System of record</a>
+      <a href="#built">Method</a>
     </div>
   </nav>
 </div>
@@ -592,6 +593,22 @@
     </div>
   </div>
 </section>
+
+<section id="built">
+  <div class="sec-head">
+    <p class="ve-label">Method</p>
+    <h2>How it was built</h2>
+  </div>
+  <div class="split">
+    <div>
+      <p>The product started from research into the studio's real operations: where leads, documents, and schedules were actually getting lost. That research became the product concept, the concept became a working system, and the system now runs in production with Docker Compose services, Caddy HTTPS, and GitHub Actions deploys from <code>main</code>.</p>
+    </div>
+    <div class="note-box">
+      <h3>Agentic development workflow</h3>
+      <p>AI agents were the development environment throughout: architecture, implementation, testing, and deployment scripts were all produced in an agentic workflow, with me directing, reviewing, and accepting the work.</p>
+    </div>
+  </div>
+</section>
 </div>
 
 <script>
@@ -684,29 +701,29 @@ const explainer = document.querySelector('.lifecycle');
 
 <style>
 .shum-explainer {
-  --signal-soft: #f6e8ea;
-  --ok: #1f7443;
-  --warn: #7a5e00;
-  --risk: #960018;
-  --info: #1a5f86;
-  --bg: var(--paper);
-  --surface: var(--paper);
+  --signal-soft: var(--signal-soft, #f6e8ea);
+  --ok: var(--ok, #1f7443);
+  --warn: var(--warn, #7a5e00);
+  --risk: var(--signal);
+  --info: var(--info, #1a5f86);
+  --bg: var(--bg-surface);
+  --surface: var(--bg-surface);
   --border: var(--rule);
   --border-bright: var(--rule-strong);
   --text: var(--ink);
   --text-dim: var(--mute);
   --accent: var(--signal);
   --accent-dim: var(--signal-soft);
-  --node-top: #ffffff;
+  --node-top: var(--bg-surface);
   --lift: rgb(11 11 11 / 0.1);
   --halo: 16%;
   --font-body: var(--font);
   --font-display: var(--font-body);
   --display-weight: 680;
   --t-label: 13px;
-  --t-small: 14px;
-  --t-body: 17px;
-  --t-lead: 20px;
+  --t-small: var(--type-small);
+  --t-body: var(--type-body);
+  --t-lead: var(--type-lead);
   --s-1: 0.25rem;
   --s-2: 0.5rem;
   --s-3: 0.75rem;
@@ -719,7 +736,7 @@ const explainer = document.querySelector('.lifecycle');
   --r-2: 0;
   --ease: var(--ease-out);
   --fast: var(--dur-fast);
-  --med: 300ms;
+  --med: var(--dur-normal);
   --slow: 500ms;
   grid-column: 1 / -1;
   display: grid;

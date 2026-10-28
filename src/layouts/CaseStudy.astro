@@ -111,6 +111,11 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
     display: contents;
   }
 
+  .case-body :global(.case-section-full) {
+    grid-column: 1 / -1;
+    display: block;
+  }
+
   .case-body :global(.case-content) {
     max-width: 62ch;
     padding-bottom: clamp(32px, 4vw, 56px);
