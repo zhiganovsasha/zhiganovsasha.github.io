@@ -134,6 +134,11 @@ agent working in this repository.
     5. `--type-display`: `clamp(52px, 7.4vw, 108px)` — hero titles and case study titles (h1 / `.display`).
   - Rule against arbitrary font sizes: Never introduce intermediate or hardcoded font sizes (e.g. 12px, 14px, 15px, 16px, 20px, 24px, 28px, 36px) in page styles or components. Always reference the canonical CSS variables.
 
+### Prohibited: Eyebrows, kickers, and overlines
+
+- Never create small kicker tags, category badges, overlines, or eyebrow labels (e.g. `<p class="ve-label">Premise</p>`, `<p class="case-meta">Case Study</p>`, tiny tracked caps above headings or cards) anywhere on the website, unless the owner explicitly and targetly asks for them. The owner explicitly dislikes eyebrow labels.
+- Section headings, page titles, and card headers must speak for themselves directly. If context is needed, fold it into the narrative headline or the opening lead sentence.
+
 ## Windows, paths, and text encoding
 
 - This repository is used on Windows and may contain Cyrillic paths and text.

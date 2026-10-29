@@ -66,7 +66,6 @@
 </figure>
 
 <section aria-label="At a glance">
-  <p class="ve-label">At a glance</p>
   <div class="kpis">
     <div class="kpi"><span class="ve-label">Bot topics</span><span class="val"><span data-count="9">9</span></span><span class="kpi-note">Nine function windows inside Telegram.</span></div>
     <div class="kpi"><span class="ve-label">Error sources</span><span class="val"><span data-count="16">16</span></span><span class="kpi-note">1 incident registry across functions and infrastructure.</span></div>
@@ -78,7 +77,6 @@
 
 <section id="premise">
   <div class="sec-head">
-    <p class="ve-label">Premise</p>
     <h2>The input is never clean. The system is built for that.</h2>
   </div>
   <div class="split">
@@ -95,7 +93,6 @@
 
 <section id="topics">
   <div class="sec-head">
-    <p class="ve-label">Product surface</p>
     <h2>Nine topics are the product.</h2>
   </div>
   <figure>
@@ -159,7 +156,6 @@
 
 <section id="lifecycle">
   <div class="sec-head">
-    <p class="ve-label">One request, end to end</p>
     <h2>The webhook is the only synchronous door.</h2>
   </div>
   <figure class="lifecycle-figure">
@@ -199,7 +195,6 @@
 
 <section id="runtime">
   <div class="sec-head">
-    <p class="ve-label">Runtime</p>
     <h2>One public edge. Everything else stays inside.</h2>
   </div>
   <figure>
@@ -353,7 +348,6 @@
 
 <section id="media">
   <div class="sec-head">
-    <p class="ve-label">Media</p>
     <h2>Three pipelines carry what AI cannot read.</h2>
   </div>
   <figure>
@@ -402,7 +396,6 @@
 
 <section id="ai">
   <div class="sec-head">
-    <p class="ve-label">AI gateway</p>
     <h2>Every model call becomes an accounted event.</h2>
   </div>
   <figure>
@@ -461,7 +454,6 @@
 
 <section id="reliability">
   <div class="sec-head">
-    <p class="ve-label">Reliability</p>
     <h2>The hard part is the second attempt.</h2>
   </div>
   <figure>
@@ -514,7 +506,6 @@
 
 <section id="admin">
   <div class="sec-head">
-    <p class="ve-label">Control room</p>
     <h2>The admin panel shows state, not secrets.</h2>
   </div>
   <figure>
@@ -565,7 +556,6 @@
 
 <section id="data">
   <div class="sec-head">
-    <p class="ve-label">System of record</p>
     <h2>Google is the source of truth. The bot is the entrance.</h2>
   </div>
   <div class="ve-table" tabindex="0" role="region" aria-label="Systems of record comparison. Scroll horizontally to explore.">
@@ -596,7 +586,6 @@
 
 <section id="built">
   <div class="sec-head">
-    <p class="ve-label">Method</p>
     <h2>How it was built</h2>
   </div>
   <div class="split">
@@ -886,7 +875,6 @@ const explainer = document.querySelector('.lifecycle');
 .sec-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
   margin-bottom: clamp(24px, 3vw, 40px);
   padding-top: 0;
   border-top: 0;
@@ -896,9 +884,6 @@ const explainer = document.querySelector('.lifecycle');
   max-width: 30ch;
 }
 
-.sec-head .ve-label {
-  padding-top: 0;
-}
 
 
 figure {
@@ -1055,9 +1040,6 @@ figure {
   line-height: 1.4;
 }
 
-section > .ve-label:has(+ .kpis) {
-  margin-bottom: 12px;
-}
 
 
 .split {

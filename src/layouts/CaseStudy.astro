@@ -18,7 +18,6 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
         <a class="back" href="/development"
           ><span aria-hidden="true">←</span> Back to AI Development</a
         >
-        <p class="case-meta">Case Study</p>
         <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
         <p class="lede case-role">{role}</p>
       </div>
@@ -60,16 +59,10 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
 
-  .case-meta {
-    margin: 0;
-    color: var(--signal);
-    font-size: var(--type-small);
-    font-weight: 600;
-  }
 
   .case-title {
     font-size: var(--type-display);
-    margin-top: 18px;
+    margin: 0;
   }
 
   .case-title.rainbow-gradient {

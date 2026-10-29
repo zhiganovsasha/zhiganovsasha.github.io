@@ -41,6 +41,7 @@
 
 ## Контент и кейсы
 
+- [x] Очистить SHUM Telegram Assistant и CaseStudy от мелких надзаголовков-кикеров (eyebrow labels).
 - [ ] Выделить переиспользуемые компоненты-примитивы из `ShumAssistantExplainer` (MetricsGrid, PipelineDiagram, TechSpecTable, ProblemSolutionBlock) для унификации остальных кейсов (`blob-tracker`, `studio-shum-ru`, `shum-brain`).
 - [ ] Перевести кейс `blob-tracker` на стандарт и визуальные примитивы SHUM Telegram Assistant.
 - [ ] Перевести кейс `studio-shum-ru` на стандарт и визуальные примитивы SHUM Telegram Assistant.
