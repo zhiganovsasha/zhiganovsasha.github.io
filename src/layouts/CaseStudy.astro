@@ -59,6 +59,7 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
     transform: translateX(-2px);
   }
 
+
   .case-meta {
     margin: 0;
     color: var(--signal);
@@ -67,7 +68,7 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-title {
-    font-size: clamp(44px, 6.4vw, 88px);
+    font-size: var(--type-display);
     margin-top: 18px;
   }
 
@@ -86,6 +87,7 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-role {
+    font-size: var(--type-lead);
     margin-top: 24px;
     max-width: 52ch;
   }
@@ -177,7 +179,7 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   .case-body :global(.pull-quote) {
     border-left: 2px solid var(--ink);
     padding-left: 24px;
-    font-size: clamp(20px, 2.2vw, 26px);
+    font-size: var(--type-lead);
     font-weight: 550;
     letter-spacing: -0.015em;
     line-height: 1.35;

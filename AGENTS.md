@@ -125,6 +125,14 @@ agent working in this repository.
   - Generative inline script in `Base.astro` rotates between three themes
     (Apple Intelligence, Instagram Sunset, Cyber Prismatic), varies gradient angles,
     and sets random initial phases and hover delays on `pointerenter`.
+- Typographic system (5-step canonical scale):
+  - All typography across the site strictly adheres to exactly 5 canonical fluid steps defined in `src/styles/global.css`:
+    1. `--type-small`: `clamp(13px, 0.8rem + 0.1vw, 14px)` — metadata, captions, footers, tags, status badges, small UI buttons.
+    2. `--type-body`: `clamp(17px, 1.02rem + 0.15vw, 18px)` — running paragraphs, bullet items, descriptions. (Intermediate 15px/16px body copy is prohibited).
+    3. `--type-lead`: `clamp(20px, 1.1rem + 0.55vw, 24px)` — lead intros, pull statements, lede paragraphs, card titles (h3), dialog titles.
+    4. `--type-heading`: `clamp(32px, 3.6vw, 48px)` — section headings (h2), catalog direction names, metric values.
+    5. `--type-display`: `clamp(52px, 7.4vw, 108px)` — hero titles and case study titles (h1 / `.display`).
+  - Rule against arbitrary font sizes: Never introduce intermediate or hardcoded font sizes (e.g. 12px, 14px, 15px, 16px, 20px, 24px, 28px, 36px) in page styles or components. Always reference the canonical CSS variables.
 
 ## Windows, paths, and text encoding
 

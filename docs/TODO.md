@@ -12,6 +12,7 @@
 
 ## Первая версия
 
+- [ ] Подготовить компонентные примитивы кейсов (MetricsGrid, PipelineDiagram, TechSpecTable, ProblemSolutionBlock) для унификации страниц кейсов.
 - [x] Скопировать исходный портрет из
   `C:\Users\1234\Pictures\userpic.jpg`, сохранив оригинал без изменений.
 - [x] Подготовить оптимизированные размеры и форматы портрета.
@@ -40,6 +41,10 @@
 
 ## Контент и кейсы
 
+- [ ] Выделить переиспользуемые компоненты-примитивы из `ShumAssistantExplainer` (MetricsGrid, PipelineDiagram, TechSpecTable, ProblemSolutionBlock) для унификации остальных кейсов (`blob-tracker`, `studio-shum-ru`, `shum-brain`).
+- [ ] Перевести кейс `blob-tracker` на стандарт и визуальные примитивы SHUM Telegram Assistant.
+- [ ] Перевести кейс `studio-shum-ru` на стандарт и визуальные примитивы SHUM Telegram Assistant.
+- [ ] Перевести кейс `shum-brain` на стандарт и визуальные примитивы SHUM Telegram Assistant.
 - [ ] Снять отдельные изображения и демонстрационные видео SHUM Telegram
   Assistant.
 - [ ] Снять отдельные изображения и демонстрационные видео SHUM Brain.

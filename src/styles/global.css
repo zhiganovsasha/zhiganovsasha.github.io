@@ -53,8 +53,9 @@
   --font-code: 'IBM Plex Mono', monospace;
   --type-small: clamp(13px, 0.8rem + 0.1vw, 14px);
   --type-body: clamp(17px, 1.02rem + 0.15vw, 18px);
-  --type-lead: clamp(20px, 1.1rem + 0.55vw, 23px);
-  --type-heading: clamp(28px, 2.6vw, 36px);
+  --type-lead: clamp(20px, 1.1rem + 0.55vw, 24px);
+  --type-heading: clamp(32px, 3.6vw, 48px);
+  --type-display: clamp(52px, 7.4vw, 108px);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 200ms;
   --dur-normal: 260ms;
@@ -230,6 +231,7 @@ summary,
 /* ---------- typography ---------- */
 
 .display {
+  font-size: var(--type-display);
   font-weight: 680;
   letter-spacing: -0.04em;
   line-height: 0.98;
@@ -584,7 +586,7 @@ summary,
 }
 
 .section-head h2 {
-  font-size: clamp(32px, 4.6vw, 60px);
+  font-size: var(--type-heading);
   font-weight: 680;
   letter-spacing: -0.04em;
   line-height: 1.02;
@@ -605,7 +607,7 @@ summary,
 }
 
 .site-footer h2 {
-  font-size: clamp(30px, 4vw, 52px);
+  font-size: var(--type-heading);
   font-weight: 680;
   letter-spacing: -0.035em;
   margin: 0 0 40px;
@@ -631,7 +633,7 @@ summary,
 }
 
 .email-text {
-  font-size: clamp(17px, 1.5vw, 21px);
+  font-size: var(--type-lead);
   font-weight: 500;
   letter-spacing: -0.01em;
   color: #ffffff;
@@ -751,7 +753,7 @@ dialog.dir-dialog[open]::backdrop {
 }
 
 .dir-dialog h3 {
-  font-size: 28px;
+  font-size: var(--type-lead);
   letter-spacing: -0.03em;
   margin: 0 0 14px;
 }

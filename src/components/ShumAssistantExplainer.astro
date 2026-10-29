@@ -720,7 +720,7 @@ const explainer = document.querySelector('.lifecycle');
   --font-body: var(--font);
   --font-display: var(--font-body);
   --display-weight: 680;
-  --t-label: 13px;
+  --t-label: var(--type-small);
   --t-small: var(--type-small);
   --t-body: var(--type-body);
   --t-lead: var(--type-lead);
@@ -759,7 +759,7 @@ const explainer = document.querySelector('.lifecycle');
 .shum-explainer .sec-head h2 {
   max-width: 30ch;
   font-family: var(--font-display);
-  font-size: clamp(28px, 3.8vw, 52px);
+  font-size: var(--type-heading);
   font-weight: var(--display-weight);
   line-height: 1.02;
   letter-spacing: -0.025em;
@@ -899,6 +899,7 @@ const explainer = document.querySelector('.lifecycle');
 .sec-head .ve-label {
   padding-top: 0;
 }
+
 
 figure {
   display: grid;
@@ -1042,7 +1043,7 @@ figure {
 }
 
 .kpi .val {
-  font: 600 clamp(2rem, 3vw, 2.8rem) / 1 var(--font-body);
+  font: 600 var(--type-heading) / 1 var(--font-body);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   text-box: trim-both cap alphabetic;
@@ -1057,6 +1058,7 @@ figure {
 section > .ve-label:has(+ .kpis) {
   margin-bottom: 12px;
 }
+
 
 .split {
   display: grid;
@@ -1818,7 +1820,6 @@ details.deep .deep-body > *:first-child {
 @media (max-width: 620px) {
   .shum-explainer .sec-head h2 {
     max-width: 100%;
-    font-size: 26px;
     line-height: 1.05;
   }
 
