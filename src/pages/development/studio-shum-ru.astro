@@ -3,6 +3,22 @@ import { Image } from 'astro:assets';
 import CaseStudy from '../../layouts/CaseStudy.astro';
 import cover from '../../assets/studio-shum-cover.jpg';
 
+const preserved = [
+  { value: '38', label: 'source routes, including every project and article' },
+  { value: '25', label: 'project pages with their specifications and prices' },
+  { value: '5', label: 'published articles kept at their original addresses' },
+  { value: '466', label: 'media and font files restored and checksum-verified' },
+  { value: '16', label: 'project videos carried over without re-encoding' },
+];
+
+const results = [
+  { measure: 'Mobile Performance, PageSpeed', result: '96 / 100' },
+  { measure: 'Desktop Performance, PageSpeed', result: '98 / 100' },
+  { measure: 'Largest Contentful Paint, mobile', result: '2.7 s' },
+  { measure: 'Accessibility audit', result: '100 / 100' },
+  { measure: 'Legacy redirect and 410 checks', result: '105 / 105' },
+];
+
 const stack = [
   'Astro 7',
   'Node.js',
@@ -22,70 +38,265 @@ const stack = [
 <CaseStudy
   pageTitle="studio-shum.ru — Alexander Zhiganov"
   title="studio-shum.ru"
-  role="An urgent rebuild under real pressure: restore availability, keep every URL, and never lose a lead again."
+  role="The studio site became unreachable for the audience it was built for. I led the move to infrastructure we control: every URL preserved, leads routed to the studio, and every release reversible."
 >
-  <section class="case-section">
-    <h2>Production site</h2>
-    <div class="case-content">
+  <section class="case-section case-section-full">
+    <div class="case-content case-open">
       <figure class="case-figure">
         <Image
           src={cover}
-          alt="Studio SHUM production homepage rebuilt and deployed on controlled infrastructure"
+          alt="studio-shum.ru homepage in production with the SHUM navigation and a multimedia installation hero"
           class="case-img"
-          widths={[600, 1000, 1400]}
-          sizes="(max-width: 900px) 100vw, 65vw"
+          widths={[600, 1000, 1400, 1900]}
+          sizes="(max-width: 900px) 100vw, 85vw"
         />
-        <figcaption>Production homepage of studio-shum.ru rebuilt with Astro on self-hosted infrastructure</figcaption>
+        <figcaption>
+          The rebuilt homepage in production. The design, projects, and
+          enquiry path stayed; the infrastructure underneath changed.
+        </figcaption>
       </figure>
     </div>
   </section>
 
   <section class="case-section">
-    <h2>The problem</h2>
+    <h2>The site was unreachable where it mattered.</h2>
     <div class="case-content">
       <p class="pull-quote">
         When studio-shum.ru was blocked in Russia, we started losing potential
         leads. I urgently rebuilt the website on infrastructure we could
         control.
       </p>
-    </div>
-  </section>
-
-  <section class="case-section">
-    <h2>The task</h2>
-    <div class="case-content">
-      <ul>
-        <li>Restore availability urgently.</li>
-        <li>Move the site to infrastructure we control.</li>
-        <li>
-          Preserve the existing materials, design, URLs, and media so that no
-          link and no search result breaks.
-        </li>
-        <li>Reduce the risk of losing leads during and after the move.</li>
-        <li>Keep the site's search visibility intact.</li>
-        <li>
-          Create a reproducible process for publishing and rolling back, so
-          the next emergency is a routine operation.
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="case-section">
-    <h2>How it was built</h2>
-    <div class="case-content">
       <p>
-        The site was rebuilt as a static Astro project with a verified
-        deployment pipeline: every deploy package is checked before release,
-        smoke tests run against the live result, and releases are atomic with
-        an immediate rollback path. Images are optimized at build time with
-        Sharp, typography is normalized with Typograf, and Playwright guards
-        the result with end-to-end checks.
+        studio-shum.ru is not a portfolio decoration. It is where the studio
+        explains its services, shows 25 projects, publishes articles, and
+        receives enquiries. When Russian visitors could no longer reach it, the
+        site stopped doing all four jobs at once.
       </p>
       <p>
-        This case also shows that I build websites and landings as part of
-        ongoing work: from urgency and constraints to a controlled,
-        reproducible production process.
+        The old setup also sent enquiries through an embedded form on someone
+        else's platform. The studio could not see how many people tried to
+        write and failed. The rebuild had to solve availability, preserve the
+        site, and put the lead path under the studio's control.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Faithful meant keeping everything that already worked.</h2>
+    <div class="case-content">
+      <p>
+        This was not a redesign. The site was reconstructed from its live
+        source, page by page, so the material the studio had built over years
+        survived the move: project dossiers with specifications and prices,
+        articles, team cards, brand typography, and the original media.
+      </p>
+
+      <ul class="inventory">
+        {preserved.map((item) => (
+          <li>
+            <strong>{item.value}</strong>
+            <span>{item.label}</span>
+          </li>
+        ))}
+      </ul>
+
+      <p>
+        Only the foundation changed. Hosting, the enquiry form, deployment,
+        caching, image delivery, and typographic normalization were replaced.
+        The visible site stayed recognizable to the people who already knew it.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>The site moved in one piece.</h2>
+    <div class="case-content">
+      <p>
+        Every asset was restored locally, checksum-verified, and served from
+        the new build instead of Squarespace or a raw GitHub URL. The original
+        files were never re-encoded or overwritten. The 16 project videos were
+        saved from the public streams as they were.
+      </p>
+      <p>
+        URLs were handled as a product decision, not a cleanup. The 25 flat
+        project addresses moved to <code>/projects/[slug]</code> with permanent
+        301 redirects. <code>/home</code> redirects to the homepage. Eight tag
+        routes and one empty category were removed with HTTP 410 Gone, a clear
+        signal to search engines instead of redirect debt.
+      </p>
+      <p>
+        The old site also depended on a Squarespace runtime for navigation,
+        galleries, filters, consent, and video. All of it was rebuilt in owned
+        code. Three.js appears once, on the branded 404 page, loaded lazily so
+        it never touches normal page startup.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>A lead no longer depends on a third-party form.</h2>
+    <div class="case-content">
+      <p>
+        The new form is part of the site. It posts to a small Node service on
+        loopback, behind Nginx, and the service writes the enquiry into a
+        SQLite outbox before delivery. Telegram is the notification, not the
+        database. If the assistant is unavailable, the record waits in the
+        queue and is retried instead of disappearing.
+      </p>
+
+      <ol class="lead-steps">
+        <li>
+          <strong>Native form</strong>
+          <span>Validation, origin checks, rate limits, honeypot.</span>
+        </li>
+        <li>
+          <strong>Node service</strong>
+          <span>Loopback only, isolated behind Nginx.</span>
+        </li>
+        <li>
+          <strong>SQLite outbox</strong>
+          <span>Recorded first, retried if delivery fails.</span>
+        </li>
+        <li>
+          <strong>Telegram topic</strong>
+          <span>Delivered to the lead topic, with email fallback.</span>
+        </li>
+      </ol>
+
+      <p>
+        Delivery goes to the studio's Telegram assistant. Duplicate submissions
+        return the existing record instead of creating a second lead. Personal
+        fields are purged from SQLite after 90 days, and the Telegram card is
+        anonymized after 30. The public email address remains as a fallback.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>A release is a switch, not an upload.</h2>
+    <div class="case-content">
+      <p>
+        The first version of deployment copied files into the live directory. A
+        failed transfer could leave the site half-updated, and there was no
+        quick way back. The new path builds a complete release, verifies it,
+        uploads it beside the current one, and moves a symlink.
+      </p>
+
+      <ol class="release">
+        <li>
+          <strong>Build</strong>
+          <span>Static HTML, normalized typography, responsive WebP.</span>
+        </li>
+        <li>
+          <strong>Check</strong>
+          <span>Tests, internal links, media references, deploy package.</span>
+        </li>
+        <li>
+          <strong>Package</strong>
+          <span>Release archive with a SHA-256 manifest, media hardlinked.</span>
+        </li>
+        <li>
+          <strong>Switch</strong>
+          <span>The current symlink moves to the new release in one step.</span>
+        </li>
+        <li>
+          <strong>Verify</strong>
+          <span>Smoke tests on live routes, automatic rollback on failure.</span>
+        </li>
+      </ol>
+
+      <p>
+        If a smoke test fails, the symlink returns to the previous release
+        automatically. Five releases are retained, and the media bank is
+        hardlinked between them, so a 476 MiB video library is not copied five
+        times. The same pipeline runs every check on <code>dev</code> and only
+        deploys from <code>main</code>. Publishing stopped being an event that
+        depended on someone's laptop.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>Speed was part of the migration.</h2>
+    <div class="case-content">
+      <p>
+        The homepage was carrying oversized images and nine blocking CSS
+        requests. Hero images were generated from 4x masters into responsive
+        WebP at 750, 1080, 1920, and 2560 pixels, cutting the mobile LCP image
+        weight by about 3.18 MB, a 95.8% reduction. CSS requests dropped from 9
+        to 3, fonts load with <code>font-display: swap</code>, and hashed assets
+        and media are cached for a year as immutable.
+      </p>
+      <p>
+        The same pass normalized heading levels across all 38 pages and
+        brought the accessibility audit to 100/100.
+      </p>
+
+      <table class="results">
+        <caption>Measured on the live site on 18 October 2026.</caption>
+        <tbody>
+          {results.map((row) => (
+            <tr>
+              <th scope="row">{row.measure}</th>
+              <td>{row.result}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p class="case-note">
+        These are dated measurements, not a permanent promise. PageSpeed moves
+        with network, device, and third-party scripts. The work was to remove
+        the causes, not to chase a number.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>The move also had to keep the site findable.</h2>
+    <div class="case-content">
+      <p>
+        Redirects were only one part. The rebuild shipped structured data for
+        the organization, the website, project and publication collections, and
+        individual articles. It also added page and video sitemaps, canonical
+        URLs, and a stable route map that does not change when content is
+        updated.
+      </p>
+      <p>
+        All 105 legacy redirect and 410 checks pass on production. Google Search
+        Console and Yandex Webmaster are connected with active sitemaps. The
+        site also publishes <code>llms.txt</code> and machine-readable content
+        signals, so agents can read the studio's public material without
+        scraping the layout.
+      </p>
+      <p>
+        Search visibility is not something I can promise to preserve in a
+        screenshot. It is something I can make measurable, then watch.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-section">
+    <h2>What this proves.</h2>
+    <div class="case-content">
+      <p>
+        I did not need a new design to make the site work. I needed a foundation
+        the studio could own. I led the rebuild: I made the product, content,
+        and infrastructure decisions, and AI agents wrote and shipped the code.
+        The result is a site that serves its own pages, records its own leads,
+        and can return to the previous release in seconds.
+      </p>
+      <p>
+        That is the part I would repeat on any project: define the constraint,
+        keep what already works, and make the production path boring. The live
+        site is at
+        <a
+          href="https://studio-shum.ru"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="studio-shum.ru live site (opens in a new tab)"
+          >studio-shum.ru <span aria-hidden="true">↗</span></a
+        >.
       </p>
     </div>
   </section>
@@ -99,3 +310,185 @@ const stack = [
     </div>
   </section>
 </CaseStudy>
+
+<style>
+  :global(.case-body .case-content.case-open) {
+    max-width: none;
+  }
+
+  .inventory {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0 0 1.4em;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--rule-strong);
+    background: var(--bg-surface);
+  }
+
+  .inventory li {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 18px 20px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .inventory li:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .inventory li:last-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .inventory strong {
+    font-size: var(--type-lead);
+    font-weight: 650;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .inventory span {
+    font-size: var(--type-small);
+    line-height: 1.4;
+    color: var(--mute);
+  }
+
+  .lead-steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0 0 1.4em;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--rule-strong);
+    background: var(--rule-strong);
+  }
+
+  .lead-steps li {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    margin: 0;
+    padding: 16px 18px;
+    background: var(--bg-surface);
+  }
+
+  .lead-steps strong {
+    font-size: var(--type-body);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .lead-steps span {
+    font-size: var(--type-small);
+    line-height: 1.45;
+    color: var(--mute);
+  }
+
+  .release {
+    margin: 0 0 1.4em;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .release li {
+    display: grid;
+    grid-template-columns: minmax(88px, 0.34fr) minmax(0, 1fr);
+    gap: 4px 20px;
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .release strong {
+    font-size: var(--type-body);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .release span {
+    font-size: var(--type-small);
+    line-height: 1.45;
+    color: var(--mute);
+    padding-top: 2px;
+  }
+
+  .results {
+    width: 100%;
+    margin: 0 0 1em;
+    border-collapse: collapse;
+    font-size: var(--type-small);
+  }
+
+  .results caption {
+    padding-bottom: 10px;
+    text-align: left;
+    color: var(--mute);
+  }
+
+  .results th,
+  .results td {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: baseline;
+  }
+
+  .results tbody tr:first-child th,
+  .results tbody tr:first-child td {
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .results th {
+    font-weight: 500;
+    text-align: left;
+    color: var(--ink);
+  }
+
+  .results td {
+    text-align: right;
+    font-size: var(--type-body);
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .case-note {
+    max-width: 60ch;
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+  }
+
+  @media (max-width: 760px) {
+    .inventory {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .inventory li,
+    .inventory li:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .inventory li:last-child {
+      grid-column: auto;
+      border-bottom: 0;
+    }
+
+    .lead-steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .release li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+  }
+</style>
