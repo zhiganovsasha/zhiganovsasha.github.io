@@ -36,7 +36,8 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .back {
-    display: inline-flex;
+    display: flex;
+    width: fit-content;
     align-items: center;
     gap: 6px;
     min-height: 44px;
@@ -66,7 +67,9 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   .case-title.rainbow-gradient {
-    display: inline;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
     background: var(--grad-spectrum);
@@ -201,17 +204,6 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   @media (max-width: 760px) {
-    .back {
-      display: flex;
-      width: fit-content;
-    }
-
-    .case-title.rainbow-gradient {
-      display: block;
-      width: fit-content;
-      max-width: 100%;
-    }
-
     .case-body {
       grid-template-columns: 1fr;
     }
