@@ -1,0 +1,26 @@
+{
+  "skill_name": "personal-style-thumbs",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create two 16:9 thumbnail candidates for a compact personal-site card rendered about 320 CSS pixels wide. The subject is an AI agent workflow that turns one brief into a finished working artifact. Follow the established visual language of the development covers. Do not connect anything to the website. Save both candidates in the project's generated-asset system and wait for my choice.",
+      "expected_output": "Two restrained paper-relief candidates with one dominant metaphor, no more than three large supporting forms, and no fine background detail.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 2,
+      "prompt": "Create two 16:9 cover candidates for a wide personal-site project card rendered about 720 CSS pixels wide. Show research being transformed into a practical working product without using arrows, floating dashboards, glowing networks, or corporate-tech imagery. Keep safe space near the outer edges. Do not connect the result to the website. Save both candidates and wait for my choice.",
+      "expected_output": "Two wide paper-relief scenes with a clear transformation metaphor, controlled detail, safe crop space, and crimson close to #960018.",
+      "files": [],
+      "expectations": []
+    },
+    {
+      "id": 3,
+      "prompt": "Create two 16:9 candidates for a large personal-site feature block rendered about 1200 CSS pixels wide. The subject is My AI toolkit as a real working studio bench rather than a software dashboard. The scene may be richer than a thumbnail but must remain calm, tactile, and clearly hierarchical. Do not connect it to the website. Save both candidates and wait for my choice.",
+      "expected_output": "Two large-format paper-relief scenes with a stronger narrative, restrained background, coherent physical construction, and no AI-slop motifs.",
+      "files": [],
+      "expectations": []
+    }
+  ]
+}
