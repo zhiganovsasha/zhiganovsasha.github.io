@@ -102,6 +102,7 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
 
   .case-title {
     font-size: var(--type-display);
+    line-height: 1.05;
     margin: 0;
     min-width: 0;
   }
@@ -110,6 +111,8 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
     display: block;
     width: fit-content;
     max-width: 100%;
+    padding-block: 0.04em 0.18em;
+    margin-block: -0.04em -0.18em;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
     background: var(--grad-spectrum);

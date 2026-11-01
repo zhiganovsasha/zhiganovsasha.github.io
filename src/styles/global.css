@@ -839,6 +839,8 @@ dialog.dir-dialog[open]::backdrop {
 
 .rainbow-gradient {
   display: inline;
+  padding-block: 0.04em 0.18em;
+  margin-block: -0.04em -0.18em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   background: var(--grad-spectrum);
