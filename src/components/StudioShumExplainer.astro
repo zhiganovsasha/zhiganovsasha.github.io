@@ -1,0 +1,979 @@
+---
+import { Image } from 'astro:assets';
+import siteScreenshot from '../assets/studio-shum-cover.jpg';
+import homeHero from '../assets/studio-shum-home-hero.webp';
+import teamImage from '../assets/studio-shum-team.webp';
+import projectPoster from '../assets/studio-shum-project-poster.jpg';
+
+const preserved = [
+  ['38', 'source routes, including every project and article'],
+  ['25', 'project pages with specifications and prices'],
+  ['5', 'published articles kept at their original addresses'],
+  ['466', 'media and font files restored and checksum-verified'],
+  ['16', 'project videos carried over without re-encoding'],
+];
+
+const leadStages = [
+  {
+    name: 'Native form',
+    detail: 'The site validates the request, checks its origin, applies rate limits, and rejects bots with a honeypot.',
+    outcome: 'A valid enquiry enters infrastructure the studio controls.',
+  },
+  {
+    name: 'Node service',
+    detail: 'A small service runs on loopback behind Nginx. It accepts the form without exposing its own public port.',
+    outcome: 'The public site and private delivery service stay separated.',
+  },
+  {
+    name: 'SQLite outbox',
+    detail: 'The enquiry is written to SQLite before any notification is attempted. Duplicate submissions return the existing record.',
+    outcome: 'A temporary delivery failure cannot erase the lead.',
+  },
+  {
+    name: 'Telegram topic',
+    detail: 'The studio assistant receives the lead card in the right topic, with email as a fallback and retries when delivery fails.',
+    outcome: 'Telegram is a notification channel, not the database.',
+  },
+];
+
+const releaseStages = [
+  ['Build', 'Static HTML, normalized typography, responsive WebP.'],
+  ['Check', 'Tests, internal links, media references, deploy package.'],
+  ['Package', 'A release archive with a SHA-256 manifest and hardlinked media.'],
+  ['Switch', 'The current symlink moves to the complete new release.'],
+  ['Verify', 'Live smoke tests trigger an automatic rollback on failure.'],
+];
+
+const results = [
+  ['96 / 100', 'Mobile Performance, PageSpeed'],
+  ['98 / 100', 'Desktop Performance, PageSpeed'],
+  ['2.7 s', 'Largest Contentful Paint, mobile'],
+  ['100 / 100', 'Accessibility audit'],
+  ['105 / 105', 'Legacy redirect and 410 checks'],
+];
+
+const stack = [
+  ['Astro 7', 'Static routes, project pages, publications, and structured data.'],
+  ['Node.js + SQLite', 'Durable enquiry intake, retries, deduplication, and retention.'],
+  ['Sharp + Typograf', 'Responsive image delivery and normalized editorial typography.'],
+  ['Playwright', 'Route, form, accessibility, redirect, and smoke-test coverage.'],
+  ['Nginx', 'Caching, security headers, reverse proxying, and release switching.'],
+  ['GitHub Actions', 'Build verification, packaging, deployment, smoke tests, and rollback.'],
+];
+---
+
+<div class="studio-explainer">
+  <section class="overview" id="studio-overview" aria-labelledby="studio-overview-title">
+    <div class="overview-copy">
+      <h2 id="studio-overview-title">Same site. New foundation.</h2>
+      <p>
+        The design, projects, articles, and enquiry path stayed recognizable.
+        Hosting, lead delivery, deployment, caching, and image delivery moved
+        to infrastructure the studio can operate and reverse.
+      </p>
+    </div>
+    <figure class="site-screen motion-shutter" data-ui>
+      <Image
+        src={siteScreenshot}
+        alt="studio-shum.ru homepage in production with SHUM navigation and a multimedia installation hero"
+        widths={[720, 1080, 1440, 1900]}
+        sizes="(max-width: 900px) 100vw, 88vw"
+      />
+      <figcaption>
+        The rebuilt homepage in production. The visible site stayed; the
+        infrastructure underneath changed.
+      </figcaption>
+    </figure>
+  </section>
+
+  <nav class="studio-nav" aria-label="studio-shum.ru case sections">
+    <a href="#studio-access">Access</a>
+    <a href="#studio-preserved">Preserved</a>
+    <a href="#studio-leads">Leads</a>
+    <a href="#studio-release">Release</a>
+    <a href="#studio-results">Results</a>
+    <a href="#studio-stack">Technology</a>
+  </nav>
+
+  <section id="studio-access" aria-labelledby="studio-access-title">
+    <div class="section-copy split-copy">
+      <h2 id="studio-access-title">Access failed where it mattered.</h2>
+      <div>
+        <p class="statement">
+          When studio-shum.ru was blocked in Russia, we started losing
+          potential leads. I urgently rebuilt the website on infrastructure we
+          could control.
+        </p>
+        <p>
+          The site explains the studio’s services, shows its work, publishes
+          articles, and receives enquiries. When Russian visitors could no
+          longer reach it, all four jobs failed together. The embedded form
+          also hid how many people tried to write and never reached the team.
+        </p>
+      </div>
+    </div>
+    <figure class="ownership-map">
+      <div class="ownership-before">
+        <h3>Before</h3>
+        <p>Pages, media, and the form depended on systems outside the studio.</p>
+      </div>
+      <span class="ownership-action" aria-hidden="true">rebuild <b>→</b></span>
+      <div class="ownership-after">
+        <h3>After</h3>
+        <p>Routes, assets, leads, releases, and rollback live on owned infrastructure.</p>
+      </div>
+      <figcaption>
+        This was a continuity project, not a redesign. The audience kept the
+        same destination while the operational risk moved under the studio’s control.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="studio-preserved" aria-labelledby="studio-preserved-title">
+    <div class="section-copy">
+      <h2 id="studio-preserved-title">Every public route survived.</h2>
+      <p>
+        The live source was reconstructed page by page. Project dossiers,
+        prices, articles, team cards, typography, videos, and original media
+        stayed intact while the foundation changed.
+      </p>
+    </div>
+    <dl class="preserved-grid">
+      {preserved.map(([value, label]) => (
+        <div>
+          <dt>{value}</dt>
+          <dd>{label}</dd>
+        </div>
+      ))}
+    </dl>
+    <div class="media-proof">
+      <figure class="media-wide motion-shutter">
+        <Image
+          src={homeHero}
+          alt="Multimedia stage with blue beams and a mirrored ceiling, used as the studio-shum.ru homepage hero"
+          widths={[720, 1080, 1600, 2200]}
+          sizes="(max-width: 760px) 100vw, 62vw"
+        />
+        <figcaption>The homepage kept SHUM’s project-led visual identity.</figcaption>
+      </figure>
+      <div class="media-pair">
+        <figure class="motion-shutter">
+          <Image
+            src={teamImage}
+            alt="SHUM team standing together in the studio"
+            widths={[480, 720, 1080]}
+            sizes="(max-width: 760px) 100vw, 30vw"
+          />
+          <figcaption>Team material remained part of the same content system.</figcaption>
+        </figure>
+        <figure class="motion-shutter">
+          <Image
+            src={projectPoster}
+            alt="Sharjah Light Festival projection on a dam reflected in water"
+            widths={[480, 720, 1080]}
+            sizes="(max-width: 760px) 100vw, 30vw"
+          />
+          <figcaption>Project media stayed local, responsive, and reusable.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="route-note">
+      <p>
+        Twenty-five flat project addresses moved to <code>/projects/[slug]</code>
+        with permanent redirects. <code>/home</code> returns to the homepage.
+        Obsolete tag and category routes answer with HTTP 410 Gone instead of
+        accumulating redirect debt.
+      </p>
+      <p>
+        Every asset is served from the new build instead of Squarespace or a
+        raw GitHub URL. The source files were checksum-verified and never
+        re-encoded or overwritten.
+      </p>
+    </div>
+  </section>
+
+  <section id="studio-leads" aria-labelledby="studio-leads-title">
+    <div class="section-copy split-copy">
+      <h2 id="studio-leads-title">A lead now survives failure.</h2>
+      <p>
+        The new form records first and notifies second. If Telegram or the
+        assistant is unavailable, the request waits in a durable queue instead
+        of disappearing.
+      </p>
+    </div>
+    <figure class="lead-explorer" data-lead-explorer data-enhanced="false">
+      <div class="lead-controls" role="group" aria-label="Explore the enquiry path" hidden>
+        {leadStages.map((stage, index) => (
+          <button type="button" data-lead-step={index} aria-pressed={index === 0 ? 'true' : 'false'}>
+            {stage.name}
+          </button>
+        ))}
+      </div>
+      <div class="lead-details" aria-live="polite" aria-atomic="true">
+        {leadStages.map((stage, index) => (
+          <article class="lead-detail" data-lead-panel={index}>
+            <h3>{stage.name}</h3>
+            <p>{stage.detail}</p>
+            <strong>{stage.outcome}</strong>
+          </article>
+        ))}
+      </div>
+      <figcaption>
+        Personal fields are purged from SQLite after 90 days, and the Telegram
+        card is anonymized after 30. The public email address remains a fallback.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="studio-release" aria-labelledby="studio-release-title">
+    <div class="section-copy">
+      <h2 id="studio-release-title">A release became one switch.</h2>
+      <p>
+        Uploading files into a live directory could leave the site half-updated.
+        The replacement path builds and verifies a complete release beside the
+        current one, then moves a symlink in one step.
+      </p>
+    </div>
+    <figure class="release-flow">
+      <div>
+        {releaseStages.map(([name, detail], index) => (
+          <article class="release-stage">
+            <h3>{name}</h3>
+            <p>{detail}</p>
+            {index < releaseStages.length - 1 && <span aria-hidden="true">→</span>}
+          </article>
+        ))}
+      </div>
+      <figcaption>
+        A failed smoke test moves the symlink back automatically. Five releases
+        are retained, while the 476 MiB media bank is hardlinked instead of copied five times.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section id="studio-results" aria-labelledby="studio-results-title">
+    <div class="section-copy split-copy">
+      <h2 id="studio-results-title">Speed came from the rebuild.</h2>
+      <div>
+        <p>
+          Responsive WebP variants cut the mobile hero image by about 3.18 MB,
+          a 95.8% reduction. CSS requests dropped from nine to three, fonts use
+          <code>font-display: swap</code>, and hashed assets are cached as immutable.
+        </p>
+        <p>
+          The same pass normalized heading levels across all 38 pages and
+          brought the accessibility audit to 100/100.
+        </p>
+      </div>
+    </div>
+    <dl class="result-grid">
+      {results.map(([value, label]) => (
+        <div>
+          <dt>{value}</dt>
+          <dd>{label}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="measurement-note">
+      Measured on the live site on 18 October 2026. These are dated results, not
+      a permanent promise: PageSpeed changes with network, device, and third-party scripts.
+    </p>
+  </section>
+
+  <section id="studio-findable" aria-labelledby="studio-findable-title">
+    <div class="section-copy split-copy">
+      <h2 id="studio-findable-title">Findability became measurable.</h2>
+      <div>
+        <p>
+          The rebuild shipped organization, website, collection, project, and
+          article structured data alongside page and video sitemaps, canonical
+          URLs, and a stable route map.
+        </p>
+        <p>
+          All 105 legacy redirect and 410 checks pass on production. Google
+          Search Console and Yandex Webmaster have active sitemaps. The site
+          also publishes <code>llms.txt</code> and machine-readable content signals.
+        </p>
+      </div>
+    </div>
+    <blockquote>
+      Search visibility cannot be preserved in a screenshot. It can be made
+      measurable, then watched.
+    </blockquote>
+  </section>
+
+  <section class="role-section" id="studio-role" aria-labelledby="studio-role-title">
+    <div class="section-copy">
+      <h2 id="studio-role-title">What this proves.</h2>
+      <p>
+        I did not need a new design to make the site work. I needed a foundation
+        the studio could own. I led the rebuild: I made the product, content,
+        and infrastructure decisions, and AI agents wrote and shipped the code.
+      </p>
+      <p>
+        The result serves its own pages, records its own leads, and can return
+        to the previous release in seconds. That is the part I would repeat:
+        define the constraint, keep what works, and make the production path boring.
+      </p>
+    </div>
+    <a class="btn btn-primary" href="https://studio-shum.ru" target="_blank" rel="noopener noreferrer">
+      Open studio-shum.ru <span aria-hidden="true">↗</span>
+    </a>
+  </section>
+
+  <section id="studio-stack" aria-labelledby="studio-stack-title">
+    <div class="section-copy">
+      <h2 id="studio-stack-title">What runs underneath.</h2>
+    </div>
+    <dl class="stack-spec">
+      {stack.map(([name, purpose]) => (
+        <div>
+          <dt>{name}</dt>
+          <dd>{purpose}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="boundary-note">
+      Three.js appears only on the branded 404 page and loads lazily. It never
+      touches normal page startup.
+    </p>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lead-explorer]').forEach((explorer) => {
+    const controls = explorer.querySelector<HTMLElement>('.lead-controls');
+    const buttons = Array.from(explorer.querySelectorAll<HTMLButtonElement>('[data-lead-step]'));
+    const panels = Array.from(explorer.querySelectorAll<HTMLElement>('[data-lead-panel]'));
+    if (!controls || buttons.length === 0 || panels.length === 0) return;
+
+    const showStage = (index: number) => {
+      buttons.forEach((button, buttonIndex) => {
+        button.setAttribute('aria-pressed', String(buttonIndex === index));
+      });
+      panels.forEach((panel, panelIndex) => {
+        panel.hidden = panelIndex !== index;
+      });
+    };
+
+    explorer.dataset.enhanced = 'true';
+    controls.hidden = false;
+    buttons.forEach((button, index) => button.addEventListener('click', () => showStage(index)));
+    showStage(0);
+  });
+
+  const sectionLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.studio-nav a'));
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        sectionLinks.forEach((link) => {
+          if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    sectionLinks.forEach((link) => {
+      const target = document.querySelector<HTMLElement>(link.hash);
+      if (target) sectionObserver.observe(target);
+    });
+  }
+
+  const motionTargets = Array.from(document.querySelectorAll<HTMLElement>(
+    '.studio-explainer .motion-shutter, .preserved-grid > div, .release-stage, .result-grid > div, .stack-spec > div',
+  ));
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const motionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        motionObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    motionTargets.forEach((target) => {
+      target.classList.add('motion-ready');
+      motionObserver.observe(target);
+    });
+  }
+</script>
+
+<style>
+  .studio-explainer {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: clamp(64px, 8vw, 112px);
+    min-width: 0;
+  }
+
+  .studio-explainer :where(p, h2, h3, figure, figcaption, dl, dd, blockquote) {
+    margin: 0;
+  }
+
+  .studio-explainer section {
+    display: grid;
+    gap: 28px;
+    min-width: 0;
+    scroll-margin-top: 168px;
+  }
+
+  .studio-explainer h2 {
+    max-width: 24ch;
+  }
+
+  .studio-explainer h3 {
+    font-size: var(--type-lead);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .studio-explainer p {
+    max-width: 65ch;
+  }
+
+  .studio-explainer figcaption {
+    max-width: 90ch;
+    padding-top: 16px;
+    border: 0;
+    background: transparent;
+    color: var(--mute);
+    font-size: var(--type-small);
+  }
+
+  .overview-copy,
+  .split-copy,
+  .route-note {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 24px clamp(28px, 6vw, 88px);
+    align-items: start;
+  }
+
+  .overview-copy p {
+    font-size: var(--type-lead);
+    line-height: 1.45;
+  }
+
+  .site-screen {
+    padding: 12px;
+    background: var(--bg-surface);
+  }
+
+  .site-screen :global(img),
+  .media-proof :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .studio-nav {
+    position: sticky;
+    top: 64px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    margin-block: -40px -32px;
+    padding-block: 10px;
+    background: var(--bg-canvas);
+    font-size: var(--type-small);
+  }
+
+  .studio-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--mute);
+    text-decoration: none;
+  }
+
+  .studio-nav a:hover,
+  .studio-nav a[aria-current='location'] {
+    color: var(--signal);
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  .split-copy > div {
+    display: grid;
+    gap: 20px;
+  }
+
+  .statement {
+    font-size: var(--type-lead);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ownership-map {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-surface);
+  }
+
+  .ownership-before,
+  .ownership-after {
+    display: grid;
+    align-content: center;
+    gap: 14px;
+    min-height: 220px;
+    padding: clamp(24px, 4vw, 44px);
+    background: var(--bg-sunken);
+  }
+
+  .ownership-after {
+    background: var(--signal-subtle);
+  }
+
+  .ownership-action {
+    align-self: center;
+    color: var(--mute);
+    font-size: var(--type-small);
+    text-align: center;
+  }
+
+  .ownership-action b {
+    display: block;
+    color: var(--signal);
+    font-size: var(--type-lead);
+  }
+
+  .ownership-map figcaption {
+    grid-column: 1 / -1;
+  }
+
+  .preserved-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .preserved-grid > div,
+  .result-grid > div {
+    padding: clamp(20px, 3vw, 32px);
+    background: var(--bg-surface);
+  }
+
+  .preserved-grid > div:nth-child(even),
+  .result-grid > div:nth-child(even) {
+    background: var(--bg-sunken);
+  }
+
+  .preserved-grid dt,
+  .result-grid dt {
+    color: var(--signal);
+    font-size: var(--type-heading);
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .preserved-grid dd,
+  .result-grid dd {
+    margin-top: 14px;
+    font-size: var(--type-body);
+    line-height: 1.45;
+  }
+
+  .media-proof {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+    gap: 12px;
+  }
+
+  .media-proof figure {
+    min-width: 0;
+    padding: 12px;
+    background: var(--bg-surface);
+  }
+
+  .media-wide :global(img) {
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+  }
+
+  .media-pair {
+    display: grid;
+    gap: 12px;
+  }
+
+  .media-pair figure:nth-child(2) {
+    background: var(--bg-sunken);
+  }
+
+  .media-pair :global(img) {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .route-note {
+    padding: clamp(24px, 4vw, 40px);
+    background: var(--signal-subtle);
+  }
+
+  .lead-explorer {
+    padding: 12px;
+    background: var(--bg-surface);
+  }
+
+  .lead-controls {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+    background: var(--bg-sunken);
+  }
+
+  .lead-controls[hidden] {
+    display: none;
+  }
+
+  .lead-controls button {
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 0;
+    background: var(--bg-surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--type-small);
+    cursor: pointer;
+    transition:
+      transform 140ms var(--ease-out),
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .lead-controls button:hover {
+    color: var(--signal);
+  }
+
+  .lead-controls button:active {
+    transform: scale(0.97);
+  }
+
+  .lead-controls button[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .lead-details {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding-top: 12px;
+  }
+
+  [data-enhanced='true'] .lead-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lead-detail {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    min-height: 220px;
+    padding: clamp(24px, 4vw, 44px);
+    background: var(--bg-sunken);
+  }
+
+  .lead-detail strong {
+    max-width: 55ch;
+    color: var(--signal);
+    font-size: var(--type-body);
+  }
+
+  .lead-detail[hidden] {
+    display: none;
+  }
+
+  .lead-explorer figcaption {
+    padding-inline: 12px;
+  }
+
+  .release-flow {
+    padding: 12px;
+    background: var(--bg-surface);
+  }
+
+  .release-flow > div {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-sunken);
+  }
+
+  .release-stage {
+    position: relative;
+    min-width: 0;
+    padding: clamp(20px, 3vw, 28px);
+    background: transparent;
+  }
+
+  .release-stage:nth-child(4) {
+    background: var(--signal-subtle);
+  }
+
+  .release-stage p {
+    margin-top: 14px;
+  }
+
+  .release-stage > span {
+    position: absolute;
+    top: 50%;
+    right: -18px;
+    z-index: 2;
+    color: var(--signal);
+    font-size: var(--type-lead);
+    transform: translateY(-50%);
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .measurement-note,
+  .boundary-note {
+    color: var(--mute);
+    font-size: var(--type-small);
+  }
+
+  blockquote {
+    max-width: 28ch;
+    padding: clamp(28px, 5vw, 56px);
+    background: var(--signal-subtle);
+    font-size: var(--type-lead);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .role-section {
+    grid-template-columns: minmax(0, 1.35fr) minmax(220px, 0.65fr);
+    align-items: end;
+    padding: clamp(28px, 5vw, 56px);
+    background: var(--bg-surface);
+  }
+
+  .role-section .section-copy {
+    display: grid;
+    gap: 20px;
+  }
+
+  .role-section .btn {
+    justify-self: end;
+  }
+
+  .stack-spec {
+    display: grid;
+    gap: 8px;
+  }
+
+  .stack-spec > div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 24px;
+    padding: 20px 24px;
+    background: var(--bg-surface);
+  }
+
+  .stack-spec > div:nth-child(even) {
+    background: var(--bg-sunken);
+  }
+
+  .stack-spec dt {
+    font-weight: 600;
+  }
+
+  .stack-spec dd {
+    max-width: 60ch;
+  }
+
+  .boundary-note {
+    padding: 20px 24px;
+    background: var(--signal-subtle);
+    color: var(--ink);
+  }
+
+  .studio-explainer button:focus-visible,
+  .studio-explainer a:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-ready.motion-shutter {
+      overflow: clip;
+    }
+
+    .motion-ready.motion-shutter :global(img) {
+      transform: scale(1.04) translateY(10px);
+      transition: transform 1200ms cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .motion-ready.motion-shutter.is-in :global(img) {
+      transform: none;
+    }
+
+    .motion-ready:is(.preserved-grid > div, .result-grid > div, .stack-spec > div) {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 700ms var(--ease-out),
+        transform 800ms var(--ease-out);
+      transition-delay: var(--motion-delay, 0ms);
+    }
+
+    .motion-ready.release-stage {
+      opacity: 0;
+      transform: translateX(-20px);
+      transition:
+        opacity 700ms var(--ease-out),
+        transform 800ms var(--ease-out);
+      transition-delay: var(--motion-delay, 0ms);
+    }
+
+    .motion-ready:is(.preserved-grid > div, .result-grid > div, .stack-spec > div, .release-stage).is-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .preserved-grid > div:nth-child(2),
+    .result-grid > div:nth-child(2),
+    .release-stage:nth-child(2) {
+      --motion-delay: 70ms;
+    }
+
+    .preserved-grid > div:nth-child(3),
+    .result-grid > div:nth-child(3),
+    .release-stage:nth-child(3) {
+      --motion-delay: 140ms;
+    }
+
+    .preserved-grid > div:nth-child(4),
+    .result-grid > div:nth-child(4),
+    .release-stage:nth-child(4) {
+      --motion-delay: 210ms;
+    }
+
+    .preserved-grid > div:nth-child(5),
+    .result-grid > div:nth-child(5),
+    .release-stage:nth-child(5) {
+      --motion-delay: 280ms;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .preserved-grid,
+    .result-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .media-proof {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .media-wide :global(img) {
+      min-height: 0;
+    }
+
+    .media-pair {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .release-flow > div {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .release-stage > span {
+      display: none;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .studio-explainer {
+      gap: 64px;
+    }
+
+    .studio-explainer section {
+      gap: 24px;
+      scroll-margin-top: 208px;
+    }
+
+    .studio-explainer h2 {
+      max-width: none;
+    }
+
+    .studio-nav {
+      top: 104px;
+      gap: 0 16px;
+      margin-block: -16px 0;
+    }
+
+    .overview-copy,
+    .split-copy,
+    .route-note,
+    .role-section,
+    .stack-spec > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .overview-copy p {
+      font-size: var(--type-body);
+    }
+
+    .ownership-map {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ownership-before,
+    .ownership-after {
+      min-height: 0;
+    }
+
+    .ownership-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .ownership-action b {
+      transform: rotate(90deg);
+    }
+
+    .ownership-map figcaption {
+      grid-column: auto;
+    }
+
+    .preserved-grid,
+    .result-grid,
+    .media-pair,
+    .lead-controls,
+    .lead-details,
+    .release-flow > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lead-detail {
+      min-height: 0;
+    }
+
+    .role-section .btn {
+      justify-self: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lead-controls button {
+      transition: none;
+    }
+  }
+</style>
