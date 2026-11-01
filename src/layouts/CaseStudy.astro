@@ -1,14 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
   role: string;
   pageTitle: string;
   rainbowTitle?: boolean;
+  clientLogo?: ImageMetadata;
+  clientName?: string;
+  clientContext?: string;
 }
 
-const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
+const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, clientContext } = Astro.props;
 ---
 
 <Base title={pageTitle} current="development">
@@ -18,7 +23,34 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
         <a class="back" href="/development"
           ><span aria-hidden="true">←</span> Back to AI Development</a
         >
-        <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
+        <div class="case-title-row">
+          <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
+          {
+            clientLogo && (
+              <span
+                class="case-client"
+                tabindex={clientContext ? 0 : undefined}
+                aria-describedby={clientContext ? 'case-client-context' : undefined}
+              >
+                <Image
+                  class="case-client-logo"
+                  src={clientLogo}
+                  alt={clientName ? `${clientName} logo` : ''}
+                  widths={[48, 60, 84, 120, 240]}
+                  sizes="(max-width: 640px) 13.5vw, 120px"
+                  loading="eager"
+                />
+                {
+                  clientContext && (
+                    <span class="case-client-tooltip" id="case-client-context" role="tooltip">
+                      {clientContext}
+                    </span>
+                  )
+                }
+              </span>
+            )
+          }
+        </div>
         <p class="lede case-role">{role}</p>
       </div>
     </header>
@@ -61,9 +93,17 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
 
 
 
+  .case-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(24px, 5vw, 80px);
+  }
+
   .case-title {
     font-size: var(--type-display);
     margin: 0;
+    min-width: 0;
   }
 
   .case-title.rainbow-gradient {
@@ -80,6 +120,55 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
     color: transparent;
     animation: rainbow-shimmer 14s ease-in-out infinite;
     animation-delay: var(--rand-delay, 0s);
+  }
+
+  .case-client {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .case-client:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+  }
+
+  .case-client-logo {
+    display: block;
+    width: clamp(84px, 9vw, 120px);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .case-client-tooltip {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(280px, calc(100vw - 32px));
+    padding: 12px 14px;
+    background: var(--ink);
+    color: var(--bg-surface);
+    font-size: var(--type-small);
+    line-height: 1.45;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition:
+      opacity var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out),
+      visibility 0s linear var(--dur-fast);
+  }
+
+  .case-client:hover .case-client-tooltip,
+  .case-client:focus-visible .case-client-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
   }
 
   .case-role {
@@ -204,6 +293,14 @@ const { title, role, pageTitle, rainbowTitle = true } = Astro.props;
   }
 
   @media (max-width: 760px) {
+    .case-title-row {
+      gap: clamp(12px, 4vw, 24px);
+    }
+
+    .case-client-logo {
+      width: clamp(42px, 13.5vw, 60px);
+    }
+
     .case-body {
       grid-template-columns: 1fr;
     }

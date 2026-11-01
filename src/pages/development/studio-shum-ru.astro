@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import CaseStudy from '../../layouts/CaseStudy.astro';
 import cover from '../../assets/studio-shum-cover.jpg';
+import shumClientLogo from '../../assets/shum-client-logo.jpg';
 
 const preserved = [
   { value: '38', label: 'source routes, including every project and article' },
@@ -36,9 +37,12 @@ const stack = [
 ---
 
 <CaseStudy
-  pageTitle="studio-shum.ru — Alexander Zhiganov"
-  title="studio-shum.ru"
+  pageTitle="Website — Alexander Zhiganov"
+  title="Website"
   role="The studio site became unreachable for the audience it was built for. I led the move to infrastructure we control: every URL preserved, leads routed to the studio, and every release reversible."
+  clientLogo={shumClientLogo}
+  clientName="SHUM"
+  clientContext="I am a co-founder and creative producer at SHUM, a multimedia studio."
 >
   <section class="case-section case-section-full">
     <div class="case-content case-open">

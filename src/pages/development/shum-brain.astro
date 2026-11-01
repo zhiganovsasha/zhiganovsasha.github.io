@@ -1,6 +1,7 @@
 ---
 import CaseStudy from '../../layouts/CaseStudy.astro';
 import ShumBrainExplainer from '../../components/ShumBrainExplainer.astro';
+import shumClientLogo from '../../assets/shum-client-logo.jpg';
 ---
 
 <CaseStudy
@@ -8,6 +9,9 @@ import ShumBrainExplainer from '../../components/ShumBrainExplainer.astro';
   title="Second Brain"
   role="A RAG knowledge system for a multimedia studio. It turns project files, technical documents, conversations, and production history into source-backed answers for the team and AI agents."
   rainbowTitle={true}
+  clientLogo={shumClientLogo}
+  clientName="SHUM"
+  clientContext="I am a co-founder and creative producer at SHUM, a multimedia studio."
 >
   <ShumBrainExplainer />
 </CaseStudy>
