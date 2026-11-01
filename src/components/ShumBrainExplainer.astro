@@ -1,5 +1,6 @@
 <div class="brain-explainer">
-  <section id="brain-context" aria-label="Why I built SHUM Brain">
+  <section id="brain-context" aria-labelledby="brain-context-title">
+    <h2 class="sr-only" id="brain-context-title">Why I built Second Brain</h2>
     <figure class="answer-preview">
       <div class="example-question">
         <span class="question-label">Example question</span>
@@ -7,7 +8,7 @@
       </div>
       <div class="answer-path">
         <div class="rag-node">
-          <h3>SHUM Brain</h3>
+          <h3>Second Brain</h3>
           <p>Finds related project evidence by meaning, exact terms, and date.</p>
         </div>
         <div class="answer-connector"><span>retrieves evidence</span><b aria-hidden="true">→</b></div>
@@ -22,11 +23,11 @@
       </div>
       <figcaption>A team member can ask in natural language and receive the project context with links to the evidence behind it.</figcaption>
     </figure>
-    <p class="context-note">Studio knowledge is spread across files, conversations, media, and people. Founders and directors repeatedly stop to find links and answer routine questions. SHUM Brain lets every team member ask directly, without interrupting someone else or holding back because a question feels too small.</p>
+    <p class="context-note">Studio knowledge is spread across files, conversations, media, and people. Founders and directors repeatedly stop to find links and answer routine questions. Second Brain lets every team member ask directly, without interrupting someone else or holding back because a question feels too small.</p>
     <p class="status-note"><span class="pause-mark" aria-hidden="true">Ⅱ</span><span><strong>Development in progress.</strong> Currently paused due to budget constraints.</span></p>
   </section>
 
-  <nav class="brain-nav" aria-label="SHUM Brain sections">
+  <nav class="brain-nav" aria-label="Second Brain sections">
     <a href="#brain-context">Why I built it</a>
     <a href="#brain-tour">Product tour</a>
     <a href="#brain-ingest">Ingest</a>
@@ -40,7 +41,7 @@
   <section id="brain-tour" aria-labelledby="brain-tour-title">
     <div class="section-copy">
       <h2 id="brain-tour-title">The administrative interface keeps the archive usable.</h2>
-      <p>This walkthrough shows the administrative side of SHUM Brain: ingest queues, source review, wiki pages, duplicate checks, and conflict review. A team member asking a question never sees this interface. They simply talk to Brain in a familiar chat.</p>
+      <p>This walkthrough shows the administrative side of Second Brain: ingest queues, source review, wiki pages, duplicate checks, and conflict review. A team member asking a question never sees this interface. They simply talk to Second Brain in a familiar chat.</p>
       <p class="recording-note">I’m sorry that parts of the interface in this recording are in Russian. This may make it harder to follow.</p>
     </div>
     <figure class="product-video">
@@ -174,7 +175,7 @@
   <section id="brain-graph" aria-labelledby="brain-graph-title">
     <div class="section-copy">
       <h2 id="brain-graph-title">Remember the hype around Obsidian-like graphs? I made one we could actually use.</h2>
-      <p>SHUM Brain’s 3D graph makes project scopes, files, fragments, media, and people navigable. The interface uses <a href="https://github.com/vasturiano/react-force-graph" target="_blank" rel="noreferrer">react-force-graph-3d</a>, the React wrapper built on <a href="https://github.com/vasturiano/3d-force-graph" target="_blank" rel="noreferrer">3d-force-graph</a>.</p>
+      <p>Second Brain’s 3D graph makes project scopes, files, fragments, media, and people navigable. The interface uses <a href="https://github.com/vasturiano/react-force-graph" target="_blank" rel="noreferrer noopener" aria-label="react-force-graph-3d on GitHub (opens in a new tab)">react-force-graph-3d</a>, the React wrapper built on <a href="https://github.com/vasturiano/3d-force-graph" target="_blank" rel="noreferrer noopener" aria-label="3d-force-graph on GitHub (opens in a new tab)">3d-force-graph</a>.</p>
       <p class="recording-note">I’m sorry that parts of the interface in this recording are in Russian. This may make it harder to follow.</p>
     </div>
     <figure class="product-video">
@@ -224,8 +225,8 @@
     </div>
     <figure>
       <div class="agent-exchange">
-        <div class="exchange-row"><strong>AI agent</strong><div><span class="exchange-verb">asks for relevant evidence</span><code>brain_query(question)</code></div><strong>SHUM Brain</strong></div>
-        <div class="exchange-row response"><strong>AI agent</strong><div><span class="exchange-verb">returns fragments and confidence</span><span>Text + source IDs + file context</span></div><strong>SHUM Brain</strong></div>
+        <div class="exchange-row"><strong>AI agent</strong><div><span class="exchange-verb">asks for relevant evidence</span><code>brain_query(question)</code></div><strong>Second Brain</strong></div>
+        <div class="exchange-row response"><strong>AI agent</strong><div><span class="exchange-verb">returns fragments and confidence</span><span>Text + source IDs + file context</span></div><strong>Second Brain</strong></div>
         <div class="answer-contract"><h3>The answer contract</h3><div><p><strong>Cite the claim.</strong><span>Attach the relevant source ID to important facts.</span></p><p><strong>Expose uncertainty.</strong><span>State the returned confidence. Keep conflicting facts visible.</span></p><p><strong>Leave gaps visible.</strong><span>Say when the evidence is insufficient.</span></p></div></div>
       </div>
       <figcaption>These are the instructions for an agent using the memory. Retrieval supplies the evidence; following the citation contract remains the agent’s responsibility.</figcaption>
@@ -241,11 +242,11 @@
       <div><h3>Implemented locally</h3><ul><li>Hybrid retrieval and source-linked results</li><li>Wiki with separate AI and human blocks</li><li>Graph, people records, and review tools</li><li>React interface, FastAPI backend, and MCP server</li></ul></div>
       <div class="unfinished"><h3>Still needs work</h3><ul><li>Extraction quality across complex source formats</li><li>Summary accuracy and stronger evidence context</li><li>Retrieval calibration and operational hardening</li><li>Dedicated safe data for a public product demo</li></ul></div>
     </div>
-    <p class="integration-note">Connecting SHUM Brain to the SHUM Telegram Assistant remains a future direction. There is no completed production integration.</p>
+    <p class="integration-note">Connecting Second Brain to the SHUM Telegram Assistant remains a future direction. There is no completed production integration.</p>
     <details class="implementation-notes">
       <summary>Implementation behind the diagrams</summary>
       <div>
-        <p>The diagrams describe mechanisms in the SHUM Brain source, rather than a live product session.</p>
+        <p>The diagrams describe mechanisms in the Second Brain source, rather than a live product session.</p>
         <dl><div><dt>Ingest</dt><dd><code>pipeline/ingest_*.py</code> extracts text, image descriptions, transcripts, video summaries, and source metadata.</dd></div><div><dt>Retrieval</dt><dd><code>pipeline/retrieval.py</code> combines semantic, keyword, and temporal candidates.</dd></div><div><dt>Wiki</dt><dd><code>pipeline/wiki_blocks.py</code> preserves human blocks and writes AI-block history.</dd></div><div><dt>Agent access</dt><dd><code>mcp_server/server.py</code> exposes source retrieval and wiki tools.</dd></div><div><dt>Interface</dt><dd>React, Vite, and TypeScript over a FastAPI API; ChromaDB and SQLite FTS5 store the search indexes.</dd></div></dl>
       </div>
     </details>
@@ -455,16 +456,27 @@
       '3': 'The system combines the candidate lists while keeping every source ID attached.',
       '4': 'The AI agent receives RAG context, writes the answer, and cites the supporting material.',
     };
-    const showStep = (step: string) => {
-      search.dataset.current = step;
-      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.searchStep === step)));
-      parts.forEach((part) => part.classList.toggle('is-active', part.dataset.searchPart === step));
-      if (caption) caption.textContent = captions[step];
+    const showStep = (step: string, updateUrl = false) => {
+      const validStep = captions[step] ? step : '4';
+      search.dataset.current = validStep;
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.searchStep === validStep)));
+      parts.forEach((part) => part.classList.toggle('is-active', part.dataset.searchPart === validStep));
+      if (caption) caption.textContent = captions[validStep];
+      if (updateUrl && window.history && window.history.replaceState) {
+        const url = new URL(window.location.href);
+        if (validStep === '4') {
+          url.searchParams.delete('step');
+        } else {
+          url.searchParams.set('step', validStep);
+        }
+        window.history.replaceState(null, '', url.toString());
+      }
     };
-    buttons.forEach((button) => button.addEventListener('click', () => showStep(button.dataset.searchStep || '4')));
+    buttons.forEach((button) => button.addEventListener('click', () => showStep(button.dataset.searchStep || '4', true)));
     if (controls) controls.hidden = false;
     search.classList.add('is-interactive');
-    showStep('4');
+    const initialStep = new URLSearchParams(window.location.search).get('step') || '4';
+    showStep(initialStep, false);
   }
   const sectionLinks = document.querySelectorAll<HTMLAnchorElement>('.brain-nav a');
   if ('IntersectionObserver' in window) {
