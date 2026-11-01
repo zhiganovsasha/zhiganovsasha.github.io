@@ -12,3 +12,7 @@ entities.json
 dist/
 opencode.json
 
+# Local source recordings are too large for the public repository.
+/src/screen-recordings/
+/public/shum-brain-local-preview.*
+

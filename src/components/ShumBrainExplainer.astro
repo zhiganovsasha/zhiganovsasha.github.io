@@ -1,0 +1,482 @@
+<div class="brain-explainer">
+  <section id="brain-context" aria-label="Why I built SHUM Brain">
+    <figure class="answer-preview">
+      <div class="example-question">
+        <span class="question-label">Example question</span>
+        <p>“What project did we make last May that used liquid-metal graphics?”</p>
+      </div>
+      <div class="answer-path">
+        <div class="rag-node">
+          <h3>SHUM Brain</h3>
+          <p>Finds related project evidence by meaning, exact terms, and date.</p>
+        </div>
+        <div class="answer-connector"><span>retrieves evidence</span><b aria-hidden="true">→</b></div>
+        <div class="answer-card">
+          <h3>Source-backed answer</h3>
+          <ul>
+            <li>Project and date</li>
+            <li>Liquid-metal visual references</li>
+            <li>Links to the original files</li>
+          </ul>
+        </div>
+      </div>
+      <figcaption>A team member can ask in natural language and receive the project context with links to the evidence behind it.</figcaption>
+    </figure>
+    <p class="context-note">Studio knowledge is spread across files, conversations, media, and people. Founders and directors repeatedly stop to find links and answer routine questions. SHUM Brain lets every team member ask directly, without interrupting someone else or holding back because a question feels too small.</p>
+    <p class="status-note"><span class="pause-mark" aria-hidden="true">Ⅱ</span><span><strong>Development in progress.</strong> Currently paused due to budget constraints.</span></p>
+  </section>
+
+  <nav class="brain-nav" aria-label="SHUM Brain sections">
+    <a href="#brain-context">Why I built it</a>
+    <a href="#brain-tour">Product tour</a>
+    <a href="#brain-ingest">Ingest</a>
+    <a href="#brain-search">RAG search</a>
+    <a href="#brain-wiki">Wiki</a>
+    <a href="#brain-graph">Graph</a>
+    <a href="#brain-agents">AI agents</a>
+    <a href="#brain-status">Status and role</a>
+  </nav>
+
+  <section id="brain-tour" aria-labelledby="brain-tour-title">
+    <div class="section-copy">
+      <h2 id="brain-tour-title">The administrative interface keeps the archive usable.</h2>
+      <p>This walkthrough shows the administrative side of SHUM Brain: ingest queues, source review, wiki pages, duplicate checks, and conflict review. A team member asking a question never sees this interface. They simply talk to Brain in a familiar chat.</p>
+      <p class="recording-note">I’m sorry that parts of the interface in this recording are in Russian. This may make it harder to follow.</p>
+    </div>
+    <figure class="product-video">
+      <video
+        controls
+        muted
+        playsinline
+        preload="metadata"
+        poster="/media/shum-brain/shum-brain-walkthrough-poster.webp"
+        width="1600"
+        height="900"
+      >
+        <source src="/media/shum-brain/shum-brain-walkthrough.mp4" type="video/mp4" />
+        Your browser does not support HTML video.
+      </video>
+      <figcaption>The walkthrough shows the tools behind the chat experience.</figcaption>
+    </figure>
+  </section>
+
+  <section id="brain-ingest" aria-labelledby="brain-ingest-title">
+    <div class="section-copy">
+      <h2 id="brain-ingest-title">Ingest turns mixed project material into searchable evidence.</h2>
+      <p>SHUM projects do not live in clean text documents. The system extracts useful content from documents, images, audio, and video, then keeps the original file context on every fragment.</p>
+    </div>
+    <figure>
+      <div class="ingest-pipeline">
+        <div class="ingest-sources">
+          <h3>Project material</h3>
+          <div><span>Documents</span><span>Images</span><span>Audio</span><span>Video</span><span>Notes and chats</span></div>
+        </div>
+        <div class="pipeline-connector"><span>extracts</span><b aria-hidden="true">→</b></div>
+        <div class="extractors">
+          <h3>Readable evidence</h3>
+          <div><span>Text and document structure</span><span>Image descriptions</span><span>Transcripts and video summaries</span></div>
+        </div>
+        <div class="pipeline-connector"><span>normalizes</span><b aria-hidden="true">→</b></div>
+        <div class="chunk-record">
+          <h3>Source fragment</h3>
+          <dl><div><dt>Content</dt><dd>Extracted text</dd></div><div><dt>Context</dt><dd>Project + file</dd></div><div><dt>Metadata</dt><dd>Date + media type</dd></div></dl>
+        </div>
+        <div class="pipeline-connector"><span>indexes</span><b aria-hidden="true">→</b></div>
+        <div class="search-indexes">
+          <h3>Two search indexes</h3>
+          <div><span><strong>ChromaDB</strong>Meaning</span><span><strong>SQLite FTS5</strong>Exact terms</span></div>
+        </div>
+      </div>
+      <figcaption>Ingest converts each source into searchable fragments while preserving the project, file, date, and media type needed to verify an answer.</figcaption>
+    </figure>
+  </section>
+
+  <section id="brain-search" aria-labelledby="brain-search-title">
+    <div class="section-copy">
+      <h2 id="brain-search-title">RAG finds the project even when the question uses different words.</h2>
+      <p>A team member may remember an effect, a season, or one production detail instead of a filename. Hybrid retrieval combines meaning, exact terms, and file dates before an AI agent writes the answer.</p>
+    </div>
+    <figure class="search-figure" data-brain-search data-current="4">
+      <div class="query-node" data-search-part="1">
+        <span class="question-label">The same example question</span>
+        <p>“What project did we make last May that used liquid-metal graphics?”</p>
+      </div>
+      <div class="search-lanes" data-search-part="2">
+        <article>
+          <h3>Match meaning</h3>
+          <p>Find related descriptions even when the wording changes.</p>
+          <span class="lane-term">small space ↔ short throw</span>
+          <span class="engine-label">ChromaDB</span>
+        </article>
+        <article>
+          <h3>Match exact terms</h3>
+          <p>Keep names and technical terms searchable as written.</p>
+          <span class="lane-term">lens, projector, model name</span>
+          <span class="engine-label">SQLite FTS5 / BM25</span>
+        </article>
+        <article>
+          <h3>Consider recency</h3>
+          <p>Bring recently modified material into the candidate set.</p>
+          <span class="lane-term">file modification date</span>
+          <span class="engine-label">Temporal retrieval</span>
+        </article>
+      </div>
+      <div class="merge-bridge" data-search-part="3"><span>combines the matches</span><b aria-hidden="true">↓</b><strong>One evidence set, with source IDs</strong><span>Meaning, exact terms, and file dates all contribute</span></div>
+      <div class="evidence-result" data-search-part="4">
+        <div>
+          <h3>Give the agent RAG context</h3>
+          <p>Source text, file context, and a confidence state travel together.</p>
+        </div>
+        <dl>
+          <div><dt>Fragment</dt><dd><code>chunk_id</code> + source text</dd></div>
+          <div><dt>Provenance</dt><dd>File, project scope, modification date</dd></div>
+          <div><dt>Confidence</dt><dd>High / medium / low / conflict</dd></div>
+        </dl>
+      </div>
+      <div class="search-controls" hidden>
+        <div class="step-buttons" role="group" aria-label="Explore the search process">
+          <button type="button" data-search-step="1" aria-pressed="false">Ask</button>
+          <button type="button" data-search-step="2" aria-pressed="false">Search</button>
+          <button type="button" data-search-step="3" aria-pressed="false">Combine</button>
+          <button type="button" data-search-step="4" aria-pressed="true">Give context</button>
+        </div>
+        <p class="step-caption" aria-live="polite" aria-atomic="true">The caller receives source fragments and confidence, then uses them to compose an answer.</p>
+      </div>
+      <figcaption>RAG retrieves the evidence first. The AI agent then writes an answer that points back to the original project material.</figcaption>
+    </figure>
+  </section>
+
+  <section id="brain-wiki" aria-labelledby="brain-wiki-title">
+    <div class="section-copy">
+      <h2 id="brain-wiki-title">A summary should not overwrite a person’s judgement.</h2>
+      <p>The wiki keeps generated summaries and human notes in separate blocks. Updating the AI block preserves the human block and saves the previous version.</p>
+    </div>
+    <figure>
+      <div class="wiki-mechanism">
+        <div class="wiki-input">
+          <h3>Source fragments</h3>
+          <div class="fragment-sheet"><span>Extracted text</span><span>Source identifier</span><span>File context</span></div>
+          <div class="vertical-connector"><span>grounds a summary</span><b aria-hidden="true">↓</b></div>
+          <p>Citations connect generated claims to the material behind them.</p>
+        </div>
+        <div class="wiki-page">
+          <h3>Project wiki</h3>
+          <div class="wiki-block generated"><strong>AI summary</strong><span>Regenerated from source fragments</span><span class="citation-line">Claim <span class="citation-ref">[source]</span></span></div>
+          <div class="wiki-block protected"><strong>Human notes</strong><span>Edited by a person</span><span class="protected-line"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v12H5z" /></svg>Preserved during AI updates</span></div>
+          <div class="wiki-history"><span aria-hidden="true">↳</span> Previous AI version saved to history</div>
+        </div>
+      </div>
+      <figcaption>The update boundary is a block within the page. Human notes survive regeneration; the AI summary keeps source references.</figcaption>
+    </figure>
+    <p class="under-figure">The structure works, but source extraction and summary quality still need improvement. A valid citation alone does not prove the model interpreted the source correctly.</p>
+  </section>
+
+  <section id="brain-graph" aria-labelledby="brain-graph-title">
+    <div class="section-copy">
+      <h2 id="brain-graph-title">Remember the hype around Obsidian-like graphs? I made one we could actually use.</h2>
+      <p>SHUM Brain’s 3D graph makes project scopes, files, fragments, media, and people navigable. The interface uses <a href="https://github.com/vasturiano/react-force-graph" target="_blank" rel="noreferrer">react-force-graph-3d</a>, the React wrapper built on <a href="https://github.com/vasturiano/3d-force-graph" target="_blank" rel="noreferrer">3d-force-graph</a>.</p>
+      <p class="recording-note">I’m sorry that parts of the interface in this recording are in Russian. This may make it harder to follow.</p>
+    </div>
+    <figure class="product-video">
+      <video
+        controls
+        muted
+        playsinline
+        preload="metadata"
+        poster="/media/shum-brain/shum-brain-graph-poster.webp"
+        width="1600"
+        height="900"
+      >
+        <source src="/media/shum-brain/shum-brain-graph.mp4" type="video/mp4" />
+        Your browser does not support HTML video.
+      </video>
+      <figcaption>The graph turns the archive into a navigable 3D map, with clusters, labels, media previews, and direct access to source records.</figcaption>
+    </figure>
+    <figure class="graph-model">
+      <div class="graph-scroll" tabindex="0" role="region" aria-label="Archive structure diagram, scroll horizontally on small screens">
+        <svg class="archive-graph" viewBox="0 0 1040 400" role="img" aria-labelledby="brain-graph-svg-title brain-graph-svg-desc">
+          <title id="brain-graph-svg-title">A project contains files, and files contain source fragments.</title>
+          <desc id="brain-graph-svg-desc">An illustrative project scope contains a technical drawing and a production note. Each file contains fragments. A person record links to the project scope. A dashed manual link connects the two files.</desc>
+          <defs><marker id="brain-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="context-stroke" /></marker></defs>
+          <g class="graph-edges">
+            <path d="M250 202H335V94H360" /><path d="M335 202V310H360" />
+            <path d="M610 94H750" /><path d="M610 310H750" />
+            <path d="M150 316V242" class="person-edge" />
+            <path d="M485 134V270" class="manual-edge" />
+          </g>
+          <g class="edge-labels"><text x="260" y="186">contains</text><text x="638" y="78">contains</text><text x="638" y="294">contains</text><text x="176" y="282">links to scope</text><text x="503" y="208">manual link</text></g>
+          <g class="graph-node scope-node"><rect x="40" y="162" width="210" height="80" /><text x="60" y="194">Project scope</text><text class="graph-sub" x="60" y="221">Interactive installation</text></g>
+          <g class="graph-node file-node"><path d="M360 54H590L610 74V134H360zM590 54V74H610" /><text x="380" y="88">Technical drawing</text><text class="graph-sub" x="380" y="114">File</text></g>
+          <g class="graph-node file-node"><path d="M360 270H590L610 290V350H360zM590 270V290H610" /><text x="380" y="304">Production note</text><text class="graph-sub" x="380" y="330">File</text></g>
+          <g class="graph-node chunk-node"><rect x="750" y="54" width="250" height="80" /><path d="M768 72H780M768 72V116H780" /><text x="800" y="88">Source fragment</text><text class="graph-sub" x="800" y="114">Extracted text + metadata</text></g>
+          <g class="graph-node chunk-node"><rect x="750" y="270" width="250" height="80" /><path d="M768 288H780M768 288V332H780" /><text x="800" y="304">Source fragment</text><text class="graph-sub" x="800" y="330">Extracted text + metadata</text></g>
+          <g class="graph-node person-node"><rect x="40" y="316" width="210" height="64" /><text x="60" y="354">Person record</text></g>
+        </svg>
+      </div>
+      <figcaption>The implemented graph follows this structure. Solid arrows show containment; the dashed line is a human-created link.</figcaption>
+    </figure>
+  </section>
+
+  <section id="brain-agents" aria-labelledby="brain-agents-title">
+    <div class="section-copy">
+      <h2 id="brain-agents-title">Give the agent evidence it can cite.</h2>
+      <p>A Model Context Protocol (MCP) server lets an AI agent query the archive and read the wiki. The retrieval tool returns evidence; the calling agent composes the final answer.</p>
+    </div>
+    <figure>
+      <div class="agent-exchange">
+        <div class="exchange-row"><strong>AI agent</strong><div><span class="exchange-verb">asks for relevant evidence</span><code>brain_query(question)</code></div><strong>SHUM Brain</strong></div>
+        <div class="exchange-row response"><strong>AI agent</strong><div><span class="exchange-verb">returns fragments and confidence</span><span>Text + source IDs + file context</span></div><strong>SHUM Brain</strong></div>
+        <div class="answer-contract"><h3>The answer contract</h3><div><p><strong>Cite the claim.</strong><span>Attach the relevant source ID to important facts.</span></p><p><strong>Expose uncertainty.</strong><span>State the returned confidence. Keep conflicting facts visible.</span></p><p><strong>Leave gaps visible.</strong><span>Say when the evidence is insufficient.</span></p></div></div>
+      </div>
+      <figcaption>These are the instructions for an agent using the memory. Retrieval supplies the evidence; following the citation contract remains the agent’s responsibility.</figcaption>
+    </figure>
+  </section>
+
+  <section id="brain-status" aria-labelledby="brain-status-title">
+    <div class="section-copy">
+      <h2 id="brain-status-title">I designed the product, retrieval, and interface.</h2>
+      <p>I defined the product, designed the retrieval and evidence model, built the FastAPI backend and React interface, and used AI agents throughout development. Budget constraints paused the project before completion.</p>
+    </div>
+    <div class="state-grid">
+      <div><h3>Implemented locally</h3><ul><li>Hybrid retrieval and source-linked results</li><li>Wiki with separate AI and human blocks</li><li>Graph, people records, and review tools</li><li>React interface, FastAPI backend, and MCP server</li></ul></div>
+      <div class="unfinished"><h3>Still needs work</h3><ul><li>Extraction quality across complex source formats</li><li>Summary accuracy and stronger evidence context</li><li>Retrieval calibration and operational hardening</li><li>Dedicated safe data for a public product demo</li></ul></div>
+    </div>
+    <p class="integration-note">Connecting SHUM Brain to the SHUM Telegram Assistant remains a future direction. There is no completed production integration.</p>
+    <details class="implementation-notes">
+      <summary>Implementation behind the diagrams</summary>
+      <div>
+        <p>The diagrams describe mechanisms in the SHUM Brain source, rather than a live product session.</p>
+        <dl><div><dt>Ingest</dt><dd><code>pipeline/ingest_*.py</code> extracts text, image descriptions, transcripts, video summaries, and source metadata.</dd></div><div><dt>Retrieval</dt><dd><code>pipeline/retrieval.py</code> combines semantic, keyword, and temporal candidates.</dd></div><div><dt>Wiki</dt><dd><code>pipeline/wiki_blocks.py</code> preserves human blocks and writes AI-block history.</dd></div><div><dt>Agent access</dt><dd><code>mcp_server/server.py</code> exposes source retrieval and wiki tools.</dd></div><div><dt>Interface</dt><dd>React, Vite, and TypeScript over a FastAPI API; ChromaDB and SQLite FTS5 store the search indexes.</dd></div></dl>
+      </div>
+    </details>
+  </section>
+</div>
+
+<style>
+  .brain-explainer { grid-column: 1 / -1; min-width: 0; }
+  .brain-explainer section + section { margin-top: clamp(64px, 8vw, 112px); }
+  .section-copy { display: grid; gap: 20px; margin-bottom: 32px; }
+  .brain-explainer h2 { max-width: 20ch; }
+  .section-copy p { margin: 0; max-width: 70ch; }
+  .section-copy .recording-note { color: var(--mute); }
+  .section-copy a { color: var(--signal); text-underline-offset: 4px; }
+  .brain-explainer h3 { font-size: var(--type-lead); line-height: 1.25; font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  .brain-explainer figure { margin: 0; border: 1px solid var(--rule-strong); background: var(--bg-surface); }
+  .brain-explainer figcaption { display: block; max-width: none; width: 100%; padding: 16px 24px; line-height: 1.5; font-size: var(--type-small); color: var(--mute); background: var(--bg-canvas); border-top: 1px solid var(--rule-strong); }
+  .product-video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: var(--ink); }
+  .product-video video:focus-visible { outline: 2px solid var(--signal); outline-offset: 4px; }
+  .brain-explainer .graph-model { margin-top: 32px; }
+  .example-question { padding: clamp(24px, 4vw, 40px); background: var(--bg-sunken); border-bottom: 1px solid var(--rule-strong); }
+  .example-question p { max-width: 36ch; margin: 8px 0 0; font-size: var(--type-lead); font-weight: 550; letter-spacing: -0.015em; }
+  .answer-path { display: grid; grid-template-columns: 1fr 0.5fr 1fr; gap: 24px; align-items: center; padding: clamp(24px, 4vw, 48px); }
+  .rag-node, .answer-card { padding: 28px; border: 1px solid var(--rule-strong); }
+  .rag-node { background: var(--signal-subtle); border-color: var(--signal); }
+  .rag-node p { margin: 16px 0 0; }
+  .answer-card ul { margin: 16px 0 0; padding-left: 1.1em; }
+  .answer-card li + li { margin-top: 8px; }
+  .answer-connector, .pipeline-connector { display: grid; gap: 4px; justify-items: center; }
+  .answer-connector span, .pipeline-connector span, .vertical-connector span { font-size: var(--type-small); color: var(--mute); text-align: center; }
+  .answer-connector b, .pipeline-connector b { font-weight: 400; font-size: var(--type-heading); line-height: 1; color: var(--signal); }
+  .status-note { display: flex; gap: 12px; align-items: center; margin: 20px 0 0; font-size: var(--type-small); color: var(--mute); }
+  .status-note strong { color: var(--ink); font-weight: 550; }
+  .pause-mark { display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 auto; border: 1px solid var(--rule-strong); color: var(--ink); font-weight: 700; }
+  .context-note { max-width: 72ch; margin: 24px 0 0; }
+  .brain-nav { display: flex; gap: 8px 28px; padding-block: 14px; margin-block: 40px 64px; border-block: 1px solid var(--rule-strong); position: sticky; top: 64px; z-index: 10; background: var(--bg-canvas); overflow-x: auto; }
+  .brain-nav a { display: inline-flex; align-items: center; min-height: 44px; flex-shrink: 0; font-size: var(--type-small); color: var(--mute); text-decoration: none; }
+  .brain-nav a:hover, .brain-nav a[aria-current='location'] { color: var(--signal); text-decoration: underline; text-underline-offset: 6px; }
+  .brain-explainer section { scroll-margin-top: 160px; }
+  .ingest-pipeline { display: grid; grid-template-columns: minmax(170px, 1fr) 64px minmax(180px, 1fr) 64px minmax(180px, 0.9fr) 64px minmax(170px, 1fr); gap: 12px; align-items: stretch; padding: clamp(24px, 3vw, 40px); }
+  .ingest-sources, .extractors, .chunk-record, .search-indexes { padding: 24px; border: 1px solid var(--rule-strong); min-width: 0; }
+  .ingest-sources > div, .extractors > div, .search-indexes > div { display: grid; gap: 8px; margin-top: 20px; }
+  .ingest-sources span, .extractors span { padding-top: 8px; border-top: 1px solid var(--rule); }
+  .chunk-record { background: var(--signal-subtle); border-color: var(--signal); }
+  .chunk-record dl { margin: 16px 0 0; }
+  .chunk-record dl > div { display: grid; gap: 2px; padding-block: 8px; }
+  .chunk-record dl > div + div { border-top: 1px solid var(--rule-strong); }
+  .chunk-record dt { font-size: var(--type-small); color: var(--mute); }
+  .chunk-record dd { margin: 0; }
+  .search-indexes span { display: grid; gap: 2px; padding: 12px; background: var(--bg-sunken); }
+  .search-indexes strong { font-weight: 550; }
+  .pipeline-connector { align-content: center; }
+  .query-node { padding: 28px 32px; border-bottom: 1px solid var(--rule-strong); background: var(--bg-sunken); }
+  .question-label { font-size: var(--type-small); color: var(--mute); }
+  .query-node p { font-size: var(--type-lead); margin: 8px 0 0; font-weight: 550; letter-spacing: -0.015em; }
+  .search-lanes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .search-lanes article { padding: 28px; display: flex; flex-direction: column; align-items: start; gap: 16px; }
+  .search-lanes article + article { border-left: 1px solid var(--rule-strong); }
+  .search-lanes p { margin: 0; }
+  .lane-term { font-size: var(--type-small); color: var(--signal); margin-top: auto; padding-top: 8px; }
+  .engine-label { font-size: var(--type-small); overflow-wrap: anywhere; }
+  .merge-bridge { border-block: 1px solid var(--rule-strong); padding: 24px; display: grid; justify-items: center; text-align: center; gap: 8px; }
+  .merge-bridge > span { font-size: var(--type-small); color: var(--mute); }
+  .merge-bridge b { color: var(--signal); font-size: var(--type-lead); font-weight: 400; line-height: 1; }
+  .merge-bridge strong { font-weight: 550; }
+  .evidence-result { padding: 28px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; }
+  .evidence-result p { margin: 12px 0 0; max-width: 35ch; }
+  .evidence-result dl { margin: 0; }
+  .evidence-result dl > div { display: grid; gap: 4px; padding-block: 10px; }
+  .evidence-result dl > div + div { border-top: 1px solid var(--rule); }
+  .evidence-result dt { font-size: var(--type-small); color: var(--mute); }
+  .evidence-result dd { margin: 0; font-size: var(--type-body); }
+  .evidence-result code { font-size: var(--type-small); }
+  .search-controls { border-top: 1px solid var(--rule-strong); padding: 20px 28px; background: var(--bg-canvas); }
+  .search-controls[hidden] { display: none; }
+  .step-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .step-buttons button { font: inherit; font-size: var(--type-small); padding: 10px 16px; min-height: 44px; border: 1px solid var(--rule-strong); background: var(--bg-surface); color: var(--ink); cursor: pointer; }
+  .step-buttons button:hover { border-color: var(--signal); }
+  .step-buttons button[aria-pressed='true'] { background: var(--signal); color: var(--paper); border-color: var(--signal); }
+  .step-caption { font-size: var(--type-body); margin: 16px 0 0; min-height: 3.1em; max-width: 70ch; }
+  .search-figure.is-interactive [data-search-part] { position: relative; }
+  .search-figure.is-interactive [data-search-part]::after { content: ''; position: absolute; inset: 0; border: 2px solid var(--signal); pointer-events: none; opacity: 0; transition: opacity var(--dur-normal) var(--ease-out); }
+  .search-figure.is-interactive [data-search-part].is-active::after { opacity: 1; }
+  .under-figure { max-width: 72ch; margin: 20px 0 0; }
+  .wiki-mechanism { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(28px, 6vw, 88px); padding: clamp(24px, 4vw, 48px); }
+  .wiki-input { padding-top: 8px; }
+  .fragment-sheet { display: grid; gap: 8px; margin-top: 24px; padding: 24px; background: var(--bg-sunken); border: 1px solid var(--rule-strong); font-size: var(--type-small); }
+  .fragment-sheet span + span { border-top: 1px solid var(--rule-strong); padding-top: 8px; }
+  .vertical-connector { display: grid; justify-items: center; gap: 4px; padding-block: 16px 0; }
+  .vertical-connector b { color: var(--signal); font-size: var(--type-lead); line-height: 1; font-weight: 400; }
+  .wiki-input > p { margin: 12px 0 0; }
+  .wiki-page { border: 1px solid var(--rule-strong); }
+  .wiki-page > h3 { padding: 20px 24px; border-bottom: 1px solid var(--rule-strong); }
+  .wiki-block { display: grid; gap: 8px; padding: 24px; }
+  .wiki-block > strong { font-weight: 550; }
+  .wiki-block > span { font-size: var(--type-small); }
+  .generated { background: var(--signal-subtle); }
+  .citation-line { margin-top: 8px; padding-block: 8px; border-block: 1px solid var(--rule-strong); }
+  .citation-ref { color: var(--signal); }
+  .protected { border-top: 1px solid var(--rule-strong); }
+  .protected-line { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-weight: 550; }
+  .protected-line svg { flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .wiki-history { font-size: var(--type-small); color: var(--mute); border-top: 1px solid var(--rule-strong); padding: 16px 24px; background: var(--bg-sunken); }
+  .graph-scroll { overflow-x: auto; padding: 24px 0; }
+  .archive-graph { display: block; width: 100%; min-width: 1040px; height: auto; font-family: var(--font); }
+  .graph-edges path { fill: none; stroke: var(--ink); stroke-width: 1.5; marker-end: url(#brain-arrow); }
+  .graph-edges .manual-edge { stroke: var(--signal); stroke-dasharray: 6 5; marker-end: none; }
+  .graph-edges .person-edge { stroke: var(--signal); }
+  .edge-labels text { font-size: var(--type-small); fill: var(--ink); }
+  .graph-node rect, .graph-node path { fill: var(--bg-surface); stroke: var(--ink); stroke-width: 1.5; }
+  .scope-node rect { fill: var(--signal-subtle); stroke: var(--signal); }
+  .chunk-node rect { fill: var(--bg-sunken); }
+  .graph-node text { font-size: var(--type-body); fill: var(--ink); font-weight: 550; }
+  .graph-node .graph-sub { font-size: var(--type-small); font-weight: 400; }
+  .agent-exchange { padding: clamp(24px, 4vw, 48px); }
+  .exchange-row { display: grid; grid-template-columns: 140px 1fr 160px; gap: 24px; align-items: end; margin-bottom: 24px; }
+  .exchange-row > strong { font-size: var(--type-lead); font-weight: 550; padding-bottom: 8px; }
+  .exchange-row > div { position: relative; display: grid; gap: 6px; border-bottom: 1px solid var(--signal); padding: 0 20px 12px 0; }
+  .exchange-row > div::after { content: ''; position: absolute; right: 0; bottom: -5px; width: 9px; height: 9px; border-top: 1px solid var(--signal); border-right: 1px solid var(--signal); transform: rotate(45deg); }
+  .exchange-verb { font-size: var(--type-small); color: var(--mute); }
+  .exchange-row code { font-size: var(--type-small); overflow-wrap: anywhere; }
+  .response > div { border-color: var(--ink); }
+  .response > div::after { left: 0; right: auto; border-color: var(--ink); transform: rotate(-135deg); }
+  .response > div > span:last-child { font-size: var(--type-small); }
+  .response > strong { visibility: hidden; }
+  .answer-contract { margin-top: 40px; border-top: 1px solid var(--rule-strong); padding-top: 24px; }
+  .answer-contract > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .answer-contract p { margin: 20px 0 0; display: grid; gap: 8px; align-content: start; }
+  .answer-contract strong { font-weight: 550; }
+  .state-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule-strong); background: var(--bg-surface); }
+  .state-grid > div { padding: 32px; }
+  .state-grid > div + div { border-left: 1px dashed var(--rule-strong); background: var(--bg-canvas); }
+  .state-grid ul { padding-left: 1.1em; margin: 20px 0 0; }
+  .state-grid li { padding-left: 4px; margin-top: 12px; }
+  .state-grid .unfinished li::marker { content: '– '; }
+  .integration-note { margin: 24px 0 0; max-width: 72ch; }
+  .implementation-notes { margin-top: 40px; border-block: 1px solid var(--rule-strong); }
+  .implementation-notes summary { cursor: pointer; font-size: var(--type-small); padding-block: 20px; }
+  .implementation-notes > div { padding-bottom: 24px; max-width: 80ch; }
+  .implementation-notes p { margin: 0 0 20px; }
+  .implementation-notes dl { margin: 0; }
+  .implementation-notes dl > div { display: grid; grid-template-columns: 140px 1fr; gap: 24px; margin-top: 16px; }
+  .implementation-notes dt { font-size: var(--type-small); color: var(--mute); padding-top: 3px; }
+  .implementation-notes dd { margin: 0; }
+  .implementation-notes code { font-size: var(--type-small); overflow-wrap: anywhere; }
+  @media (max-width: 900px) {
+    .section-copy { grid-template-columns: 1fr; gap: 20px; }
+    .brain-explainer h2 { max-width: 26ch; }
+    .answer-path { grid-template-columns: 1fr 0.4fr 1fr; gap: 16px; }
+    .rag-node, .answer-card { padding: 24px 20px; }
+    .ingest-pipeline { grid-template-columns: 1fr; gap: 16px; }
+    .pipeline-connector { grid-template-columns: 1fr auto; justify-items: start; padding-inline: 8px; }
+    .pipeline-connector b { transform: rotate(90deg); font-size: var(--type-lead); }
+    .search-lanes article { padding: 24px 20px; }
+    .wiki-mechanism { gap: 28px; grid-template-columns: 0.85fr 1.15fr; }
+    .exchange-row { grid-template-columns: 100px 1fr 140px; gap: 16px; }
+  }
+  @media (max-width: 640px) {
+    .brain-explainer section + section { margin-top: 64px; }
+    .example-question { padding: 24px 20px; }
+    .answer-path { grid-template-columns: 1fr; gap: 16px; padding: 24px 20px; }
+    .answer-connector { grid-template-columns: 1fr auto; justify-items: start; padding-inline: 8px; }
+    .answer-connector b { transform: rotate(90deg); font-size: var(--type-lead); }
+    .brain-nav { gap: 24px; margin-block: 32px 48px; top: 64px; }
+    .brain-explainer figcaption { padding: 16px 20px; }
+    .query-node { padding: 24px 20px; }
+    .search-lanes { grid-template-columns: 1fr; }
+    .search-lanes article { gap: 12px; }
+    .search-lanes article + article { border-left: 0; border-top: 1px solid var(--rule-strong); }
+    .lane-term { padding-top: 0; }
+    .evidence-result { grid-template-columns: 1fr; padding: 24px 20px; gap: 16px; }
+    .search-controls { padding: 20px; }
+    .step-buttons { gap: 6px; }
+    .step-buttons button { padding-inline: 12px; }
+    .step-caption { min-height: 6.2em; }
+    .wiki-mechanism { grid-template-columns: 1fr; padding: 24px 20px; }
+    .wiki-input { padding-top: 0; }
+    .wiki-page > h3, .wiki-block { padding: 20px; }
+    .graph-scroll { padding-block: 8px; }
+    .agent-exchange { padding: 24px 20px; }
+    .exchange-row { grid-template-columns: 1fr; gap: 12px; }
+    .exchange-row > strong { padding: 0; }
+    .exchange-row > strong:last-child { justify-self: end; }
+    .exchange-row > div { margin-block: 4px; }
+    .response { display: flex; flex-direction: column-reverse; align-items: stretch; }
+    .response > strong { visibility: visible; font-size: var(--type-body); }
+    .response > strong:last-child { align-self: flex-end; }
+    .answer-contract { margin-top: 28px; }
+    .answer-contract > div { grid-template-columns: 1fr; gap: 0; }
+    .state-grid { grid-template-columns: 1fr; }
+    .state-grid > div { padding: 24px 20px; }
+    .state-grid > div + div { border-left: 0; border-top: 1px dashed var(--rule-strong); }
+    .implementation-notes dl > div { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+
+<script>
+  const search = document.querySelector<HTMLElement>('[data-brain-search]');
+  if (search) {
+    const controls = search.querySelector<HTMLElement>('.search-controls');
+    const caption = search.querySelector<HTMLElement>('.step-caption');
+    const buttons = search.querySelectorAll<HTMLButtonElement>('[data-search-step]');
+    const parts = search.querySelectorAll<HTMLElement>('[data-search-part]');
+    const captions: Record<string, string> = {
+      '1': 'The question remembers an effect and a date instead of a filename.',
+      '2': 'Semantic, keyword, and temporal retrieval run in parallel to collect different kinds of candidates.',
+      '3': 'The system combines the candidate lists while keeping every source ID attached.',
+      '4': 'The AI agent receives RAG context, writes the answer, and cites the supporting material.',
+    };
+    const showStep = (step: string) => {
+      search.dataset.current = step;
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.searchStep === step)));
+      parts.forEach((part) => part.classList.toggle('is-active', part.dataset.searchPart === step));
+      if (caption) caption.textContent = captions[step];
+    };
+    buttons.forEach((button) => button.addEventListener('click', () => showStep(button.dataset.searchStep || '4')));
+    if (controls) controls.hidden = false;
+    search.classList.add('is-interactive');
+    showStep('4');
+  }
+  const sectionLinks = document.querySelectorAll<HTMLAnchorElement>('.brain-nav a');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        sectionLinks.forEach((link) => {
+          if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    document.querySelectorAll('.brain-explainer section[id]').forEach((section) => observer.observe(section));
+  }
+</script>
