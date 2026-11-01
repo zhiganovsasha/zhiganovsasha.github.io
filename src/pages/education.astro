@@ -1,7 +1,6 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import portrait from '../assets/portrait.jpg';
 import stagePhoto from '../assets/speaking-stage-microrave.webp';
 
 interface RegistryItem {
@@ -15,15 +14,6 @@ interface RegistryItem {
 }
 
 const registry: RegistryItem[] = [
-  {
-    year: '2026',
-    platform: 'Prosvet Festival (Perm)',
-    topic: 'Light art and contemporary creative technology installation dialogue and artist talk',
-    format: 'Artist Talk',
-    linkText: 'Read Article',
-    url: 'https://59.ru/text/entertainment/2026/08/29/76612177',
-    lang: 'RU'
-  },
   {
     year: '2025',
     platform: 'ArtMasters 2025',
@@ -42,25 +32,7 @@ const registry: RegistryItem[] = [
     url: 'https://www.reuters.com/lifestyle/russia-early-bird-ravers-flock-coffeehouses-2025-03-07',
     lang: 'EN'
   },
-  {
-    year: '2025',
-    platform: 'Digital Rain Festival',
-    topic: 'Media art curation, generative visual systems, and exhibition opening remarks',
-    format: 'Talk & Feature',
-    linkText: 'Read Review',
-    url: 'https://dzen.ru/a/aNqosqNCZnqRcmXI',
-    lang: 'RU'
-  },
 
-  {
-    year: '2025',
-    platform: 'MGIK (Moscow State Institute of Culture)',
-    topic: 'Academic session and expert evaluation on creative industries and ArtMasters finalists',
-    format: 'Academic Talk',
-    linkText: 'View Session',
-    url: 'https://t.me/mgik_official/11566',
-    lang: 'RU'
-  },
   {
     year: '2025',
     platform: 'VK Prostore',
@@ -81,7 +53,7 @@ const registry: RegistryItem[] = [
   },
   {
     year: '2024',
-    platform: 'Creative Competence Development Center',
+    platform: 'TIME CODE Festival',
     topic: 'Full-length video lecture «The 14th Element: AI as an Integral Team Member» on generative co-creation',
     format: 'Video Lecture',
     linkText: 'Watch Lecture',
@@ -95,15 +67,6 @@ const registry: RegistryItem[] = [
     format: 'Keynote',
     linkText: 'Speaker Profile',
     url: 'https://g8.art/ru/account/37445',
-    lang: 'RU'
-  },
-  {
-    year: '2024',
-    platform: 'TIME CODE Festival',
-    topic: 'Keynote lecture on artificial intelligence in modern media, journalism, and creative workflows',
-    format: 'Keynote',
-    linkText: 'Read Coverage',
-    url: 'https://dm-centre.ru/novosti/media-novosti/time-code-2024-iskusstvennyj-intellekt-i-media_/',
     lang: 'RU'
   },
   {
@@ -149,24 +112,6 @@ const registry: RegistryItem[] = [
     format: 'Expert Column',
     linkText: 'Read Column',
     url: 'https://secrets.tbank.ru/blogi-kompanij/trendy-vizualnogo-oformleniya-meropriyatij/',
-    lang: 'RU'
-  },
-  {
-    year: '2024',
-    platform: 'Outline 2024 (Pixels in the pines)',
-    topic: 'Live broadcast and artist dialogue on architectural media interventions in natural landscape',
-    format: 'Artist Talk',
-    linkText: 'View Stream',
-    url: 'https://t.me/DocStreamHub/2376',
-    lang: 'RU'
-  },
-  {
-    year: '2024',
-    platform: 'Signal Festival 2024',
-    topic: 'Experiential technology, interactive sensor design, and festival spatial staging',
-    format: 'Field Talk',
-    linkText: 'View Dispatch',
-    url: 'https://t.me/pokaspitdali/2828',
     lang: 'RU'
   },
   {
@@ -318,28 +263,17 @@ const registry: RegistryItem[] = [
         </div>
       </div>
 
-      <div class="hero-media-stack">
-        <figure class="hero-portrait">
-          <Image
-            src={portrait}
-            alt="Portrait of Alexander Zhiganov, Educator and Speaker"
-            widths={[560, 900, 1400]}
-            sizes="(max-width: 900px) 100vw, 48vw"
-            loading="eager"
-            fetchpriority="high"
-          />
-        </figure>
-        <figure class="hero-stage-card">
-          <Image
-            src={stagePhoto}
-            alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
-            widths={[600, 1000, 1600]}
-            sizes="(max-width: 900px) 100vw, 48vw"
-            loading="eager"
-          />
-          <figcaption class="stage-caption">Keynote on creative technology &amp; neural production</figcaption>
-        </figure>
-      </div>
+      <figure class="hero-stage-card">
+        <Image
+          src={stagePhoto}
+          alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
+          widths={[600, 1000, 1600]}
+          sizes="(max-width: 900px) 100vw, 48vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <figcaption class="stage-caption">Keynote on creative technology &amp; neural production</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -614,33 +548,6 @@ const registry: RegistryItem[] = [
     margin-top: clamp(32px, 4vw, 44px);
   }
 
-  .hero-media-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .hero-portrait {
-    margin: 0;
-    background: var(--bg-sunken);
-    border: 1px solid var(--border-color);
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-  }
-
-  .hero-portrait img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-    filter: grayscale(12%);
-    transition: filter var(--dur-med) var(--ease-out);
-  }
-
-  .hero-portrait:hover img {
-    filter: grayscale(0%);
-  }
 
   .hero-stage-card {
     margin: 0;
@@ -1020,9 +927,6 @@ const registry: RegistryItem[] = [
       gap: 36px;
     }
 
-    .hero-portrait {
-      max-width: 480px;
-    }
   }
 
   @media (max-width: 768px) {
