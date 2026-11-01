@@ -6,7 +6,7 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  current?: 'home' | 'development' | 'contact';
+  current?: 'home' | 'development' | 'education' | 'contact';
 }
 
 const {
@@ -51,7 +51,7 @@ const {
         root.style.setProperty('--rand-delay', baseDelay);
 
         function initHoverRandomizer() {
-          var items = document.querySelectorAll('.brand, .main-nav a');
+          var items = document.querySelectorAll('.brand, .main-nav > a');
           items.forEach(function(item) {
             item.addEventListener('pointerenter', function() {
               var hoverDelay = -(Math.random() * 14).toFixed(2) + 's';

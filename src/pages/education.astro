@@ -1,0 +1,1109 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import portrait from '../assets/portrait.jpg';
+import stagePhoto from '../assets/speaking-stage-microrave.webp';
+
+interface RegistryItem {
+  year: string;
+  platform: string;
+  topic: string;
+  format: string;
+  linkText: string;
+  url: string;
+  lang?: string;
+}
+
+const registry: RegistryItem[] = [
+  {
+    year: '2026',
+    platform: 'Prosvet Festival (Perm)',
+    topic: 'Light art and contemporary creative technology installation dialogue and artist talk',
+    format: 'Artist Talk',
+    linkText: 'Read Article',
+    url: 'https://59.ru/text/entertainment/2026/08/29/76612177',
+    lang: 'RU'
+  },
+  {
+    year: '2025',
+    platform: 'ArtMasters 2025',
+    topic: 'Educational championship keynote on media art, neural systems, and creative production',
+    format: 'Lecture',
+    linkText: 'View Announcement',
+    url: 'https://vk.com/wall-194343825_21154',
+    lang: 'RU'
+  },
+  {
+    year: '2025',
+    platform: 'Reuters (Worldwide)',
+    topic: 'Global feature coverage on the morning coffeehouse rave phenomenon in Moscow',
+    format: 'Global Press',
+    linkText: 'Read Feature',
+    url: 'https://www.reuters.com/lifestyle/russia-early-bird-ravers-flock-coffeehouses-2025-03-07',
+    lang: 'EN'
+  },
+  {
+    year: '2025',
+    platform: 'Digital Rain Festival',
+    topic: 'Media art curation, generative visual systems, and exhibition opening remarks',
+    format: 'Talk & Feature',
+    linkText: 'Read Review',
+    url: 'https://dzen.ru/a/aNqosqNCZnqRcmXI',
+    lang: 'RU'
+  },
+
+  {
+    year: '2025',
+    platform: 'MGIK (Moscow State Institute of Culture)',
+    topic: 'Academic session and expert evaluation on creative industries and ArtMasters finalists',
+    format: 'Academic Talk',
+    linkText: 'View Session',
+    url: 'https://t.me/mgik_official/11566',
+    lang: 'RU'
+  },
+  {
+    year: '2025',
+    platform: 'VK Prostore',
+    topic: 'Masterclass series on digital art workflows and generative visual pipelines',
+    format: 'Workshop',
+    linkText: 'View Masterclass',
+    url: 'https://vk.com/wall-215494353_27775',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'ÉKRAN 2024 (Alexandrinsky Theatre New Stage)',
+    topic: 'Keynote «The Invisible Plot» on modern media art, perception, and storytelling in digital production',
+    format: 'Keynote Talk',
+    linkText: 'Watch Keynote',
+    url: 'https://www.youtube.com/watch?v=zMkn6tobpPA',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'Creative Competence Development Center',
+    topic: 'Full-length video lecture «The 14th Element: AI as an Integral Team Member» on generative co-creation',
+    format: 'Video Lecture',
+    linkText: 'Watch Lecture',
+    url: 'https://vkvideo.ru/video-190860512_456239300',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'G8 Creative Industries Festival',
+    topic: 'Creative technology and neural production pipeline keynote on the main festival stage',
+    format: 'Keynote',
+    linkText: 'Speaker Profile',
+    url: 'https://g8.art/ru/account/37445',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'TIME CODE Festival',
+    topic: 'Keynote lecture on artificial intelligence in modern media, journalism, and creative workflows',
+    format: 'Keynote',
+    linkText: 'Read Coverage',
+    url: 'https://dm-centre.ru/novosti/media-novosti/time-code-2024-iskusstvennyj-intellekt-i-media_/',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'TASS Press Center',
+    topic: 'Press conference on multimedia technology, architectural illumination, and festival design',
+    format: 'Press Conference',
+    linkText: 'Watch Broadcast',
+    url: 'https://vk.com/video-210951176_456242076',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'TV Russia 1 (Vesti Moscow)',
+    topic: 'Television news feature broadcast on the Outline 2024 installations and sound sculpture',
+    format: 'TV Broadcast',
+    linkText: 'Watch Story',
+    url: 'https://smotrim.ru/video/2838968',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'TV St. Petersburg',
+    topic: 'Live guest segment on «Morning in St. Petersburg» discussing interactive light art',
+    format: 'TV Broadcast',
+    linkText: 'Watch Segment',
+    url: 'https://tvspb.ru/programs/stories/3363843',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'IQTalk Podcast',
+    topic: 'Longform video podcast on creative production, standing out in the market, and event technology',
+    format: 'Video Podcast',
+    linkText: 'Watch Episode',
+    url: 'https://youtu.be/SznWaPqp6JQ?si=qup22IrwRxVHR0qW',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'T-Business Secrets (T-Bank)',
+    topic: 'Expert editorial column on emerging event visualization trends, multimedia, and experiential staging',
+    format: 'Expert Column',
+    linkText: 'Read Column',
+    url: 'https://secrets.tbank.ru/blogi-kompanij/trendy-vizualnogo-oformleniya-meropriyatij/',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'Outline 2024 (Pixels in the pines)',
+    topic: 'Live broadcast and artist dialogue on architectural media interventions in natural landscape',
+    format: 'Artist Talk',
+    linkText: 'View Stream',
+    url: 'https://t.me/DocStreamHub/2376',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'Signal Festival 2024',
+    topic: 'Experiential technology, interactive sensor design, and festival spatial staging',
+    format: 'Field Talk',
+    linkText: 'View Dispatch',
+    url: 'https://t.me/pokaspitdali/2828',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'Ridero',
+    topic: 'Publication of «Formula of Rave», a cultural monograph analyzing modern electronic music events',
+    format: 'Book',
+    linkText: 'Book Page',
+    url: 'https://ridero.ru/books/formula_reiva/',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'Night of Light at Gatchina',
+    topic: 'Talk on multimedia storytelling and architectural projection mapping in historic park environments',
+    format: 'Talk',
+    linkText: 'View Post',
+    url: 'https://vk.com/wall-55848808_2764',
+    lang: 'RU'
+  },
+  {
+    year: '2024',
+    platform: 'MICRORAVE Samara',
+    topic: 'Regional cultural tour, public discussion on micro-events and interdisciplinary art',
+    format: 'Public Talk',
+    linkText: 'Read Coverage',
+    url: 'https://www.sobaka.ru/smr/entertainment/weekend/171487',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'eLibrary (Russian Science Citation Index)',
+    topic: 'Peer-reviewed academic research paper analyzing neural network models in contemporary generative art',
+    format: 'Research Paper',
+    linkText: 'Read Paper',
+    url: 'https://www.elibrary.ru/item.asp?id=74498708&pff=1',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'Tinkoff Journal (T-Zh)',
+    topic: 'In-depth investigative interview detailing how Russia’s first neural dance film was conceived and rendered',
+    format: 'Feature Interview',
+    linkText: 'Read Longread',
+    url: 'https://journal.tinkoff.ru/ai-generated-dance-video/',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'MAER / RBC+ / Vedomosti / TASS',
+    topic: 'National media coverage and commentary on the first nationwide AI DOOH campaign for International Women’s Day',
+    format: 'National Press',
+    linkText: 'Read Story',
+    url: 'https://plus.rbc.ru/pressrelease/6406ee1a7a8aa95e099fd8f0',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'BOX Media',
+    topic: 'Professional video interview on video production craft, direction, and commercial video workflows',
+    format: 'Video Interview',
+    linkText: 'Watch Interview',
+    url: 'https://www.youtube.com/watch?v=puZO21Stxqk',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'INTERVALS Festival 2023',
+    topic: 'Broadcast story and artist statement on the «Nonsense Combine» video mapping installation at Tsekh*',
+    format: 'TV Broadcast',
+    linkText: 'Watch Story',
+    url: 'https://rutube.ru/video/b28c791cf2ee5eb236fd73c6f9eae18d/?r=wd&t=679',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'Vechernyaya Moskva',
+    topic: 'Print feature interview on the arrival of generative AI pipelines in commercial advertising',
+    format: 'Print Press',
+    linkText: 'View Archive (PDF)',
+    url: 'https://files.vm.ru/pdf/2023.07/original/64adb17e82682c1a5fe38d82.pdf',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'Nika FM Radio',
+    topic: 'Radio broadcast interview discussing neural video production, Stable Diffusion, and the Kirigami project',
+    format: 'Radio Broadcast',
+    linkText: 'Listen Story',
+    url: 'https://vk.com/wall-79377876_20083',
+    lang: 'RU'
+  },
+  {
+    year: '2023',
+    platform: 'Cinedance',
+    topic: 'Specialized dance cinema critique and neural style transfer choreography analysis',
+    format: 'Review',
+    linkText: 'Read Critique',
+    url: 'https://t.me/cinedance/428',
+    lang: 'RU'
+  }
+];
+---
+
+<Base
+  title="Education & Speaking — Alexander Zhiganov"
+  description="Keynotes, hands-on workshops, and educational programs on autonomous AI agents, commercial generative video, and interactive technology."
+  current="education"
+>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <h1 class="display hero-title">Education &amp; Speaking</h1>
+        <p class="lede hero-lede">
+          I turn production engineering and generative pipelines into actionable frameworks.
+        </p>
+        <p class="hero-body muted">
+          I lecture, lead intensive workshops, and deliver keynotes on autonomous AI agents,
+          commercial video production, and interactive technology for engineering teams, creative festivals,
+          and universities worldwide.
+        </p>
+
+        <ul class="credentials-list" role="list">
+          <li class="credential-item">
+            <span class="cred-dot" aria-hidden="true"></span>
+            <span>G8 Creative Industries Festival Speaker</span>
+          </li>
+          <li class="credential-item">
+            <span class="cred-dot" aria-hidden="true"></span>
+            <span>ArtMasters &amp; TIME CODE Lecturer</span>
+          </li>
+          <li class="credential-item">
+            <span class="cred-dot" aria-hidden="true"></span>
+            <span>Peer-Reviewed AI Research Co-Author (eLibrary / RSCI)</span>
+          </li>
+          <li class="credential-item">
+            <span class="cred-dot" aria-hidden="true"></span>
+            <span>Featured in Reuters, Tinkoff Journal &amp; National TV</span>
+          </li>
+        </ul>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#programs">
+            Explore Programs <span aria-hidden="true">↓</span>
+          </a>
+          <a class="btn btn-ghost" href="#contact">
+            Book a Talk or Workshop <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-media-stack">
+        <figure class="hero-portrait">
+          <Image
+            src={portrait}
+            alt="Portrait of Alexander Zhiganov, Educator and Speaker"
+            widths={[560, 900, 1400]}
+            sizes="(max-width: 900px) 100vw, 48vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </figure>
+        <figure class="hero-stage-card">
+          <Image
+            src={stagePhoto}
+            alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
+            widths={[600, 1000, 1600]}
+            sizes="(max-width: 900px) 100vw, 48vw"
+            loading="eager"
+          />
+          <figcaption class="stage-caption">Keynote on creative technology &amp; neural production</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section programs-section" id="programs" aria-labelledby="programs-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="programs-title">Ready-to-Book Programs</h2>
+        <p class="section-lead muted">
+          Structured curricula engineered for conference stages, corporate offsites, and intensive team sprints. Available in-person in the UAE and worldwide, or remotely.
+        </p>
+      </div>
+
+      <div class="programs-grid">
+        <article class="program-card">
+          <div class="card-head">
+            <h3 class="card-title">Autonomous AI Workflows for Modern Teams</h3>
+            <p class="card-pitch">
+              How modern engineering and creative teams build and ship production software, bots, and automated pipelines using autonomous AI agents instead of bloated engineering stacks.
+            </p>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-row">
+              <span class="meta-label">Available Formats:</span>
+              <span class="meta-value">Keynote (45 min), Intensive Workshop (2–4 hours), Guest Lecture</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Target Audience:</span>
+              <span class="meta-value">Engineering leads, product managers, creative technologists, startup founders</span>
+            </div>
+          </div>
+
+          <div class="card-takeaways">
+            <h4 class="takeaways-title">Key Takeaways</h4>
+            <ul class="takeaways-list" role="list">
+              <li>Structuring production agentic workflows with Antigravity, Codex, and MCP servers</li>
+              <li>Context architecture, deterministic guardrails, and safe background tool execution</li>
+              <li>Moving from zero lines of code to production-grade deployment with verified case studies</li>
+            </ul>
+          </div>
+
+          <div class="card-actions">
+            <a class="btn btn-card" href="#contact">
+              Book This Program <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="program-card">
+          <div class="card-head">
+            <h3 class="card-title">Commercial AI Video Production</h3>
+            <p class="card-pitch">
+              Production-proven generative video pipelines from initial conceptual development to broadcast-grade delivery and large-format DOOH screens.
+            </p>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-row">
+              <span class="meta-label">Available Formats:</span>
+              <span class="meta-value">Keynote (45 min), Studio Workshop (3–4 hours), Masterclass</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Target Audience:</span>
+              <span class="meta-value">Production studios, art directors, motion designers, brand marketers</span>
+            </div>
+          </div>
+
+          <div class="card-takeaways">
+            <h4 class="takeaways-title">Key Takeaways</h4>
+            <ul class="takeaways-list" role="list">
+              <li>Overcoming diffusion hallucinations, flickering, and temporal consistency challenges</li>
+              <li>Multi-machine distributed rendering pipelines, frame interpolation, and post-processing</li>
+              <li>Real production breakdowns: the Kirigami dance film (3,250 frames) and MAER nationwide DOOH campaign</li>
+            </ul>
+          </div>
+
+          <div class="card-actions">
+            <a class="btn btn-card" href="#contact">
+              Book This Program <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="program-card">
+          <div class="card-head">
+            <h3 class="card-title">Experiential Tech &amp; Festival Installations</h3>
+            <p class="card-pitch">
+              Designing, engineering, and producing interactive media art, real-time computer vision systems, and large-scale festival installations that engage physical audiences.
+            </p>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-row">
+              <span class="meta-label">Available Formats:</span>
+              <span class="meta-value">Keynote (45 min), Masterclass, Panel Discussion</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Target Audience:</span>
+              <span class="meta-value">Festival curators, experiential agencies, spatial designers, cultural institutions</span>
+            </div>
+          </div>
+
+          <div class="card-takeaways">
+            <h4 class="takeaways-title">Key Takeaways</h4>
+            <ul class="takeaways-list" role="list">
+              <li>Real-time computer vision in physical environments using OpenCV, WebGL, and custom sensors</li>
+              <li>Hardware and software resilience under high-load live festival conditions (Intervals, Outline, Signal)</li>
+              <li>Designing cultural phenomena: from morning coffeehouse raves to multi-day art interventions</li>
+            </ul>
+          </div>
+
+          <div class="card-actions">
+            <a class="btn btn-card" href="#contact">
+              Book This Program <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section registry-section" id="registry" aria-labelledby="registry-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="registry-title">Selected Appearances &amp; Media Track Record</h2>
+        <p class="section-lead muted">
+          A documented chronological registry of keynotes, university lectures, peer-reviewed publications, and broadcast appearances across 2023–2026.
+        </p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="registry-table" aria-label="Chronological registry of speaking appearances, lectures, and media features">
+          <thead>
+            <tr>
+              <th scope="col" class="th-year">Year</th>
+              <th scope="col" class="th-platform">Platform / Event</th>
+              <th scope="col" class="th-topic">Topic &amp; Narrative Context</th>
+              <th scope="col" class="th-format">Format</th>
+              <th scope="col" class="th-source">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {registry.map((item) => (
+              <tr class="registry-row">
+                <td class="td-year">
+                  <span class="year-badge">{item.year}</span>
+                </td>
+                <td class="td-platform">
+                  <strong class="platform-name">{item.platform}</strong>
+                </td>
+                <td class="td-topic">
+                  <p class="topic-text">{item.topic}</p>
+                </td>
+                <td class="td-format">
+                  <span class="format-badge">{item.format}</span>
+                  {item.lang && <span class="lang-tag" aria-label={`Language: ${item.lang}`}>{item.lang}</span>}
+                </td>
+                <td class="td-source">
+                  <a
+                    class="source-link"
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${item.linkText}: ${item.platform} (opens in new tab)`}
+                  >
+                    <span>{item.linkText}</span>
+                    <span class="arrow" aria-hidden="true">↗</span>
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section" id="book" aria-labelledby="cta-title">
+    <div class="wrap">
+      <div class="cta-box">
+        <div class="cta-content">
+          <h2 class="cta-title" id="cta-title">Book Alexander for Your Event or Team</h2>
+          <p class="cta-lead">
+            Planning a conference keynote, an intensive corporate workshop, or an academic guest lecture?
+            I am available for engagements in the UAE and internationally. Let's discuss formats, dates, and custom curricula.
+          </p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="#contact">
+            Contact Details <span aria-hidden="true">↓</span>
+          </a>
+          <a
+            class="btn btn-ghost"
+            href="https://t.me/zhiganovsasha"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Direct on Telegram <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- HERO ---------- */
+  .hero {
+    padding-top: clamp(40px, 6vw, 88px);
+    padding-bottom: clamp(56px, 7vw, 104px);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+
+  .hero-title {
+    font-size: var(--type-display);
+    margin-top: 18px;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .hero-lede {
+    font-size: var(--type-lead);
+    margin-top: clamp(24px, 3vw, 40px);
+    font-weight: 550;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .hero-body {
+    font-size: var(--type-body);
+    margin-top: 16px;
+    line-height: 1.55;
+    max-width: 58ch;
+  }
+
+  .credentials-list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .credential-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: var(--type-small);
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .cred-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--signal);
+    flex-shrink: 0;
+    transform: translateY(-1px);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: clamp(32px, 4vw, 44px);
+  }
+
+  .hero-media-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .hero-portrait {
+    margin: 0;
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-color);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .hero-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: grayscale(12%);
+    transition: filter var(--dur-med) var(--ease-out);
+  }
+
+  .hero-portrait:hover img {
+    filter: grayscale(0%);
+  }
+
+  .hero-stage-card {
+    margin: 0;
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-stage-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(10%);
+    transition: filter var(--dur-med) var(--ease-out);
+  }
+
+  .hero-stage-card:hover img {
+    filter: grayscale(0%);
+  }
+
+  .stage-caption {
+    padding: 10px 14px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    background: var(--bg-surface);
+    line-height: 1.4;
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  .section-head {
+    margin-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .section-head h2 {
+    font-size: var(--type-heading);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .section-lead {
+    font-size: var(--type-body);
+    margin-top: 14px;
+    max-width: 68ch;
+    line-height: 1.55;
+  }
+
+  /* ---------- PROGRAMS GRID ---------- */
+  .programs-section {
+    padding-top: clamp(64px, 8vw, 112px);
+    padding-bottom: clamp(64px, 8vw, 112px);
+  }
+
+  .programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 2.5vw, 32px);
+    align-items: stretch;
+  }
+
+  .program-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: clamp(24px, 2.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .program-card:hover {
+    border-color: var(--signal);
+    transform: translateY(-2px);
+  }
+
+  .card-head {
+    margin-bottom: 24px;
+  }
+
+  .card-title {
+    font-size: var(--type-lead);
+    line-height: 1.25;
+    margin: 0 0 12px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .card-pitch {
+    font-size: var(--type-body);
+    color: var(--mute);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card-meta {
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .meta-value {
+    font-size: var(--type-small);
+    color: var(--mute);
+    line-height: 1.45;
+  }
+
+  .card-takeaways {
+    flex-grow: 1;
+    margin-bottom: 28px;
+  }
+
+  .takeaways-title {
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+
+  .takeaways-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .takeaways-list li {
+    font-size: var(--type-small);
+    color: var(--mute);
+    line-height: 1.45;
+    position: relative;
+    padding-left: 14px;
+  }
+
+  .takeaways-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--signal);
+  }
+
+  .card-actions {
+    margin-top: auto;
+  }
+
+  .btn-card {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 18px;
+    box-sizing: border-box;
+    background: var(--bg-canvas);
+    color: var(--ink);
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    font-size: var(--type-small);
+    font-weight: 550;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn-card:hover {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #ffffff;
+  }
+
+  /* ---------- REGISTRY TABLE ---------- */
+  .registry-section {
+    padding-top: clamp(64px, 8vw, 112px);
+    padding-bottom: clamp(64px, 8vw, 112px);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .registry-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--type-small);
+    font-family: inherit;
+    min-width: 780px;
+  }
+
+  .registry-table th {
+    background: var(--bg-sunken);
+    padding: 14px 18px;
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+  }
+
+  .th-year {
+    width: 80px;
+  }
+
+  .th-platform {
+    width: 220px;
+  }
+
+  .th-format {
+    width: 160px;
+  }
+
+  .th-source {
+    width: 140px;
+    text-align: right;
+  }
+
+  .registry-table td {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  .registry-row:last-child td {
+    border-bottom: none;
+  }
+
+  .registry-row:hover td {
+    background: rgba(150, 0, 24, 0.02);
+  }
+
+  .year-badge {
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--mute);
+  }
+
+  .platform-name {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .topic-text {
+    margin: 0;
+    color: var(--mute);
+    line-height: 1.45;
+    max-width: 60ch;
+  }
+
+  .td-format {
+    white-space: nowrap;
+  }
+
+  .format-badge {
+    display: inline-block;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .lang-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 5px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-color);
+    font-size: 11px;
+    color: var(--faint);
+    vertical-align: middle;
+  }
+
+  .td-source {
+    text-align: right;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--signal);
+    text-decoration: none;
+    font-weight: 550;
+    white-space: nowrap;
+    padding: 4px 6px;
+    box-sizing: border-box;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .source-link:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+  }
+
+  .source-link .arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .source-link:hover .arrow {
+    transform: translate(2px, -2px);
+  }
+
+  /* ---------- CTA SECTION ---------- */
+  .cta-section {
+    padding-top: clamp(64px, 8vw, 112px);
+    padding-bottom: clamp(64px, 8vw, 128px);
+  }
+
+  .cta-box {
+    background: var(--bg-sunken);
+    border: 1px solid var(--border-color);
+    padding: clamp(32px, 5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .cta-title {
+    font-size: var(--type-heading);
+    line-height: 1.2;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .cta-lead {
+    font-size: var(--type-lead);
+    color: var(--mute);
+    line-height: 1.45;
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ---------- RESPONSIVE BREAKPOINTS ---------- */
+  @media (max-width: 1024px) {
+    .programs-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .hero-portrait {
+      max-width: 480px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .table-wrap {
+      border: none;
+      background: transparent;
+      overflow-x: visible;
+    }
+
+    .registry-table,
+    .registry-table tbody,
+    .registry-row,
+    .registry-table td {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .registry-table thead {
+      display: none;
+    }
+
+    .registry-row {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+
+    .registry-table td {
+      padding: 0;
+      border: none;
+    }
+
+    .td-year {
+      display: inline-block;
+      width: auto;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+
+    .td-platform {
+      display: inline-block;
+      width: auto;
+      margin-bottom: 6px;
+    }
+
+    .td-format {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .td-topic {
+      margin-bottom: 14px;
+    }
+
+    .topic-text {
+      max-width: 100%;
+    }
+
+    .td-source {
+      text-align: left;
+      padding-top: 6px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-actions,
+    .cta-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .hero-actions .btn,
+    .cta-actions .btn {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+</style>

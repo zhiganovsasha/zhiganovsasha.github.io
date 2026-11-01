@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: 'home' | 'development' | 'contact';
+  current?: 'home' | 'development' | 'education' | 'contact';
 }
 
 const { current } = Astro.props;
@@ -16,6 +16,12 @@ const { current } = Astro.props;
         data-text="AI Development"
         aria-current={current === 'development' ? 'page' : undefined}
         >AI Development</a
+      >
+      <a
+        href="/education"
+        data-text="Talks"
+        aria-current={current === 'education' ? 'page' : undefined}
+        >Talks</a
       >
       <a href="#contact" data-text="Contact" aria-current={current === 'contact' ? 'page' : undefined}
         >Contact</a
@@ -120,7 +126,7 @@ const { current } = Astro.props;
       align-self: flex-start;
     }
 
-    .main-nav a[href='/'] {
+    .main-nav > a[href='/'] {
       display: none;
     }
 
@@ -133,7 +139,7 @@ const { current } = Astro.props;
       font-size: var(--type-small);
     }
 
-    .main-nav a {
+    .main-nav > a {
       display: inline-flex;
       align-items: center;
       min-height: 44px;

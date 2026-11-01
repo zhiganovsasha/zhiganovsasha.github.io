@@ -325,7 +325,7 @@ summary,
   font-size: var(--type-small);
 }
 
-.main-nav a {
+.main-nav > a {
   position: relative;
   text-decoration: none;
   color: var(--mute);
@@ -340,7 +340,7 @@ summary,
     transform var(--dur-fast) var(--ease-out);
 }
 
-.main-nav a::after {
+.main-nav > a::after {
   content: attr(data-text);
   position: absolute;
   inset: 0;
@@ -359,20 +359,20 @@ summary,
   pointer-events: none;
 }
 
-.main-nav a:hover,
-.main-nav a[aria-current='page']:hover {
+.main-nav > a:hover,
+.main-nav > a[aria-current='page']:hover {
   color: var(--ink);
 }
 
 @supports (-webkit-background-clip: text) {
-  .main-nav a:hover,
-  .main-nav a[aria-current='page']:hover {
+  .main-nav > a:hover,
+  .main-nav > a[aria-current='page']:hover {
     color: transparent;
   }
 }
 
-.main-nav a:hover::after,
-.main-nav a[aria-current='page']:hover::after {
+.main-nav > a:hover::after,
+.main-nav > a[aria-current='page']:hover::after {
   opacity: 1;
 }
 
@@ -388,11 +388,11 @@ summary,
   }
 }
 
-.main-nav a:active {
+.main-nav > a:active {
   transform: translateY(1px);
 }
 
-.main-nav a[aria-current='page'] {
+.main-nav > a[aria-current='page'] {
   color: var(--ink);
   border-bottom-color: var(--signal);
 }
@@ -475,18 +475,21 @@ summary,
 }
 
 .cv-menu a,
-.cv-menu span {
+.cv-menu li > span {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
   min-height: 44px;
   padding: 10px 12px;
+  box-sizing: border-box;
   text-decoration: none;
   font-size: var(--type-small);
 }
 
 .cv-menu a {
+  color: var(--ink);
   transition:
     background var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
@@ -502,21 +505,36 @@ summary,
 }
 
 .cv-menu a .get {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: auto;
+  padding: 2px 6px;
+  box-sizing: border-box;
+  line-height: 1.2;
   color: var(--signal);
   font-size: var(--type-small);
 }
 
-.cv-menu span {
+.cv-menu li > span {
   color: var(--faint);
   cursor: default;
 }
 
 .cv-menu .cv-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: auto;
+  padding: 2px 6px;
+  box-sizing: border-box;
+  line-height: 1.2;
   font-size: var(--type-small);
   letter-spacing: 0;
   color: var(--faint);
   border: 1px solid var(--rule);
-  padding: 2px 6px;
 }
 
 /* ---------- buttons ---------- */
