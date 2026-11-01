@@ -1,0 +1,607 @@
+---
+import { Image } from 'astro:assets';
+import coverImage from '../assets/blob-tracker-cover.webp';
+import interfaceImage from '../assets/blob-tracker-interface.webp';
+
+const regions = [
+  { path: 'M40 63L69 43L108 54L122 84L105 116L67 120L37 99Z', x: 37, y: 43, w: 85, h: 77, cx: 80, cy: 82 },
+  { path: 'M174 30L207 38L218 67L200 92L172 85L158 57Z', x: 158, y: 30, w: 60, h: 62, cx: 188, cy: 61 },
+  { path: 'M153 129L184 112L218 124L232 153L208 179L173 176L148 155Z', x: 148, y: 112, w: 84, h: 67, cx: 190, cy: 145 },
+];
+
+const detectors = [
+  { name: 'Edge', detail: 'Finds boundaries where brightness changes.', path: 'M25 67L39 31L75 23L103 47L94 83L56 93Z', kind: 'edge' },
+  { name: 'Motion', detail: 'Compares frames to isolate what moves.', path: 'M48 67L62 31L98 23L126 47L117 83L79 93Z', kind: 'motion' },
+  { name: 'HSV', detail: 'Selects regions within a chosen color range.', path: 'M25 67L39 31L75 23L103 47L94 83L56 93Z', kind: 'hsv' },
+  { name: 'Area', detail: 'Separates connected light or dark regions.', path: 'M25 67L39 31L75 23L103 47L94 83L56 93Z', kind: 'area' },
+];
+
+const effectGroups = [
+  {
+    name: 'Studio VFX',
+    count: '15',
+    effects: 'Neon, Ghost, Matrix, Rainbow, Fire, Sparkles, CRT, Halftone, Comic, Thermal, Blueprint, Glow Edge, Star Trail, Wireframe, Liquid',
+  },
+  {
+    name: 'Classic overlays',
+    count: '15',
+    effects: 'Contour, Cross, Frame, L-Frame, X-Frame, Grid, Particle, Dash, Scope, Win2K, Backdrop, Emojis, Heatmap, Voronoi, ConvexHull',
+  },
+];
+
+const metrics = [
+  ['5–10×', 'documented GPU speedup for blur and Sobel versus CPU OpenCV'],
+  ['15 + 15', 'Studio VFX styles and classic overlays in the effect registry'],
+  ['3', 'export routes: Mediabunny, WebCodecs H.264, and MediaRecorder'],
+  ['0', 'video uploads to a processing server'],
+];
+
+const workflow = [
+  ['Define the behavior', 'I describe the detector, visual result, browser limits, and failure states.'],
+  ['Route the coding work', 'OpenCode runs through model routers; I used this project to compare more than ten models.'],
+  ['Change the real application', 'The agent works in the same app, effects, export, and interface files that ship to users.'],
+  ['Verify in browsers', 'Playwright checks detection, export, cancellation, CDN fallbacks, and audio handling.'],
+];
+
+const stack = [
+  ['JavaScript + OpenCV.js', 'Analyze video frames and extract contours in the browser.'],
+  ['WebGL2', 'Accelerate blur, Sobel edge detection, and thresholding on the GPU, with a CPU fallback.'],
+  ['WebCodecs + Mediabunny', 'Encode and package rendered output as MP4 or WebM, with audio when the browser can decode it.'],
+  ['Playwright', 'Check detection, export, cancellation, library fallbacks, and audio scenarios in a real browser.'],
+  ['GitHub Pages', 'Serve the standalone application as a static site.'],
+];
+---
+
+<div class="blob-explainer">
+  <section class="result-section" id="blob-result" aria-labelledby="blob-result-title">
+    <h2 id="blob-result-title">The same clip reveals the whole result.</h2>
+    <p>One 8.4-second source runs before and after Blob Tracker. A single player keeps both versions in sync.</p>
+    <figure class="comparison-player" data-comparison-player data-mobile-view="result">
+      <div class="video-view-switch" data-comparison-view-controls hidden role="group" aria-label="Video shown on small screens">
+        <button type="button" data-comparison-view="source" aria-pressed="false">Source</button>
+        <button type="button" data-comparison-view="result" aria-pressed="true">Result</button>
+      </div>
+      <div class="video-pair">
+        <div class="comparison-pane" data-pane="source">
+          <h3>Source footage</h3>
+          <video controls muted playsinline preload="metadata" poster="/media/blob-tracker/blob-tracker-before-poster.webp" width="720" height="1280" tabindex="0" aria-label="Source footage. Press Enter or Space to play or pause both videos." data-comparison-video>
+            <source src="/media/blob-tracker/blob-tracker-before.mp4" type="video/mp4" />
+            Your browser does not support HTML video.
+          </video>
+        </div>
+        <div class="comparison-pane" data-pane="result">
+          <h3>Blob Tracker result</h3>
+          <video controls muted playsinline preload="metadata" poster="/media/blob-tracker/blob-tracker-after-poster.webp" width="720" height="1280" tabindex="0" aria-label="Processed footage. Press Enter or Space to play or pause both videos." data-comparison-video>
+            <source src="/media/blob-tracker/blob-tracker-after.mp4" type="video/mp4" />
+            Your browser does not support HTML video.
+          </video>
+        </div>
+      </div>
+      <div class="comparison-controls" data-comparison-controls hidden>
+        <button type="button" data-comparison-toggle>Play both</button>
+        <label class="comparison-scrubber">
+          <span class="sr-only">Video timeline</span>
+          <input type="range" min="0" max="1000" value="0" step="1" data-comparison-scrubber />
+        </label>
+        <output data-comparison-time>0:00 / 0:08</output>
+        <button type="button" data-comparison-sound aria-pressed="false">Turn sound on</button>
+      </div>
+      <figcaption>The processed version was exported from the original footage with Blob Tracker’s contour and connection graphics.</figcaption>
+    </figure>
+
+    <figure class="blob-demo" aria-labelledby="blob-demo-caption" data-style="frame">
+      <div class="frame-sequence">
+        <div class="frame-view">
+          <h3>Video frame</h3>
+          <svg viewBox="0 0 270 210" role="img" aria-label="An illustrative source frame with three separate regions of pixels">
+            <path class="frame-ground" d="M0 0H270V210H0Z" />
+            {regions.map((region) => <path class="source-region" d={region.path} />)}
+          </svg>
+          <p>The source stays visible.</p>
+        </div>
+        <div class="sequence-verb" aria-hidden="true">detect<span>→</span></div>
+        <div class="frame-view">
+          <h3>Detected regions</h3>
+          <svg viewBox="0 0 270 210" role="img" aria-label="The same three regions isolated as a binary mask with their centers marked">
+            <path class="mask-ground" d="M0 0H270V210H0Z" />
+            {regions.map((region) => <g><path class="mask-region" d={region.path} /><path class="mask-center" d={`M${region.cx - 5} ${region.cy}h10M${region.cx} ${region.cy - 5}v10`} /></g>)}
+          </svg>
+          <p>Contours define the geometry.</p>
+        </div>
+        <div class="sequence-verb" aria-hidden="true">draw<span>→</span></div>
+        <div class="frame-view">
+          <h3>Graphic overlay</h3>
+          <svg viewBox="0 0 270 210" role="img" aria-label="A graphic effect placed on the same detected regions">
+            <path class="frame-ground" d="M0 0H270V210H0Z" />
+            {regions.map((region) => <path class="source-region" d={region.path} />)}
+            <g class="overlay-connections"><path d="M80 82L188 61L190 145L80 82" /></g>
+            {regions.map((region) => <g class="overlay-region">
+              <rect class="overlay-frame" x={region.x} y={region.y} width={region.w} height={region.h} />
+              <path class="overlay-contour" d={region.path} />
+              <path class="overlay-cross" d={`M${region.cx - 16} ${region.cy}h32M${region.cx} ${region.cy - 16}v32`} />
+              <rect class="overlay-center" x={region.cx - 2} y={region.cy - 2} width="4" height="4" />
+            </g>)}
+          </svg>
+          <p>One detection, different styles.</p>
+        </div>
+      </div>
+      <div class="demo-controls" data-blob-controls hidden>
+        <div class="style-buttons" role="group" aria-label="Illustration overlay style">
+          <button type="button" data-blob-style="frame" aria-pressed="true">Frame</button>
+          <button type="button" data-blob-style="cross" aria-pressed="false">Cross</button>
+          <button type="button" data-blob-style="contour" aria-pressed="false">Contour</button>
+        </div>
+        <label class="connection-control"><input type="checkbox" data-blob-connections checked /> Connect centers</label>
+      </div>
+      <figcaption id="blob-demo-caption">Detected contours become graphic effects over the original video. The control changes this schematic illustration, not a live detector.</figcaption>
+    </figure>
+  </section>
+
+  <nav class="blob-nav" aria-label="Blob Tracker case sections">
+    <a href="#blob-result">Result</a>
+    <a href="#blob-interface">Interface</a>
+    <a href="#blob-story">Story</a>
+    <a href="#blob-detection">Detection</a>
+    <a href="#blob-export">Export</a>
+    <a href="#blob-agents">AI workflow</a>
+    <a href="#blob-stack">Technology</a>
+  </nav>
+
+  <section id="blob-interface" aria-labelledby="blob-interface-title">
+    <h2 id="blob-interface-title">The whole tool lives in one browser window.</h2>
+    <p>Load a clip, tune the detector, choose a style, review the tracked result, and export without sending the video to a processing server.</p>
+    <figure class="interface-figure motion-shutter" data-ui>
+      <Image src={interfaceImage} alt="Blob Tracker browser interface processing a vertical video with contour overlays, playback controls, and a detector settings panel" widths={[720, 1080, 1440]} sizes="(max-width: 900px) 100vw, 88vw" />
+      <figcaption>A real session in the public browser app: the video stage stays large while detection, style, and export controls remain in one inspector.</figcaption>
+    </figure>
+    <div class="interface-facts">
+      <div><h3>Track</h3><p>Choose Edge, Motion, HSV, or Area, then tune sensitivity, smoothing, grouping, and blob size.</p></div>
+      <div><h3>Style</h3><p>Switch effects without changing the detector, then adjust color, line, labels, connections, and animation.</p></div>
+      <div><h3>Export</h3><p>Keep the source dimensions, choose MP4 or WebM, set output frame rate and bitrate, and cancel long renders.</p></div>
+    </div>
+  </section>
+
+  <section id="blob-story" aria-labelledby="blob-story-title">
+    <h2 id="blob-story-title">The Reels needed a tool first.</h2>
+    <div class="story-split">
+      <div class="story-copy">
+        <p>I had an idea for <a href="https://www.instagram.com/studio.shum/" target="_blank" rel="noopener noreferrer">@studio.shum <span aria-hidden="true">↗</span></a>: a series of Instagram videos built around the thought that everything looks better with a blob-tracking effect.</p>
+        <p>I could not find a simple, free tool that met my requirements. TouchDesigner could do it, but learning it for a handful of Reels felt slower than building the tool myself. So I started building.</p>
+      </div>
+      <figure class="cover-figure">
+        <Image src={coverImage} alt="White dandelions connected by crimson tracking frames in Blob Tracker project artwork" widths={[600, 900, 1200]} sizes="(max-width: 620px) 100vw, 46vw" />
+        <figcaption>Project artwork built from the same visual language: detected regions, frames, and connections.</figcaption>
+      </figure>
+    </div>
+    <ol class="evolution">
+      <li><h3>Make it for SHUM</h3><p>I started with a local production tool for the studio’s Instagram content.</p></li>
+      <li><h3>Move it into the browser</h3><p>I adapted the detector, visualizer, and post-processing system of Apolotary’s MIT-licensed project to JavaScript and OpenCV.js.</p></li>
+      <li><h3>Let others use it</h3><p>I released Blob Tracker as my first open-source project, free for anyone to use.</p></li>
+    </ol>
+  </section>
+
+  <section id="blob-detection" aria-labelledby="blob-detection-title">
+    <h2 id="blob-detection-title">Choose what the detector responds to.</h2>
+    <p>A blob is a connected region of pixels. The detector finds its outline and center; the visual style decides what to draw there.</p>
+    <figure>
+      <div class="detector-grid">
+        {detectors.map((detector) => <div class="detector-case">
+          <h3>{detector.name}</h3>
+          <svg viewBox="0 0 160 112" class:list={['detector-drawing', detector.kind]} aria-hidden="true">
+            <path class="detector-reference" d="M25 67L39 31L75 23L103 47L94 83L56 93Z" />
+            <path class="detector-target" d={detector.path} />
+            {detector.kind === 'motion' && <path class="motion-direction" d="M34 56H75M66 48L75 56L66 64" />}
+            {detector.kind === 'hsv' && <><rect class="color-sample" x="125" y="29" width="18" height="18" /><path class="sample-link" d="M109 40H121" /></>}
+            {detector.kind === 'area' && <path class="area-divider" d="M66 23V93" />}
+          </svg>
+          <p>{detector.detail}</p>
+        </div>)}
+      </div>
+      <figcaption>Edge, Motion, HSV, and Area isolate regions differently. The same visual styles can be applied afterward.</figcaption>
+    </figure>
+    <div class="effects-intro">
+      <h3>Thirty registered styles use the same detected geometry.</h3>
+      <p>The current app keeps a new Studio VFX set beside the classic overlays, so a tuned detector can move from a restrained contour to a full graphic treatment.</p>
+    </div>
+    <div class="effect-index">
+      {effectGroups.map((group) => <div>
+        <div class="effect-heading"><strong>{group.count}</strong><h3>{group.name}</h3></div>
+        <p>{group.effects}.</p>
+      </div>)}
+    </div>
+    <p class="boundary-note">This is contour tracking, not object recognition. A box does not mean the app knows what an object is, and tracked IDs can change during fast motion or occlusion.</p>
+  </section>
+
+  <section id="blob-export" aria-labelledby="blob-export-title">
+    <h2 id="blob-export-title">Preview lightly. Export full-size.</h2>
+    <dl class="metric-strip">
+      {metrics.map(([value, label]) => <div><dt>{value}</dt><dd>{label}</dd></div>)}
+    </dl>
+    <figure>
+      <div class="export-flow">
+        <div><h3>Load the source</h3><p>Keep the original dimensions and inspect the available audio track.</p></div>
+        <span class="export-verb">analyze <span aria-hidden="true">→</span></span>
+        <div><h3>Detect in preview</h3><p>Run blur, Sobel, thresholding, and contour extraction at a lighter preview resolution.</p></div>
+        <span class="export-verb">scale + render <span aria-hidden="true">→</span></span>
+        <div><h3>Encode the result</h3><p>Redraw the video and overlays at the source size, then package MP4 or WebM.</p></div>
+      </div>
+      <figcaption>The preview saves processing work. Export scales contour coordinates back to the source video’s dimensions.</figcaption>
+    </figure>
+    <div class="export-notes">
+      <div><h3>The video stays local.</h3><p>Processing happens in the browser. The app loads libraries from CDNs; it does not upload the video to a processing server.</p></div>
+      <div><h3>Audio depends on the browser.</h3><p>Mediabunny includes sound when the browser can decode it. Mobile browsers may produce a clean video-only file instead.</p></div>
+    </div>
+  </section>
+
+  <section class="agent-section" id="blob-agents" aria-labelledby="blob-agents-title">
+    <div class="agent-copy">
+      <h2 id="blob-agents-title">Agents met real constraints.</h2>
+      <p>I used Blob Tracker to test OpenCode and more than ten different models through model routers while building something I wanted to use.</p>
+      <p>The useful comparison was not a synthetic coding prompt. Each model had to work with real browser APIs, video files, performance limits, and regressions.</p>
+    </div>
+    <figure class="agent-figure">
+      <div class="agent-flow">
+        {workflow.map(([name, detail], index) => <div class="agent-step">
+          <h3>{name}</h3>
+          <p>{detail}</p>
+          {index < workflow.length - 1 && <span aria-hidden="true">→</span>}
+        </div>)}
+      </div>
+      <figcaption>The workflow stays model-agnostic here: the case does not assign specific modules to individual models.</figcaption>
+    </figure>
+  </section>
+
+  <section id="blob-stack" aria-labelledby="blob-stack-title">
+    <h2 id="blob-stack-title">What runs underneath.</h2>
+    <dl class="stack-spec">
+      {stack.map(([name, purpose]) => <div><dt>{name}</dt><dd>{purpose}</dd></div>)}
+    </dl>
+    <p class="boundary-note">The scope is a single-video effects tool. It has no editing timeline, keyframes, or webcam input. Source-size export can use substantial memory.</p>
+    <details class="implementation-notes">
+      <summary>Implementation behind the diagrams</summary>
+      <div>
+        <p>The diagrams summarize the public repository rather than a simulated architecture.</p>
+        <dl>
+          <div><dt><code>online-version/app.js</code></dt><dd>Playback, settings, detection, WebGL2 preview processing, and browser state.</dd></div>
+          <div><dt><code>online-version/effects.js</code></dt><dd>The 15 Studio VFX styles and 15 classic overlay registrations.</dd></div>
+          <div><dt><code>online-version/export.js</code></dt><dd>Mediabunny MP4/WebM export, audio handling, and native browser fallbacks.</dd></div>
+          <div><dt><code>tests/js/run-online-tests.mjs</code></dt><dd>Browser scenarios for formats, source-size output, 60 FPS, cancellation, and CDN fallbacks.</dd></div>
+          <div><dt><code>tests/js/audio-export-check.mjs</code></dt><dd>End-to-end audio export verification with Playwright and media inspection.</dd></div>
+        </dl>
+      </div>
+    </details>
+  </section>
+
+  <section class="sources-section" id="blob-sources" aria-labelledby="blob-sources-title">
+    <h2 id="blob-sources-title">Try it, or look inside.</h2>
+    <div class="project-links">
+      <a class="btn btn-primary" href="https://alexjiganov179-lab.github.io/blob-tracker/" target="_blank" rel="noopener noreferrer">Open Blob Tracker <span aria-hidden="true">↗</span></a>
+      <a class="btn" href="https://github.com/alexjiganov179-lab/blob-tracker" target="_blank" rel="noopener noreferrer">Source code <span aria-hidden="true">↗</span></a>
+    </div>
+    <p>Blob Tracker is MIT licensed. The browser version adapts the detector, visualizer, and post-processing system of <a href="https://github.com/Apolotary/blob-tracker" target="_blank" rel="noopener noreferrer">Apolotary/blob-tracker <span aria-hidden="true">↗</span></a>, also released under MIT.</p>
+    <p class="source-note">Technical sources: the project’s <a href="https://github.com/alexjiganov179-lab/blob-tracker/blob/master/online-version/README.md" target="_blank" rel="noopener noreferrer">browser documentation <span aria-hidden="true">↗</span></a> and its detection, effects, export, and test implementation.</p>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-comparison-player]').forEach((player) => {
+    const videos = Array.from(player.querySelectorAll<HTMLVideoElement>('[data-comparison-video]'));
+    const controls = player.querySelector<HTMLElement>('[data-comparison-controls]');
+    const viewControls = player.querySelector<HTMLElement>('[data-comparison-view-controls]');
+    const viewButtons = Array.from(player.querySelectorAll<HTMLButtonElement>('[data-comparison-view]'));
+    const toggle = player.querySelector<HTMLButtonElement>('[data-comparison-toggle]');
+    const sound = player.querySelector<HTMLButtonElement>('[data-comparison-sound]');
+    const scrubber = player.querySelector<HTMLInputElement>('[data-comparison-scrubber]');
+    const time = player.querySelector<HTMLOutputElement>('[data-comparison-time]');
+    const primary = videos[0];
+    const result = videos[1];
+    if (!primary || !result || videos.length !== 2 || !controls || !viewControls || !toggle || !sound || !scrubber || !time) return;
+
+    videos.forEach((video) => { video.controls = false; video.muted = true; });
+    controls.hidden = false;
+    viewControls.hidden = false;
+
+    const formatTime = (seconds: number) => {
+      const safeSeconds = Number.isFinite(seconds) ? Math.max(0, Math.round(seconds)) : 0;
+      const remaining = safeSeconds % 60;
+      return `${Math.floor(safeSeconds / 60)}:${remaining < 10 ? `0${remaining}` : remaining}`;
+    };
+    const updateControls = () => {
+      const duration = Number.isFinite(primary.duration) ? primary.duration : 0;
+      scrubber.value = duration > 0 ? String(Math.round((primary.currentTime / duration) * 1000)) : '0';
+      time.value = `${formatTime(primary.currentTime)} / ${formatTime(duration)}`;
+    };
+    const pauseBoth = () => {
+      videos.forEach((video) => video.pause());
+      toggle.textContent = primary.ended ? 'Play again' : 'Play both';
+    };
+    const playBoth = async () => {
+      if (primary.ended) videos.forEach((video) => { video.currentTime = 0; });
+      await Promise.all(videos.map((video) => video.play()));
+      toggle.textContent = 'Pause both';
+    };
+    const togglePlayback = () => {
+      if (primary.paused || primary.ended) playBoth().catch(pauseBoth);
+      else pauseBoth();
+    };
+
+    toggle.addEventListener('click', togglePlayback);
+    videos.forEach((video) => {
+      video.addEventListener('click', togglePlayback);
+      video.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        togglePlayback();
+      });
+    });
+    sound.addEventListener('click', () => {
+      result.muted = !result.muted;
+      const soundOn = !result.muted;
+      sound.setAttribute('aria-pressed', String(soundOn));
+      sound.textContent = soundOn ? 'Turn sound off' : 'Turn sound on';
+    });
+    viewButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const view = button.dataset.comparisonView === 'source' ? 'source' : 'result';
+        player.dataset.mobileView = view;
+        viewButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      });
+    });
+    scrubber.addEventListener('input', () => {
+      pauseBoth();
+      const duration = Number.isFinite(primary.duration) ? primary.duration : 0;
+      const nextTime = duration * (Number(scrubber.value) / 1000);
+      videos.forEach((video) => { video.currentTime = nextTime; });
+      updateControls();
+    });
+    primary.addEventListener('timeupdate', () => {
+      if (Math.abs(result.currentTime - primary.currentTime) > 0.12) result.currentTime = primary.currentTime;
+      updateControls();
+    });
+    primary.addEventListener('loadedmetadata', updateControls);
+    primary.addEventListener('ended', pauseBoth);
+  });
+
+  document.querySelectorAll<HTMLElement>('.blob-demo').forEach((demo) => {
+    const controls = demo.querySelector<HTMLElement>('[data-blob-controls]');
+    if (!controls) return;
+    const buttons = Array.from(demo.querySelectorAll<HTMLButtonElement>('[data-blob-style]'));
+    const validStyles = new Set(['frame', 'cross', 'contour']);
+    const showStyle = (style: string, updateUrl = false) => {
+      const validStyle = validStyles.has(style) ? style : 'frame';
+      demo.dataset.style = validStyle;
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.blobStyle === validStyle)));
+      if (updateUrl && window.history?.replaceState) {
+        const url = new URL(window.location.href);
+        if (validStyle === 'frame') url.searchParams.delete('blobEffect');
+        else url.searchParams.set('blobEffect', validStyle);
+        window.history.replaceState(null, '', url.toString());
+      }
+    };
+    controls.hidden = false;
+    buttons.forEach((button) => button.addEventListener('click', () => showStyle(button.dataset.blobStyle || 'frame', true)));
+    showStyle(new URLSearchParams(window.location.search).get('blobEffect') || 'frame');
+    demo.querySelector<HTMLInputElement>('[data-blob-connections]')?.addEventListener('change', (event) => {
+      const input = event.currentTarget as HTMLInputElement;
+      demo.classList.toggle('connections-off', !input.checked);
+    });
+  });
+
+  const sectionLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.blob-nav a'));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        sectionLinks.forEach((link) => {
+          if (link.hash === `#${entry.target.id}`) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    sectionLinks.forEach((link) => {
+      const target = document.querySelector<HTMLElement>(link.hash);
+      if (target) observer.observe(target);
+    });
+  }
+
+  const motionTargets = Array.from(document.querySelectorAll<HTMLElement>('.motion-shutter, .evolution li, .metric-strip > div, .agent-step'));
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const motionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        motionObserver.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+    motionTargets.forEach((target) => {
+      target.classList.add('motion-ready');
+      motionObserver.observe(target);
+    });
+  }
+</script>
+
+<style>
+  .blob-explainer { grid-column: 1 / -1; display: grid; gap: clamp(64px, 8vw, 112px); min-width: 0; }
+  .blob-explainer :where(p, h2, h3, figure, dl, dd, ol) { margin: 0; }
+  .blob-explainer section { display: grid; gap: 28px; min-width: 0; scroll-margin-top: 168px; }
+  .blob-explainer h2 { max-width: 27ch; }
+  .blob-explainer h3 { font-size: var(--type-lead); font-weight: 600; letter-spacing: -0.025em; line-height: 1.25; }
+  .blob-explainer p { max-width: 65ch; }
+  .blob-explainer a:not(.btn) { text-decoration-color: var(--signal); }
+  .blob-explainer a:hover { color: var(--signal); }
+  .blob-explainer figure { min-width: 0; }
+  .blob-explainer figcaption { padding: 16px 0 0; border: 0; background: transparent; max-width: 90ch; font-size: var(--type-small); color: var(--mute); }
+  .result-section > p { margin-top: -8px; }
+  .comparison-player { min-width: 0; }
+  .video-view-switch { display: none; width: 100%; max-width: 760px; margin-inline: auto; padding: 8px; background: var(--bg-sunken); }
+  .video-view-switch[hidden] { display: none; }
+  .video-view-switch button, .comparison-controls button, .style-buttons button { min-height: 44px; border: 0; border-radius: 0; background: var(--bg-surface); color: var(--ink); font: inherit; font-size: var(--type-small); cursor: pointer; transition: transform 140ms var(--ease-out), background-color var(--dur-fast) ease, color var(--dur-fast) ease; }
+  .video-view-switch button:active, .comparison-controls button:active, .style-buttons button:active { transform: scale(0.97); }
+  .video-view-switch button[aria-pressed='true'], .style-buttons button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+  .video-pair { width: 100%; max-width: 760px; margin-inline: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 12px; background: var(--bg-sunken); }
+  .comparison-pane { min-width: 0; background: var(--bg-surface); }
+  .comparison-pane h3 { padding: 14px 16px; font-size: var(--type-body); }
+  .comparison-pane video { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; background: #111; cursor: pointer; }
+  .comparison-controls { width: 100%; max-width: 760px; margin-inline: auto; display: grid; grid-template-columns: auto minmax(120px, 1fr) auto auto; align-items: center; gap: 12px; padding: 12px; background: var(--bg-sunken); }
+  .comparison-controls[hidden] { display: none; }
+  .comparison-controls button { padding: 10px 16px; background: var(--ink); color: var(--paper); }
+  .comparison-controls button:hover { background: var(--signal); }
+  .comparison-scrubber { display: flex; align-items: center; min-height: 44px; }
+  .comparison-scrubber input { width: 100%; accent-color: var(--signal); cursor: pointer; }
+  .comparison-controls output { min-width: 84px; font-size: var(--type-small); color: var(--mute); font-variant-numeric: tabular-nums; }
+  .comparison-pane video:focus-visible, .blob-explainer button:focus-visible, .blob-explainer summary:focus-visible, .blob-explainer a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+  .frame-sequence { display: grid; grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr) 48px minmax(0, 1fr); gap: 12px; padding: 12px; background: var(--bg-surface); }
+  .frame-view { display: grid; gap: 12px; min-width: 0; padding: clamp(16px, 2.5vw, 28px); background: var(--bg-sunken); }
+  .frame-view h3 { font-size: var(--type-body); }
+  .frame-view p { font-size: var(--type-small); color: var(--mute); }
+  .frame-view svg { display: block; width: 100%; height: auto; }
+  .frame-ground { fill: var(--bg-sunken); }
+  .source-region { fill: #fff; stroke: #a4a4a9; stroke-width: 1.5; }
+  .mask-ground { fill: #202024; }
+  .mask-region { fill: #fff; }
+  .mask-center { stroke: var(--signal); stroke-width: 2; }
+  .sequence-verb { align-self: center; text-align: center; color: var(--mute); font-size: var(--type-small); }
+  .sequence-verb span { display: block; font-size: var(--type-lead); }
+  .overlay-region :is(rect, path) { stroke: var(--signal); stroke-width: 1.5; fill: none; }
+  .overlay-region .overlay-center { fill: var(--signal); stroke: none; }
+  .overlay-connections { fill: none; stroke: var(--signal); stroke-width: 1; stroke-dasharray: 3 4; }
+  .overlay-frame, .overlay-cross, .overlay-contour, .overlay-connections { transition: opacity var(--dur-normal) var(--ease-out); }
+  .overlay-cross, .overlay-contour { opacity: 0; }
+  [data-style='cross'] .overlay-frame, [data-style='contour'] .overlay-frame { opacity: 0; }
+  [data-style='cross'] .overlay-cross, [data-style='contour'] .overlay-contour { opacity: 1; }
+  .connections-off .overlay-connections { opacity: 0; }
+  .demo-controls { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding-top: 16px; flex-wrap: wrap; }
+  .demo-controls[hidden] { display: none; }
+  .style-buttons { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px; background: var(--bg-sunken); }
+  .style-buttons button { padding: 10px 20px; }
+  .style-buttons button:hover, .video-view-switch button:hover { color: var(--signal); }
+  .connection-control { display: flex; gap: 8px; align-items: center; min-height: 44px; font-size: var(--type-small); cursor: pointer; }
+  .connection-control input { accent-color: var(--signal); width: 18px; height: 18px; margin: 0; }
+  .blob-nav { display: flex; flex-wrap: wrap; gap: 4px 24px; padding-block: 10px; margin-block: -40px -32px; position: sticky; top: 64px; z-index: 10; background: var(--bg-canvas); font-size: var(--type-small); }
+  .blob-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--mute); text-decoration: none; }
+  .blob-nav a:hover, .blob-nav a[aria-current='location'] { color: var(--signal); text-decoration: underline; text-underline-offset: 6px; }
+  .interface-figure { background: var(--bg-surface); }
+  .interface-figure :global(img), .cover-figure :global(img) { display: block; width: 100%; height: auto; }
+  .interface-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .interface-facts > div { padding: clamp(20px, 3vw, 32px); background: var(--bg-surface); }
+  .interface-facts > div:nth-child(2) { background: var(--bg-sunken); }
+  .interface-facts h3, .export-notes h3 { margin-bottom: 12px; }
+  .story-split { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 6vw, 88px); align-items: start; }
+  .story-copy { display: grid; gap: 20px; }
+  .evolution { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; }
+  .evolution li { padding: clamp(20px, 3vw, 32px); background: var(--bg-surface); }
+  .evolution li:nth-child(2) { background: var(--bg-sunken); }
+  .evolution h3 { margin-bottom: 16px; }
+  .detector-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .detector-case { padding: clamp(16px, 2vw, 28px); background: var(--bg-surface); }
+  .detector-case:nth-child(even) { background: var(--bg-sunken); }
+  .detector-case p { font-size: var(--type-body); }
+  .detector-drawing { display: block; width: 100%; height: 132px; margin-block: 16px; }
+  .detector-reference { fill: var(--bg-sunken); stroke: #a4a4a9; stroke-width: 1.5; }
+  .detector-target { fill: none; stroke: var(--signal); stroke-width: 2; }
+  .motion .detector-reference { stroke-dasharray: 4 4; fill: none; }
+  .motion-direction, .sample-link { fill: none; stroke: var(--signal); stroke-width: 1.5; }
+  .hsv .detector-target, .area .detector-target { fill: var(--signal-subtle); }
+  .color-sample { fill: var(--signal); }
+  .area-divider { stroke: var(--signal); stroke-width: 1.5; stroke-dasharray: 2 4; }
+  .effects-intro { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(28px, 6vw, 88px); align-items: start; }
+  .effects-intro h3 { max-width: 22ch; }
+  .effect-index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .effect-index > div { padding: clamp(24px, 4vw, 40px); background: var(--bg-surface); }
+  .effect-index > div:last-child { background: var(--bg-sunken); }
+  .effect-heading { display: flex; align-items: baseline; gap: 16px; margin-bottom: 20px; }
+  .effect-heading strong { color: var(--signal); font-size: var(--type-heading); font-weight: 600; letter-spacing: -0.04em; }
+  .boundary-note { padding: 20px 24px; background: var(--signal-subtle); color: var(--ink); }
+  .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .metric-strip > div { padding: clamp(20px, 3vw, 32px); background: var(--bg-surface); }
+  .metric-strip > div:first-child { background: var(--signal-subtle); }
+  .metric-strip dt { font-size: var(--type-heading); font-weight: 650; letter-spacing: -0.04em; color: var(--signal); }
+  .metric-strip dd { margin-top: 12px; font-size: var(--type-body); }
+  .export-flow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 12px; padding: 12px; background: var(--bg-surface); }
+  .export-flow > div { padding: clamp(20px, 3vw, 28px); background: var(--bg-sunken); }
+  .export-flow > div:last-of-type { background: var(--signal-subtle); }
+  .export-flow h3 { margin-bottom: 12px; }
+  .export-verb { align-self: center; font-size: var(--type-small); color: var(--mute); text-align: center; }
+  .export-verb span { display: block; font-size: var(--type-lead); color: var(--signal); }
+  .export-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 5vw, 80px); }
+  .agent-copy { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 20px clamp(28px, 6vw, 88px); align-items: start; }
+  .agent-copy h2 { grid-row: 1 / 3; }
+  .agent-figure { background: var(--bg-surface); padding: 12px; }
+  .agent-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .agent-step { position: relative; min-width: 0; padding: clamp(20px, 3vw, 28px); background: var(--bg-sunken); }
+  .agent-step:nth-child(2), .agent-step:nth-child(4) { background: var(--signal-subtle); }
+  .agent-step p { margin-top: 14px; }
+  .agent-step > span { position: absolute; right: -18px; top: 50%; z-index: 2; color: var(--signal); font-size: var(--type-lead); transform: translateY(-50%); }
+  .stack-spec { display: grid; gap: 8px; }
+  .stack-spec > div { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: 24px; padding: 20px 24px; background: var(--bg-surface); }
+  .stack-spec > div:nth-child(even) { background: var(--bg-sunken); }
+  .stack-spec dt { font-weight: 600; }
+  .stack-spec dd { max-width: 60ch; }
+  .implementation-notes { background: var(--bg-surface); padding: 12px 24px; }
+  .implementation-notes summary { cursor: pointer; font-size: var(--type-small); padding-block: 20px; }
+  .implementation-notes > div { padding-bottom: 24px; max-width: 88ch; }
+  .implementation-notes > div > p { margin-bottom: 20px; }
+  .implementation-notes dl { display: grid; gap: 8px; }
+  .implementation-notes dl > div { display: grid; grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.3fr); gap: 24px; padding: 16px; background: var(--bg-sunken); }
+  .implementation-notes dt { font-size: var(--type-small); overflow-wrap: anywhere; }
+  .implementation-notes code { font-size: var(--type-small); }
+  .project-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .source-note { color: var(--mute); font-size: var(--type-small); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .motion-ready.motion-shutter { overflow: clip; clip-path: inset(0 0 100% 0); transition: clip-path 1100ms cubic-bezier(0.76, 0, 0.24, 1); }
+    .motion-ready.motion-shutter :global(img) { transform: scale(1.06); transition: transform 1200ms cubic-bezier(0.33, 1, 0.68, 1); }
+    .motion-ready.motion-shutter.is-in { clip-path: inset(0); }
+    .motion-ready.motion-shutter.is-in :global(img) { transform: none; }
+    .motion-ready:is(.evolution li, .metric-strip > div) { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-out); transition-delay: var(--motion-delay, 0ms); }
+    .motion-ready.agent-step { opacity: 0; transform: translateX(-20px); transition: opacity 700ms var(--ease-out), transform 800ms var(--ease-out); transition-delay: var(--motion-delay, 0ms); }
+    .motion-ready:is(.evolution li, .metric-strip > div, .agent-step).is-in { opacity: 1; transform: none; }
+    .evolution li:nth-child(2), .metric-strip > div:nth-child(2), .agent-step:nth-child(2) { --motion-delay: 70ms; }
+    .evolution li:nth-child(3), .metric-strip > div:nth-child(3), .agent-step:nth-child(3) { --motion-delay: 140ms; }
+    .metric-strip > div:nth-child(4), .agent-step:nth-child(4) { --motion-delay: 210ms; }
+  }
+
+  @media (max-width: 900px) {
+    .frame-sequence { grid-template-columns: minmax(0, 1fr); }
+    .frame-view { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: center; gap: 8px 16px; }
+    .frame-view svg { grid-column: 2; grid-row: 1 / 3; }
+    .frame-view p { align-self: start; }
+    .frame-view h3 { align-self: end; }
+    .sequence-verb { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 16px; }
+    .sequence-verb span { transform: rotate(90deg); }
+    .interface-facts { grid-template-columns: minmax(0, 1fr); }
+    .interface-facts > div:nth-child(3) { background: var(--bg-surface); }
+    .story-split { grid-template-columns: minmax(0, 1fr); }
+    .story-copy { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+    .detector-grid, .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .agent-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .agent-step > span { display: none; }
+  }
+
+  @media (max-width: 620px) {
+    .blob-explainer { gap: 64px; }
+    .blob-explainer section { gap: 24px; scroll-margin-top: 208px; }
+    .blob-explainer h2 { max-width: none; }
+    .blob-nav { gap: 0 16px; margin-block: -16px 0; top: 104px; }
+    .video-view-switch { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .video-pair { grid-template-columns: minmax(0, 1fr); }
+    [data-mobile-view='source'] .comparison-pane[data-pane='result'], [data-mobile-view='result'] .comparison-pane[data-pane='source'] { display: none; }
+    .comparison-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .comparison-scrubber { grid-column: 1 / -1; grid-row: 2; }
+    .comparison-controls output { grid-column: 1 / -1; grid-row: 3; min-width: 0; }
+    .comparison-controls button { width: 100%; }
+    .comparison-pane h3 { padding: 12px; font-size: var(--type-small); }
+    .story-copy, .evolution, .effects-intro, .effect-index, .export-notes, .agent-copy, .agent-flow, .stack-spec > div, .implementation-notes dl > div { grid-template-columns: minmax(0, 1fr); }
+    .agent-copy h2 { grid-row: auto; }
+    .detector-grid, .metric-strip { grid-template-columns: minmax(0, 1fr); }
+    .export-flow { grid-template-columns: minmax(0, 1fr); }
+    .export-verb { display: flex; gap: 12px; align-items: center; justify-content: center; }
+    .export-verb span { transform: rotate(90deg); }
+    .style-buttons button { padding-inline: 16px; }
+    .implementation-notes { padding-inline: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .overlay-frame, .overlay-cross, .overlay-contour, .overlay-connections { transition: none; }
+  }
+</style>
