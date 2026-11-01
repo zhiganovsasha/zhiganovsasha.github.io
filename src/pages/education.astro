@@ -11,6 +11,7 @@ interface RegistryItem {
   linkText: string;
   url: string;
   lang?: string;
+  category: 'talks' | 'press' | 'research';
 }
 
 const registry: RegistryItem[] = [
@@ -21,7 +22,8 @@ const registry: RegistryItem[] = [
     format: 'Lecture',
     linkText: 'View Announcement',
     url: 'https://vk.com/wall-194343825_21154',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2025',
@@ -30,7 +32,8 @@ const registry: RegistryItem[] = [
     format: 'Global Press',
     linkText: 'Read Feature',
     url: 'https://www.reuters.com/lifestyle/russia-early-bird-ravers-flock-coffeehouses-2025-03-07',
-    lang: 'EN'
+    lang: 'EN',
+    category: 'press'
   },
 
   {
@@ -40,7 +43,8 @@ const registry: RegistryItem[] = [
     format: 'Workshop',
     linkText: 'View Masterclass',
     url: 'https://vk.com/wall-215494353_27775',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2024',
@@ -49,7 +53,8 @@ const registry: RegistryItem[] = [
     format: 'Keynote Talk',
     linkText: 'Watch Keynote',
     url: 'https://www.youtube.com/watch?v=zMkn6tobpPA',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2024',
@@ -58,7 +63,8 @@ const registry: RegistryItem[] = [
     format: 'Video Lecture',
     linkText: 'Watch Lecture',
     url: 'https://vkvideo.ru/video-190860512_456239300',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2024',
@@ -67,7 +73,8 @@ const registry: RegistryItem[] = [
     format: 'Keynote',
     linkText: 'Speaker Profile',
     url: 'https://g8.art/ru/account/37445',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2024',
@@ -76,7 +83,8 @@ const registry: RegistryItem[] = [
     format: 'Press Conference',
     linkText: 'Watch Broadcast',
     url: 'https://vk.com/video-210951176_456242076',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2024',
@@ -85,7 +93,8 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Story',
     url: 'https://smotrim.ru/video/2838968',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2024',
@@ -94,7 +103,8 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Segment',
     url: 'https://tvspb.ru/programs/stories/3363843',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2024',
@@ -103,7 +113,8 @@ const registry: RegistryItem[] = [
     format: 'Video Podcast',
     linkText: 'Watch Episode',
     url: 'https://youtu.be/SznWaPqp6JQ?si=qup22IrwRxVHR0qW',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2024',
@@ -112,7 +123,8 @@ const registry: RegistryItem[] = [
     format: 'Expert Column',
     linkText: 'Read Column',
     url: 'https://secrets.tbank.ru/blogi-kompanij/trendy-vizualnogo-oformleniya-meropriyatij/',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2024',
@@ -121,7 +133,8 @@ const registry: RegistryItem[] = [
     format: 'Book',
     linkText: 'Book Page',
     url: 'https://ridero.ru/books/formula_reiva/',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'research'
   },
   {
     year: '2024',
@@ -130,7 +143,8 @@ const registry: RegistryItem[] = [
     format: 'Talk',
     linkText: 'View Post',
     url: 'https://vk.com/wall-55848808_2764',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2024',
@@ -139,7 +153,8 @@ const registry: RegistryItem[] = [
     format: 'Public Talk',
     linkText: 'Read Coverage',
     url: 'https://www.sobaka.ru/smr/entertainment/weekend/171487',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'talks'
   },
   {
     year: '2023',
@@ -148,7 +163,8 @@ const registry: RegistryItem[] = [
     format: 'Research Paper',
     linkText: 'Read Paper',
     url: 'https://www.elibrary.ru/item.asp?id=74498708&pff=1',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'research'
   },
   {
     year: '2023',
@@ -157,7 +173,8 @@ const registry: RegistryItem[] = [
     format: 'Feature Interview',
     linkText: 'Read Longread',
     url: 'https://journal.tinkoff.ru/ai-generated-dance-video/',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -166,7 +183,8 @@ const registry: RegistryItem[] = [
     format: 'National Press',
     linkText: 'Read Story',
     url: 'https://plus.rbc.ru/pressrelease/6406ee1a7a8aa95e099fd8f0',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -175,7 +193,8 @@ const registry: RegistryItem[] = [
     format: 'Video Interview',
     linkText: 'Watch Interview',
     url: 'https://www.youtube.com/watch?v=puZO21Stxqk',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -184,7 +203,8 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Story',
     url: 'https://rutube.ru/video/b28c791cf2ee5eb236fd73c6f9eae18d/?r=wd&t=679',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -193,7 +213,8 @@ const registry: RegistryItem[] = [
     format: 'Print Press',
     linkText: 'View Archive (PDF)',
     url: 'https://files.vm.ru/pdf/2023.07/original/64adb17e82682c1a5fe38d82.pdf',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -202,7 +223,8 @@ const registry: RegistryItem[] = [
     format: 'Radio Broadcast',
     linkText: 'Listen Story',
     url: 'https://vk.com/wall-79377876_20083',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   },
   {
     year: '2023',
@@ -211,9 +233,17 @@ const registry: RegistryItem[] = [
     format: 'Review',
     linkText: 'Read Critique',
     url: 'https://t.me/cinedance/428',
-    lang: 'RU'
+    lang: 'RU',
+    category: 'press'
   }
 ];
+
+const counts = {
+  all: registry.length,
+  talks: registry.filter((r) => r.category === 'talks').length,
+  press: registry.filter((r) => r.category === 'press').length,
+  research: registry.filter((r) => r.category === 'research').length,
+};
 ---
 
 <Base
@@ -254,6 +284,9 @@ const registry: RegistryItem[] = [
         <div class="hero-actions">
           <a class="btn btn-primary" href="#programs">
             Explore Programs <span aria-hidden="true">↓</span>
+          </a>
+          <a class="btn btn-ghost" href="#registry">
+            Track Record ({counts.all}) <span aria-hidden="true">↓</span>
           </a>
           <a class="btn btn-ghost" href="#contact">
             Book a Talk or Workshop <span aria-hidden="true">→</span>
@@ -314,7 +347,11 @@ const registry: RegistryItem[] = [
           </div>
 
           <div class="card-actions">
-            <a class="btn btn-card" href="#contact">
+            <a
+              class="btn btn-card"
+              href="#contact"
+              aria-label="Book Autonomous AI Agents in Production program"
+            >
               Book This Program <span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -384,7 +421,11 @@ const registry: RegistryItem[] = [
           </div>
 
           <div class="card-actions">
-            <a class="btn btn-card" href="#contact">
+            <a
+              class="btn btn-card"
+              href="#contact"
+              aria-label="Book Generative Video in Commercial Production program"
+            >
               Book This Program <span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -402,6 +443,28 @@ const registry: RegistryItem[] = [
         </p>
       </div>
 
+      <div class="registry-filter-bar" role="toolbar" aria-label="Filter track record by category">
+        <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">
+          <span>All</span>
+          <span class="filter-count">({counts.all})</span>
+        </button>
+        <button type="button" class="filter-btn" data-filter="talks" aria-pressed="false">
+          <span>Keynotes &amp; Talks</span>
+          <span class="filter-count">({counts.talks})</span>
+        </button>
+        <button type="button" class="filter-btn" data-filter="press" aria-pressed="false">
+          <span>Media &amp; Press</span>
+          <span class="filter-count">({counts.press})</span>
+        </button>
+        <button type="button" class="filter-btn" data-filter="research" aria-pressed="false">
+          <span>Research &amp; Book</span>
+          <span class="filter-count">({counts.research})</span>
+        </button>
+        <span class="sr-only" aria-live="polite" id="filter-status">
+          Showing all {counts.all} appearances
+        </span>
+      </div>
+
       <div class="table-wrap">
         <table class="registry-table" aria-label="Chronological registry of speaking appearances, lectures, and media features">
           <thead>
@@ -415,7 +478,7 @@ const registry: RegistryItem[] = [
           </thead>
           <tbody>
             {registry.map((item) => (
-              <tr class="registry-row">
+              <tr class="registry-row" data-category={item.category}>
                 <td class="td-year">
                   <span class="year-badge">{item.year}</span>
                 </td>
@@ -467,6 +530,7 @@ const registry: RegistryItem[] = [
             href="https://t.me/zhiganovsasha"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Contact Alexander directly on Telegram (opens in new tab)"
           >
             Direct on Telegram <span aria-hidden="true">↗</span>
           </a>
@@ -474,6 +538,51 @@ const registry: RegistryItem[] = [
       </div>
     </div>
   </section>
+  <script>
+    function initRegistryFilter() {
+      const filterButtons = document.querySelectorAll<HTMLButtonElement>(
+        '.registry-filter-bar .filter-btn'
+      );
+      const rows = document.querySelectorAll<HTMLTableRowElement>('.registry-row');
+      const status = document.getElementById('filter-status');
+
+      if (!filterButtons.length || !rows.length) return;
+
+      filterButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.getAttribute('data-filter') || 'all';
+
+          filterButtons.forEach((b) => {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
+
+          let visibleCount = 0;
+          rows.forEach((row) => {
+            const category = row.getAttribute('data-category');
+            if (filter === 'all' || category === filter) {
+              row.removeAttribute('hidden');
+              visibleCount++;
+            } else {
+              row.setAttribute('hidden', '');
+            }
+          });
+
+          if (status) {
+            status.textContent = `Showing ${visibleCount} appearances.`;
+          }
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initRegistryFilter);
+    } else {
+      initRegistryFilter();
+    }
+  </script>
 </Base>
 
 <style>
@@ -549,7 +658,7 @@ const registry: RegistryItem[] = [
   .hero-stage-card {
     margin: 0;
     background: var(--bg-sunken);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     overflow: hidden;
     position: relative;
   }
@@ -561,7 +670,7 @@ const registry: RegistryItem[] = [
     object-fit: cover;
     display: block;
     filter: grayscale(10%);
-    transition: filter var(--dur-med) var(--ease-out);
+    transition: filter var(--dur-normal) var(--ease-out);
   }
 
   .hero-stage-card:hover img {
@@ -610,7 +719,7 @@ const registry: RegistryItem[] = [
 
   .program-card {
     background: var(--bg-surface);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     padding: clamp(24px, 2.5vw, 36px);
     display: flex;
     flex-direction: column;
@@ -635,6 +744,7 @@ const registry: RegistryItem[] = [
     margin: 0 0 12px;
     font-weight: 600;
     color: var(--ink);
+    text-wrap: balance;
   }
 
   .card-pitch {
@@ -642,11 +752,12 @@ const registry: RegistryItem[] = [
     color: var(--mute);
     line-height: 1.5;
     margin: 0;
+    text-wrap: pretty;
   }
 
   .card-meta {
     background: var(--bg-sunken);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     padding: 16px;
     margin-bottom: 24px;
     display: flex;
@@ -723,7 +834,7 @@ const registry: RegistryItem[] = [
     box-sizing: border-box;
     background: var(--bg-canvas);
     color: var(--ink);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     text-decoration: none;
     font-size: var(--type-small);
     font-weight: 550;
@@ -739,6 +850,56 @@ const registry: RegistryItem[] = [
     color: #ffffff;
   }
 
+    /* ---------- REGISTRY FILTER BAR ---------- */
+  .registry-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .filter-btn {
+    appearance: none;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: var(--type-small);
+    font-weight: 550;
+    line-height: 1.4;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .filter-btn:hover {
+    background: var(--bg-canvas);
+    border-color: var(--rule-strong);
+  }
+
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #ffffff;
+  }
+
+  .filter-count {
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .filter-btn.active .filter-count {
+    opacity: 0.85;
+  }
+
   /* ---------- REGISTRY TABLE ---------- */
   .registry-section {
     padding-top: clamp(64px, 8vw, 112px);
@@ -747,7 +908,7 @@ const registry: RegistryItem[] = [
 
   .table-wrap {
     overflow-x: auto;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     background: var(--bg-surface);
     -webkit-overflow-scrolling: touch;
   }
@@ -767,12 +928,13 @@ const registry: RegistryItem[] = [
     font-size: var(--type-small);
     font-weight: 600;
     color: var(--ink);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--rule);
     white-space: nowrap;
   }
 
   .th-year {
-    width: 80px;
+    width: 84px;
+    font-variant-numeric: tabular-nums;
   }
 
   .th-platform {
@@ -790,7 +952,7 @@ const registry: RegistryItem[] = [
 
   .registry-table td {
     padding: 16px 18px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--rule);
     vertical-align: top;
     line-height: 1.45;
   }
@@ -807,6 +969,7 @@ const registry: RegistryItem[] = [
     font-family: inherit;
     font-weight: 600;
     color: var(--mute);
+    font-variant-numeric: tabular-nums;
   }
 
   .platform-name {
@@ -834,12 +997,14 @@ const registry: RegistryItem[] = [
   .lang-tag {
     display: inline-block;
     margin-left: 6px;
-    padding: 2px 5px;
+    padding: 2px 6px;
     background: var(--bg-sunken);
-    border: 1px solid var(--border-color);
-    font-size: 11px;
-    color: var(--faint);
+    border: 1px solid var(--rule-strong);
+    font-size: var(--type-small);
+    font-weight: 550;
+    color: var(--ink);
     vertical-align: middle;
+    line-height: 1.25;
   }
 
   .td-source {
@@ -881,7 +1046,7 @@ const registry: RegistryItem[] = [
 
   .cta-box {
     background: var(--bg-sunken);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--rule);
     padding: clamp(32px, 5vw, 64px);
     display: flex;
     flex-direction: column;
@@ -894,6 +1059,7 @@ const registry: RegistryItem[] = [
     margin: 0 0 16px;
     letter-spacing: -0.02em;
     color: var(--ink);
+    text-wrap: balance;
   }
 
   .cta-lead {
@@ -902,6 +1068,7 @@ const registry: RegistryItem[] = [
     line-height: 1.45;
     margin: 0;
     max-width: 60ch;
+    text-wrap: pretty;
   }
 
   .cta-actions {
@@ -948,9 +1115,16 @@ const registry: RegistryItem[] = [
 
     .registry-row {
       background: var(--bg-surface);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--rule);
       padding: 18px 20px;
       margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .registry-row:last-child {
+      margin-bottom: 0;
     }
 
     .registry-table td {
@@ -959,37 +1133,41 @@ const registry: RegistryItem[] = [
     }
 
     .td-year {
-      display: inline-block;
-      width: auto;
-      margin-right: 8px;
-      margin-bottom: 6px;
+      order: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .td-platform {
-      display: inline-block;
-      width: auto;
-      margin-bottom: 6px;
-    }
-
-    .td-format {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-      margin-bottom: 10px;
+      order: 2;
     }
 
     .td-topic {
-      margin-bottom: 14px;
+      order: 3;
     }
 
-    .topic-text {
-      max-width: 100%;
+    .td-format {
+      order: 4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-top: 4px;
     }
 
     .td-source {
+      order: 5;
       text-align: left;
-      padding-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--rule);
+      margin-top: 4px;
+    }
+
+    .source-link {
+      padding: 6px 0;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
     }
   }
 
