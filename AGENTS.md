@@ -136,7 +136,7 @@ agent working in this repository.
     2. `--type-body`: `clamp(17px, 1.02rem + 0.15vw, 18px)` — running paragraphs, bullet items, descriptions. (Intermediate 15px/16px body copy is prohibited).
     3. `--type-lead`: `clamp(20px, 1.1rem + 0.55vw, 24px)` — lead intros, pull statements, lede paragraphs, card titles (h3), dialog titles.
     4. `--type-heading`: `clamp(32px, 3.6vw, 48px)` — section headings (h2), catalog direction names, metric values.
-    5. `--type-display`: `clamp(52px, 7.4vw, 108px)` — hero titles and case study titles (h1 / `.display`).
+    5. `--type-display`: `clamp(36px, 7.4vw, 108px)` — hero titles and case study titles (h1 / `.display`).
   - Rule against arbitrary font sizes: Never introduce intermediate or hardcoded font sizes (e.g. 12px, 14px, 15px, 16px, 20px, 24px, 28px, 36px) in page styles or components. Always reference the canonical CSS variables.
 
 ### Prohibited: Eyebrows, kickers, and overlines

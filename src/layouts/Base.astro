@@ -7,17 +7,19 @@ interface Props {
   title: string;
   description?: string;
   current?: 'home' | 'development' | 'education' | 'contact' | 'blog';
+  lang?: string;
 }
 
 const {
   title,
   description = 'Alexander Zhiganov, Creative Technologist. The producer among artists. The artist among producers.',
   current,
+  lang = 'en',
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
