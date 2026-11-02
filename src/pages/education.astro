@@ -10,7 +10,7 @@ interface RegistryItem {
   format: string;
   linkText: string;
   url: string;
-  lang?: string;
+  language: 'Russian' | 'English';
   category: 'talks' | 'press' | 'research';
 }
 
@@ -22,7 +22,7 @@ const registry: RegistryItem[] = [
     format: 'Lecture',
     linkText: 'View Announcement',
     url: 'https://vk.com/wall-194343825_21154',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -32,7 +32,7 @@ const registry: RegistryItem[] = [
     format: 'Global Press',
     linkText: 'Read Feature',
     url: 'https://www.reuters.com/lifestyle/russia-early-bird-ravers-flock-coffeehouses-2025-03-07',
-    lang: 'EN',
+    language: 'English',
     category: 'press'
   },
 
@@ -43,7 +43,7 @@ const registry: RegistryItem[] = [
     format: 'Workshop',
     linkText: 'View Masterclass',
     url: 'https://vk.com/wall-215494353_27775',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -53,7 +53,7 @@ const registry: RegistryItem[] = [
     format: 'Keynote Talk',
     linkText: 'Watch Keynote',
     url: 'https://www.youtube.com/watch?v=zMkn6tobpPA',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -63,7 +63,7 @@ const registry: RegistryItem[] = [
     format: 'Video Lecture',
     linkText: 'Watch Lecture',
     url: 'https://vkvideo.ru/video-190860512_456239300',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -73,7 +73,7 @@ const registry: RegistryItem[] = [
     format: 'Keynote',
     linkText: 'Speaker Profile',
     url: 'https://g8.art/ru/account/37445',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -83,7 +83,7 @@ const registry: RegistryItem[] = [
     format: 'Press Conference',
     linkText: 'Watch Broadcast',
     url: 'https://vk.com/video-210951176_456242076',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -93,7 +93,7 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Story',
     url: 'https://smotrim.ru/video/2838968',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -103,7 +103,7 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Segment',
     url: 'https://tvspb.ru/programs/stories/3363843',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -113,7 +113,7 @@ const registry: RegistryItem[] = [
     format: 'Video Podcast',
     linkText: 'Watch Episode',
     url: 'https://youtu.be/SznWaPqp6JQ?si=qup22IrwRxVHR0qW',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -123,7 +123,7 @@ const registry: RegistryItem[] = [
     format: 'Expert Column',
     linkText: 'Read Column',
     url: 'https://secrets.tbank.ru/blogi-kompanij/trendy-vizualnogo-oformleniya-meropriyatij/',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -133,7 +133,7 @@ const registry: RegistryItem[] = [
     format: 'Book',
     linkText: 'Book Page',
     url: 'https://ridero.ru/books/formula_reiva/',
-    lang: 'RU',
+    language: 'Russian',
     category: 'research'
   },
   {
@@ -143,7 +143,7 @@ const registry: RegistryItem[] = [
     format: 'Talk',
     linkText: 'View Post',
     url: 'https://vk.com/wall-55848808_2764',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -153,7 +153,7 @@ const registry: RegistryItem[] = [
     format: 'Public Talk',
     linkText: 'Read Coverage',
     url: 'https://www.sobaka.ru/smr/entertainment/weekend/171487',
-    lang: 'RU',
+    language: 'Russian',
     category: 'talks'
   },
   {
@@ -163,7 +163,7 @@ const registry: RegistryItem[] = [
     format: 'Research Paper',
     linkText: 'Read Paper',
     url: 'https://www.elibrary.ru/item.asp?id=74498708&pff=1',
-    lang: 'RU',
+    language: 'Russian',
     category: 'research'
   },
   {
@@ -173,7 +173,7 @@ const registry: RegistryItem[] = [
     format: 'Feature Interview',
     linkText: 'Read Longread',
     url: 'https://journal.tinkoff.ru/ai-generated-dance-video/',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -183,7 +183,7 @@ const registry: RegistryItem[] = [
     format: 'National Press',
     linkText: 'Read Story',
     url: 'https://plus.rbc.ru/pressrelease/6406ee1a7a8aa95e099fd8f0',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -193,7 +193,7 @@ const registry: RegistryItem[] = [
     format: 'Video Interview',
     linkText: 'Watch Interview',
     url: 'https://www.youtube.com/watch?v=puZO21Stxqk',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -203,7 +203,7 @@ const registry: RegistryItem[] = [
     format: 'TV Broadcast',
     linkText: 'Watch Story',
     url: 'https://rutube.ru/video/b28c791cf2ee5eb236fd73c6f9eae18d/?r=wd&t=679',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -213,7 +213,7 @@ const registry: RegistryItem[] = [
     format: 'Print Press',
     linkText: 'View Archive (PDF)',
     url: 'https://files.vm.ru/pdf/2023.07/original/64adb17e82682c1a5fe38d82.pdf',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -223,7 +223,7 @@ const registry: RegistryItem[] = [
     format: 'Radio Broadcast',
     linkText: 'Listen Story',
     url: 'https://vk.com/wall-79377876_20083',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   },
   {
@@ -233,7 +233,7 @@ const registry: RegistryItem[] = [
     format: 'Review',
     linkText: 'Read Critique',
     url: 'https://t.me/cinedance/428',
-    lang: 'RU',
+    language: 'Russian',
     category: 'press'
   }
 ];
@@ -449,6 +449,7 @@ const counts = {
               <th scope="col" class="th-topic">Topic &amp; Narrative Context</th>
               <th scope="col" class="th-format">Format</th>
               <th scope="col" class="th-source">Source</th>
+              <th scope="col" class="th-language">Language</th>
             </tr>
           </thead>
           <tbody>
@@ -465,7 +466,6 @@ const counts = {
                 </td>
                 <td class="td-format">
                   <span class="format-badge">{item.format}</span>
-                  {item.lang && <span class="lang-tag" aria-label={`Language: ${item.lang}`}>{item.lang}</span>}
                 </td>
                 <td class="td-source">
                   <a
@@ -478,6 +478,9 @@ const counts = {
                     <span>{item.linkText}</span>
                     <span class="arrow" aria-hidden="true">↗</span>
                   </a>
+                </td>
+                <td class="td-language">
+                  <span class="language-text">{item.language}</span>
                 </td>
               </tr>
             ))}
@@ -855,7 +858,7 @@ const counts = {
     text-align: left;
     font-size: var(--type-small);
     font-family: inherit;
-    min-width: 780px;
+    min-width: 860px;
   }
 
   .registry-table th {
@@ -878,12 +881,15 @@ const counts = {
   }
 
   .th-format {
-    width: 160px;
+    width: 140px;
   }
 
   .th-source {
-    width: 140px;
-    text-align: right;
+    width: 170px;
+  }
+
+  .th-language {
+    width: 110px;
   }
 
   .registry-table td {
@@ -930,21 +936,8 @@ const counts = {
     font-weight: 500;
   }
 
-  .lang-tag {
-    display: inline-block;
-    margin-left: 6px;
-    padding: 2px 6px;
-    background: var(--bg-sunken);
-    border: 1px solid var(--rule-strong);
-    font-size: var(--type-small);
-    font-weight: 550;
-    color: var(--ink);
-    vertical-align: middle;
-    line-height: 1.25;
-  }
-
   .td-source {
-    text-align: right;
+    white-space: nowrap;
   }
 
   .source-link {
@@ -956,8 +949,19 @@ const counts = {
     font-weight: 550;
     white-space: nowrap;
     padding: 4px 6px;
+    margin-left: -6px;
     box-sizing: border-box;
     transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .td-language {
+    white-space: nowrap;
+  }
+
+  .language-text {
+    display: inline-block;
+    color: var(--mute);
+    font-weight: 500;
   }
 
   .source-link:hover {
@@ -1122,8 +1126,12 @@ const counts = {
       padding-top: 4px;
     }
 
-    .td-source {
+    .td-language {
       order: 5;
+    }
+
+    .td-source {
+      order: 6;
       text-align: left;
       padding-top: 8px;
       border-top: 1px solid var(--rule);
@@ -1132,6 +1140,7 @@ const counts = {
 
     .source-link {
       padding: 6px 0;
+      margin-left: 0;
       min-height: 44px;
       display: inline-flex;
       align-items: center;
