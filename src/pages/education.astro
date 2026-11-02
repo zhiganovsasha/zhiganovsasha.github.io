@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import stagePhoto from '../assets/speaking-stage-microrave.webp';
+import stagePhoto from '../assets/speaking-stage-microrave.png';
 
 interface RegistryItem {
   year: string;
@@ -256,8 +256,9 @@ const counts = {
       <Image
         src={stagePhoto}
         alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
-        widths={[600, 1000, 1600, 1920]}
-        sizes="(max-width: 1100px) 100vw, 50vw"
+        widths={[600, 1000, 1600, 2415]}
+        sizes="(max-width: 700px) 500px, (max-width: 1100px) 100vw, 1280px"
+        quality={95}
         loading="eager"
         fetchpriority="high"
       />
