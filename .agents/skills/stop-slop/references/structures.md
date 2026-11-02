@@ -132,3 +132,14 @@ Wh- openers become a crutch. "What makes this hard is..." becomes "The constrain
 |---------|---------|
 | Lazy extremes (every, always, never, everyone, everybody, nobody) | False authority. Use specifics instead of sweeping claims. |
 | All adverbs (-ly words, "really," "just," "literally," "genuinely," "honestly," "simply," "actually") | Empty emphasis. See phrases.md for full list. |
+
+## Capitalization After Colons
+
+Capitalizing the first word after a colon in inline labels, key-value features, or running explanations is a common AI pattern (bleeding from synthetic title casing or LLM list schemas).
+
+| Pattern | Problem |
+|---------|---------|
+| "Отличительные черты: Наличие..." | AI capitalization marker |
+| "Features: Powerful..." (when not an independent sentence) | Formulaic label syntax |
+
+**Instead:** Use lowercase for common nouns and continuations: "Отличительные черты: наличие...". Capitalize only proper nouns, brands, or quoted direct speech.

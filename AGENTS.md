@@ -99,6 +99,11 @@ agent working in this repository.
 - Never add local filesystem paths from the owner's PC (for example `G:\...` or
   `E:\...`) to website articles, explainers, or published pages. Refer to files
   by repository-relative paths instead.
+- Do not capitalize the first word after a colon in running text, explanations,
+  parameter descriptions, or inline labels (for example, write «Отличительные
+  черты: наличие…», never «Отличительные черты: Наличие…»). Capitalizing after
+  a colon is an artificial AI writing marker. Use lowercase unless the word is a
+  proper noun, brand name, or quoted direct speech.
 
 ## Visual system and design rules
 
