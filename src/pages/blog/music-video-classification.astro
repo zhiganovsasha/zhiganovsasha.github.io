@@ -1,0 +1,542 @@
+---
+import Base from '../../layouts/Base.astro';
+
+interface Subgenre {
+  en: string;
+  ru: string;
+  features: string;
+  examples: { title: string; url: string }[];
+}
+
+const subgenres: Subgenre[] = [
+  {
+    en: 'Music Video',
+    ru: 'Музыкальный клип',
+    features: 'Наличие драматургии и/или выраженной сюжетности.',
+    examples: [
+      { title: 'Пример 1', url: 'https://youtu.be/aGSKrC7dGcY' },
+      { title: 'Пример 2', url: 'https://youtu.be/NOLDfHogato' },
+      { title: 'Пример 3', url: 'https://youtu.be/zXI2XZd2EtI' },
+    ],
+  },
+  {
+    en: 'Mood Video',
+    ru: 'Муд-видео',
+    features:
+      'Камерность, компактный бюджет и размах, частое присутствие синхронов с артистом. Акцент на визуальной эстетике и стилизации обложки, а не на сложной смысловой драматургии.',
+    examples: [
+      { title: 'Пример 1', url: 'https://youtu.be/MzI_CIYSsfQ' },
+      { title: 'Пример 2', url: 'https://youtu.be/nQO5OQbDffc' },
+      { title: 'Пример 3', url: 'https://youtu.be/JkNjJnXoq6c' },
+    ],
+  },
+  {
+    en: 'Visualizer',
+    ru: 'Визуализация',
+    features:
+      'Минимальные производственные ресурсы. Зачастую представляет собой зацикленную motion-графику или генеративный луп. Может сопровождаться текстом песни, но без караоке-акцента.',
+    examples: [
+      { title: 'Пример 1', url: 'https://youtu.be/XJenI8sMHFM' },
+      { title: 'Пример 2', url: 'https://youtu.be/DbCRT1oVgm0' },
+      { title: 'Пример 3', url: 'https://youtu.be/6hgMBZsWRfU' },
+    ],
+  },
+  {
+    en: 'Lyric Video',
+    ru: 'Лирик-видео',
+    features:
+      'Стилизованное караоке. Текст трека подаётся в виде кинетической типографики или графической анимации, помогая зрителю считывать лирику вместе с треком.',
+    examples: [
+      { title: 'Пример 1', url: 'https://youtu.be/8yGipyel-3I' },
+      { title: 'Пример 2', url: 'https://youtu.be/2APLh8_ExU0' },
+      { title: 'Пример 3', url: 'https://youtu.be/iamhDJS1zAw' },
+    ],
+  },
+  {
+    en: 'Live',
+    ru: 'Лайв и концертное видео',
+    features:
+      'Живой звук. Артист исполняет композицию в версии, отличающейся от студийного мастера (акустика, живой бэнд, фестивальный сет).',
+    examples: [
+      { title: 'Пример 1', url: 'https://youtu.be/UZ0erxHPk-A' },
+      { title: 'Пример 2', url: 'https://youtu.be/H7yjR55R1kQ' },
+      { title: 'Пример 3', url: 'https://youtu.be/jIIuzB11dsA' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Классификация музыкальных видео — Alexander Zhiganov"
+  description="Пять реальных поджанров музыкального видео для артистов и продюсеров: от сюжетных клипов до визуализаторов и лайвов."
+  current="blog"
+>
+  <article class="note-article">
+    <header class="note-hero">
+      <div class="wrap note-wrap">
+        <a class="back-link" href="/blog">
+          <span aria-hidden="true">←</span> К списку материалов
+        </a>
+
+        <h1 class="display note-headline">
+          Классификация музыкальных видео
+        </h1>
+
+        <div class="article-meta-row">
+          <div class="meta-pills">
+            <span class="meta-item author" translate="no">Александр Жиганов</span>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <span class="meta-item format">Заметка</span>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <time class="meta-item date" datetime="2026-11">Ноябрь 2026</time>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <span class="meta-item time">3&nbsp;минуты чтения</span>
+          </div>
+
+          <button
+            type="button"
+            class="copy-link-btn"
+            id="copy-link-btn"
+            aria-label="Скопировать ссылку на заметку"
+          >
+            <svg
+              class="copy-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <rect x="9" y="9" width="13" height="13"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-label" aria-live="polite">Скопировать ссылку</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap note-wrap note-content">
+      <p class="lead-text">
+        Я долго задавался вопросом об этом разделении, так как стал замечать слишком много различных вариантов интерпретации словосочетания «музыкальное видео». Постепенно сформировал структуру для себя, которая даёт чётко понять, к какому поджанру относится конкретная работа.
+      </p>
+
+      <section class="subgenres-list" aria-label="Поджанры музыкального видео">
+        {
+          subgenres.map((genre) => (
+            <div class="genre-card">
+              <div class="genre-header">
+                <h2 class="genre-title-en" translate="no">{genre.en}</h2>
+                <span class="genre-title-ru">{genre.ru}</span>
+              </div>
+
+              <div class="genre-body">
+                <p class="genre-features">
+                  <strong>Отличительные черты:</strong> {genre.features}
+                </p>
+
+                <div class="examples-box">
+                  <span class="examples-label">Примеры на <span translate="no">YouTube</span>:</span>
+                  <ul class="examples-links" role="list">
+                    {genre.examples.map((ex) => (
+                      <li>
+                        <a
+                          class="example-link"
+                          href={ex.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Открыть пример видео (${ex.url.replace('https://', '')}) на YouTube`}
+                        >
+                          <svg
+                            class="play-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 3l14 9-14 9V3z"></path>
+                          </svg>
+                          <span>{ex.url.replace('https://', '')}</span>
+                          <span class="ext-arrow" aria-hidden="true">↗</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </section>
+
+      <div class="note-prose-block">
+        <p>
+          Пожалуй, это те поджанры, что встречаются сейчас чаще всего. Самый молодой из них: визуализация. Этот термин вообще стал фигурировать относительно недавно.
+        </p>
+        <p>
+          Всё, что описано выше, безусловно можно назвать музыкальным видео. Но когда требуется конкретика и точное техническое задание: рекомендую прибегать именно к этой классификации. Разумеется, как и в любом медиаискусстве, существуют гибридные и мультижанровые работы, балансирующие на стыке форматов.
+        </p>
+      </div>
+
+      <div class="sunken-callout">
+        <h3 class="callout-title">Зачем всё это существует? <span translate="no">YouTube</span> и экономика релиза</h3>
+        <p>
+          Выпуск свежего альбома или сингла артисту необходимо сопровождать видеорядом. Это открывает доступ к <span translate="no">YouTube</span>: глобальной поисковой и рекомендательной витрине, дающей колоссальный поток бесплатного трафика. На <span translate="no">YouTube</span> любой слушатель может включить трек сразу, без подписки на конкретный стриминговый сервис.
+        </p>
+        <p class="roleplay-scenario">
+          <strong>Ролевая игра:</strong> вы артист, выпускающий альбом из 10&nbsp;треков. Будете ли вы снимать на каждую песню полнобюджетный сюжетный клип? В большинстве случаев: нет. Это огромные временные затраты, высокий бюджет, а для многих треков сложная драматургия просто не требуется. Но и терять <span translate="no">YouTube</span>-прослушивания нельзя.
+        </p>
+        <p>
+          Здесь и работают форматы муд-видео, лирик-видео и визуализаторов: за скромный бюджет вы визуализируете весь альбом, закрывая трафик без перегрузки продакшена.
+        </p>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <footer class="note-bottom-nav">
+        <div class="nav-next-box">
+          <span class="nav-label">Рекомендуемое эссе</span>
+          <a class="nav-next-link" href="/blog/projection-mapping">
+            Проекционный мэппинг: от иллюзий Диснейленда до фасадов и продакшен-ошибок <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <a class="nav-return-link" href="/blog">← Вернуться в стрим блога</a>
+      </footer>
+    </div>
+  </article>
+
+  <script is:inline>
+    // Copy link handler
+    (function () {
+      const copyBtn = document.getElementById('copy-link-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            const label = copyBtn.querySelector('.copy-label');
+            const oldText = label ? label.textContent : '';
+            if (label) label.textContent = 'Скопировано!';
+            copyBtn.classList.add('is-copied');
+            setTimeout(() => {
+              if (label) label.textContent = oldText;
+              copyBtn.classList.remove('is-copied');
+            }, 2000);
+          } catch (e) {
+            console.error('Copy failed', e);
+          }
+        });
+      }
+    })();
+  </script>
+</Base>
+
+<style>
+  .note-article {
+    background: var(--bg-canvas);
+    min-height: 100dvh;
+  }
+
+  .note-hero {
+    background: var(--bg-surface);
+    padding-block: clamp(40px, 7vw, 88px) clamp(32px, 5vw, 56px);
+  }
+
+  .note-wrap {
+    max-width: 800px;
+    margin-inline: auto;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 24px;
+    touch-action: manipulation;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .back-link:hover {
+    color: var(--signal);
+  }
+
+  .note-headline {
+    margin: 0 0 24px;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .article-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 20px;
+  }
+
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .meta-item.author {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .meta-item.format {
+    font-size: var(--type-small);
+    color: var(--signal);
+    font-weight: 500;
+  }
+
+  .meta-sep {
+    color: var(--rule-strong);
+  }
+
+  .copy-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: var(--type-small);
+    color: var(--ink);
+    background: var(--bg-sunken);
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+    touch-action: manipulation;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+
+  .copy-link-btn:hover {
+    background: var(--bg-canvas);
+  }
+
+  .copy-link-btn.is-copied {
+    background: var(--signal-subtle);
+    color: var(--signal);
+  }
+
+  .note-content {
+    padding-block: clamp(48px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  }
+
+  .lead-text {
+    font-size: var(--type-lead);
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 40px;
+    text-wrap: pretty;
+  }
+
+  .subgenres-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .genre-card {
+    background: var(--bg-surface);
+    padding: clamp(24px, 3.5vw, 36px);
+  }
+
+  .genre-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 14px;
+    margin-bottom: 16px;
+  }
+
+  .genre-title-en {
+    font-size: var(--type-lead);
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .genre-title-ru {
+    font-size: var(--type-body);
+    color: var(--mute);
+  }
+
+  .genre-features {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 20px;
+  }
+
+  .examples-box {
+    background: var(--bg-sunken);
+    padding: 16px 20px;
+    border-left: 3px solid var(--signal);
+  }
+
+  .examples-label {
+    display: block;
+    font-size: var(--type-small);
+    color: var(--mute);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .examples-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .example-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--type-small);
+    color: var(--ink);
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: color var(--dur-fast) var(--ease-out);
+    word-break: break-all;
+  }
+
+  .example-link:hover {
+    color: var(--signal);
+  }
+
+  .play-icon {
+    color: var(--signal);
+    flex-shrink: 0;
+  }
+
+  .ext-arrow {
+    color: var(--mute);
+    font-size: 0.85em;
+  }
+
+  .note-prose-block {
+    margin: 40px 0;
+  }
+
+  .note-prose-block p {
+    font-size: var(--type-body);
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 20px;
+  }
+
+  .sunken-callout {
+    background: var(--bg-sunken);
+    border-left: 3px solid var(--signal);
+    padding: clamp(28px, 4vw, 40px);
+    margin: 40px 0;
+  }
+
+  .callout-title {
+    font-size: var(--type-lead);
+    margin: 0 0 16px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .sunken-callout p {
+    font-size: var(--type-body);
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0 0 16px;
+  }
+
+  .sunken-callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .roleplay-scenario {
+    background: var(--bg-surface);
+    padding: 20px 24px;
+    margin: 20px 0 !important;
+  }
+
+  /* Bottom Navigation */
+  .note-bottom-nav {
+    margin-top: 64px;
+    padding-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nav-next-box {
+    background: var(--bg-surface);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .nav-next-box:hover {
+    background: #ffffff;
+  }
+
+  .nav-label {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .nav-next-link {
+    font-size: var(--type-lead);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.3;
+    touch-action: manipulation;
+  }
+
+  .nav-next-link:hover {
+    color: var(--signal);
+  }
+
+  .nav-return-link {
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    width: fit-content;
+    touch-action: manipulation;
+  }
+
+  .nav-return-link:hover {
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-link,
+    .copy-link-btn,
+    .example-link,
+    .nav-next-box,
+    .nav-next-link,
+    .nav-return-link {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+</style>

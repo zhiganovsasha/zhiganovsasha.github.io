@@ -1,0 +1,480 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import projectionCover from '../../assets/projection-mapping-cover.webp';
+
+interface BlogPost {
+  title: string;
+  excerpt: string;
+  href: string;
+  type: 'essay' | 'note';
+  typeName: string;
+  date: string;
+  readTime: string;
+  image?: ImageMetadata;
+}
+
+const posts: BlogPost[] = [
+  {
+    title: 'Проекционный мэппинг: от иллюзий Диснейленда до фасадов и продакшен-ошибок',
+    excerpt:
+      'Практический разбор аудиовизуальной технологии: чем 3D-мэппинг отличается от обычной проекции, пять прикладных типов, технический пайплайн от лазерного сканирования до сшивки проекторов и девять критических ошибок на площадке.',
+    href: '/blog/projection-mapping',
+    type: 'essay',
+    typeName: 'Эссе',
+    date: 'Ноябрь 2026',
+    readTime: '12 минут чтения',
+    image: projectionCover,
+  },
+  {
+    title: 'Классификация музыкальных видео',
+    excerpt:
+      'Пять реальных поджанров музыкального видео: от сюжетных клипов и муд-видео до визуализаторов и лайвов. Зачем они нужны артистам и как помогают визуализировать весь альбом без раздутых бюджетов.',
+    href: '/blog/music-video-classification',
+    type: 'note',
+    typeName: 'Заметка',
+    date: 'Ноябрь 2026',
+    readTime: '3 минуты чтения',
+  },
+];
+---
+
+<Base
+  title="Блог — Alexander Zhiganov"
+  description="Эссе о креативных технологиях, мультимедиа-продакшене и рабочие заметки Александра Жиганова."
+  current="blog"
+>
+  <header class="blog-head">
+    <div class="wrap">
+      <h1 class="display blog-title">Блог</h1>
+      <p class="lede blog-lede">
+        Эссе о креативных технологиях, мультимедиа-продакшене и рабочие заметки из практики создания физических и цифровых продуктов.
+      </p>
+
+      <div class="stream-filters" role="tablist" aria-label="Фильтр публикаций по формату">
+        <button
+          type="button"
+          class="filter-tab is-active"
+          role="tab"
+          id="tab-all"
+          aria-selected="true"
+          aria-controls="stream-panel"
+          data-filter="all"
+        >
+          Все материалы <span class="tab-count">2</span>
+        </button>
+        <button
+          type="button"
+          class="filter-tab"
+          role="tab"
+          id="tab-essay"
+          aria-selected="false"
+          aria-controls="stream-panel"
+          data-filter="essay"
+        >
+          Эссе <span class="tab-count">1</span>
+        </button>
+        <button
+          type="button"
+          class="filter-tab"
+          role="tab"
+          id="tab-note"
+          aria-selected="false"
+          aria-controls="stream-panel"
+          data-filter="note"
+        >
+          Заметки <span class="tab-count">1</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="blog-stream section" id="stream-panel" role="tabpanel" aria-labelledby="tab-all">
+    <div class="wrap">
+      <ul class="posts-list" role="list">
+        {
+          posts.map((post) => (
+            <li class="post-item" data-type={post.type}>
+              {post.type === 'essay' ? (
+                <article class="essay-card">
+                  {post.image && (
+                    <a class="essay-media" href={post.href} tabindex="-1" aria-hidden="true">
+                      <Image
+                        class="essay-img"
+                        src={post.image}
+                        alt="Проекционный мэппинг на архитектурном фасаде"
+                        widths={[480, 800, 1200, 1600]}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                        loading="eager"
+                      />
+                    </a>
+                  )}
+                  <div class="essay-body">
+                    <h2 class="essay-title">
+                      <a class="essay-link" href={post.href}>
+                        {post.title}
+                      </a>
+                    </h2>
+                    <p class="essay-excerpt">{post.excerpt}</p>
+                    <div class="post-meta">
+                      <span class="meta-format">{post.typeName}</span>
+                      <span class="meta-sep" aria-hidden="true">/</span>
+                      <time class="meta-date" datetime="2026-11">{post.date}</time>
+                      <span class="meta-sep" aria-hidden="true">/</span>
+                      <span class="meta-time">{post.readTime}</span>
+                      <a class="essay-action" href={post.href} aria-label={`Читать эссе: ${post.title}`}>
+                        Читать <span class="action-arrow" aria-hidden="true">→</span>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ) : (
+                <article class="note-card">
+                  <div class="note-body">
+                    <h2 class="note-title">
+                      <a class="note-link" href={post.href}>
+                        {post.title}
+                        <span class="note-arrow" aria-hidden="true">↗</span>
+                      </a>
+                    </h2>
+                    <p class="note-excerpt">{post.excerpt}</p>
+                    <div class="post-meta">
+                      <span class="meta-format">{post.typeName}</span>
+                      <span class="meta-sep" aria-hidden="true">/</span>
+                      <time class="meta-date" datetime="2026-11">{post.date}</time>
+                      <span class="meta-sep" aria-hidden="true">/</span>
+                      <span class="meta-time">{post.readTime}</span>
+                    </div>
+                  </div>
+                </article>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      const tabs = Array.from(document.querySelectorAll('.filter-tab'));
+      const items = Array.from(document.querySelectorAll('.post-item'));
+
+      function activate(filter, activeTab, updateUrl = true) {
+        tabs.forEach((t) => {
+          const isTarget = t === activeTab;
+          t.classList.toggle('is-active', isTarget);
+          t.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        });
+
+        items.forEach((item) => {
+          const itemType = item.getAttribute('data-type');
+          const shouldShow = filter === 'all' || itemType === filter;
+          item.style.display = shouldShow ? '' : 'none';
+        });
+
+        if (updateUrl && window.history && window.history.replaceState) {
+          const url = new URL(window.location.href);
+          if (filter === 'all') {
+            url.searchParams.delete('format');
+          } else {
+            url.searchParams.set('format', filter);
+          }
+          window.history.replaceState({}, '', url.toString());
+        }
+      }
+
+      // Check initial query parameter
+      const params = new URLSearchParams(window.location.search);
+      const initialFormat = params.get('format');
+      if (initialFormat) {
+        const matchingTab = tabs.find((t) => t.getAttribute('data-filter') === initialFormat);
+        if (matchingTab) {
+          activate(initialFormat, matchingTab, false);
+        }
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const filter = tab.getAttribute('data-filter') || 'all';
+          activate(filter, tab, true);
+        });
+
+        tab.addEventListener('keydown', (e) => {
+          const idx = tabs.indexOf(tab);
+          if (e.key === 'ArrowRight') {
+            const next = tabs[(idx + 1) % tabs.length];
+            next.focus();
+            next.click();
+          } else if (e.key === 'ArrowLeft') {
+            const prev = tabs[(idx - 1 + tabs.length) % tabs.length];
+            prev.focus();
+            prev.click();
+          }
+        });
+      });
+    })();
+  </script>
+</Base>
+
+<style>
+  .blog-head {
+    padding-block: clamp(48px, 8vw, 96px) clamp(32px, 5vw, 56px);
+    background: var(--bg-surface);
+  }
+
+  .blog-title {
+    margin-bottom: 16px;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  .blog-lede {
+    max-width: 68ch;
+    color: var(--mute);
+    margin-bottom: 36px;
+    text-wrap: pretty;
+  }
+
+  .stream-filters {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-sunken);
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: var(--type-small);
+    font-weight: 500;
+    color: var(--mute);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+    touch-action: manipulation;
+    transition: color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .filter-tab:hover {
+    color: var(--ink);
+  }
+
+  .filter-tab.is-active {
+    color: var(--ink);
+    background: var(--bg-surface);
+  }
+
+  .tab-count {
+    font-size: var(--type-small);
+    font-variant-numeric: tabular-nums;
+    padding-inline: 6px;
+    background: var(--bg-canvas);
+    color: var(--mute);
+  }
+
+  .filter-tab.is-active .tab-count {
+    background: var(--signal-subtle);
+    color: var(--signal);
+  }
+
+  .blog-stream {
+    padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 100px);
+    background: var(--bg-canvas);
+  }
+
+  .posts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 1040px;
+  }
+
+  .post-item {
+    display: block;
+  }
+
+  /* Essay Card: Elevated Full-Weight Surface */
+  .essay-card {
+    background: var(--bg-surface);
+    transition: background-color var(--dur-normal) var(--ease-out);
+  }
+
+  .essay-card:hover {
+    background: #ffffff;
+  }
+
+  .essay-media {
+    display: block;
+    aspect-ratio: 21 / 9;
+    overflow: hidden;
+    background: var(--bg-sunken);
+  }
+
+  .essay-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms var(--ease-out);
+  }
+
+  .essay-card:hover .essay-img {
+    transform: scale(1.015);
+  }
+
+  .essay-body {
+    padding: clamp(28px, 4vw, 44px);
+  }
+
+  .essay-title {
+    font-size: var(--type-heading);
+    line-height: 1.2;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .essay-link {
+    color: var(--ink);
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .essay-link:hover {
+    color: var(--signal);
+  }
+
+  .essay-excerpt {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0 0 24px;
+    max-width: 72ch;
+    text-wrap: pretty;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .meta-format {
+    font-weight: 500;
+    color: var(--signal);
+  }
+
+  .meta-sep {
+    color: var(--rule-strong);
+  }
+
+  .essay-action {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-small);
+    font-weight: 500;
+    color: var(--signal);
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  .essay-action:hover {
+    text-decoration: underline;
+  }
+
+  .action-arrow {
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+
+  .essay-card:hover .action-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Note Card: Lightweight Compact Surface */
+  .note-card {
+    background: var(--bg-surface);
+    transition: background-color var(--dur-normal) var(--ease-out);
+  }
+
+  .note-body {
+    padding: clamp(24px, 3.5vw, 36px);
+  }
+
+  .note-title {
+    font-size: var(--type-lead);
+    line-height: 1.25;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+
+  .note-link {
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    touch-action: manipulation;
+  }
+
+  .note-arrow {
+    color: var(--mute);
+    font-size: 0.85em;
+    transition: transform var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+
+  .note-card:hover .note-link {
+    color: var(--signal);
+  }
+
+  .note-card:hover .note-arrow {
+    color: var(--signal);
+    transform: translate(2px, -2px);
+  }
+
+  .note-excerpt {
+    font-size: var(--type-body);
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 20px;
+    max-width: 72ch;
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .filter-tab,
+    .essay-card,
+    .essay-img,
+    .action-arrow,
+    .note-card,
+    .note-arrow {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .essay-action {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 12px;
+    }
+
+    .essay-media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

@@ -1,0 +1,764 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import projectionCover from '../../assets/projection-mapping-cover.webp';
+---
+
+<Base
+  title="Проекционный мэппинг: от иллюзий Диснейленда до фасадов и продакшен-ошибок — Alexander Zhiganov"
+  description="Практический разбор технологии 3D-мэппинга: от исторических истоков и пяти прикладных типов до продакшен-пайплайна и девяти критических ошибок на площадке."
+  current="blog"
+>
+  <article class="essay-article">
+    <header class="essay-hero">
+      <div class="wrap">
+        <a class="back-link" href="/blog">
+          <span aria-hidden="true">←</span> К списку материалов
+        </a>
+
+        <h1 class="display essay-headline">
+          Проекционный мэппинг: от иллюзий Диснейленда до фасадов и продакшен-ошибок
+        </h1>
+
+        <div class="article-meta-row">
+          <div class="meta-pills">
+            <span class="meta-item author" translate="no">Александр Жиганов</span>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <span class="meta-item format">Эссе</span>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <time class="meta-item date" datetime="2026-11">Ноябрь 2026</time>
+            <span class="meta-sep" aria-hidden="true">/</span>
+            <span class="meta-item time">12&nbsp;минут чтения</span>
+          </div>
+
+          <button
+            type="button"
+            class="copy-link-btn"
+            id="copy-link-btn"
+            aria-label="Скопировать ссылку на статью"
+          >
+            <svg
+              class="copy-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <rect x="9" y="9" width="13" height="13"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="copy-label" aria-live="polite">Скопировать ссылку</span>
+          </button>
+        </div>
+
+        <figure class="hero-cover">
+          <Image
+            class="hero-cover-img"
+            src={projectionCover}
+            alt="Архитектурный проекционный мэппинг на фасаде здания"
+            widths={[640, 1024, 1440, 1920]}
+            sizes="(max-width: 768px) 100vw, (max-width: 1360px) 94vw, 1280px"
+            loading="eager"
+          />
+          <figcaption class="hero-cover-caption">
+            Архитектурный мэппинг подчиняет цифровую оптическую иллюзию сложной геометрии здания.
+          </figcaption>
+        </figure>
+      </div>
+    </header>
+
+    <div class="wrap essay-layout">
+      <!-- Sticky Sidebar Table of Contents -->
+      <aside class="toc-sidebar" aria-label="Содержание статьи">
+        <div class="toc-sticky-box">
+          <p class="toc-heading">Содержание</p>
+          <nav class="toc-nav">
+            <a href="#concept" class="toc-link is-active">Иллюзия вместо экрана</a>
+            <a href="#history" class="toc-link">От 1969 года к нашим дням</a>
+            <a href="#festivals" class="toc-link">Зачем фестивали брендам</a>
+            <a href="#types" class="toc-link">Пять типов мэппинга</a>
+            <a href="#tech" class="toc-link">Люмены, сканирование и маски</a>
+            <a href="#pipeline" class="toc-link">Пошаговый пайплайн</a>
+            <a href="#mistakes" class="toc-link">Девять ошибок на площадке</a>
+            <a href="#summary" class="toc-link">Резюме и чек-лист</a>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- Main Prose Reading Stream -->
+      <main class="essay-prose">
+        <section id="concept" class="prose-section">
+          <h2>Иллюзия вместо плоского экрана</h2>
+          <p class="lead-text">
+            Мэппинг — это направление в аудиовизуальном искусстве и дизайне, основанное на проекции изображения на поверхность физического объекта с обязательным учётом его геометрии и положения в пространстве ради оптической иллюзии.
+          </p>
+          <p>
+            В чём принципиальная разница между проекцией и мэппингом? Обычная проекция — это плоское видео или слайд на ровной белой стене или натянутом полотне. То, что происходит в переговорках, школьных классах или кинотеатрах. Купили проектор, направили на стену, смотрите кино: это проекция, существующая строго в одной двухмерной плоскости.
+          </p>
+          <p>
+            Мэппинг же всегда <strong>играет с объёмом физического объекта</strong>: пилястрами, арками, окнами, карнизами, рельефом. Проекция подчиняется форме, а не игнорирует её. Эта кропотливая работа даёт зрителю глубину и вовлечение, недостижимые на плоском экране: фасад здания может визуально «рухнуть» внутрь, сцена — раствориться в воздухе, а глухие бетонные стены превратиться в жидкий пульсирующий водопад.
+          </p>
+        </section>
+
+        <section id="history" class="prose-section">
+          <h2>От Диснейленда 1969 года к нашим дням</h2>
+          <p>
+            Принято считать, что мэппинг — сравнительно новая цифровая технология. На самом деле один из первых публичных примеров появился ещё в 1969&nbsp;году в Диснейленде, на аттракционе <em translate="no">Haunted Mansion</em>. В тёмном зале стояли неподвижные гипсовые бюсты, на которые с 16-миллиметровой плёнки проецировались лица поющих актёров. Статуи буквально оживали, артикулировали и исполняли песню в реальном пространстве.
+          </p>
+          <div class="sunken-callout">
+            <h3 class="callout-title">1997 год: Жан-Мишель Жарр на 850-летии Москвы</h3>
+            <p>
+              Хрестоматийный масштабный прецедент: шоу «Кислород в Москве» у главного здания МГУ. Фасад шириной 400&nbsp;метров и высотой 250&nbsp;метров стал поверхностью для гигантского проекционного спектакля. Технические подрядчики тех лет формулировали это дословно: <em>«Фрагменты истории города проецировались на фасад 400×250&nbsp;м. Сейчас это называют мэппинг-шоу»</em>.
+            </p>
+          </div>
+          <p>
+            Даже сегодня, когда зрителя трудно удивить графикой, мэппинг не теряет актуальности. Открытие отреставрированного собора Нотр-Дам в Париже сопровождалось масштабным проекционным шоу под сет электронного музыканта, собрав миллионы просмотров по всему миру.
+          </p>
+        </section>
+
+        <section id="festivals" class="prose-section">
+          <h2>Зачем фестивали брендам и художникам</h2>
+          <p>
+            В мире существуют сотни фестивалей, где мэппинг выступает главным медиумом: от признанных гигантов (<strong translate="no">Glow Festival</strong> в Эйндховене, <strong translate="no">iMapp Bucharest</strong> в Румынии, <strong translate="no">1Minute Projection Mapping</strong> в Японии) до российских точек притяжения: <strong translate="no">Intervals</strong> в Нижнем Новгороде (где ежегодно мэпят фасад академии «Маяк»), <strong>НУР</strong> в Казани, <strong>Ночь Света</strong> в Гатчине.
+          </p>
+          <p>
+            У этого движения есть четыре конкретные прикладные функции:
+          </p>
+          <ul class="styled-list">
+            <li>
+              <strong>Нативная интеграция спонсоров:</strong> бренды получают монументальную рекламную поверхность с колоссальным органическим охватом в соцсетях.
+            </li>
+            <li>
+              <strong>Повышение насмотренности:</strong> регулярное посещение фестивалей даёт честный срез трендов и живую реакцию нерафинированной публики.
+            </li>
+            <li>
+              <strong>Живой нетворкинг на площадке:</strong> художники и технические директора находятся прямо возле пультовых — идеальная точка для сбора команды под будущие проекты.
+            </li>
+            <li>
+              <strong>Международный статус без перелётов:</strong> фестиваль может привлечь зарубежных медиахудожников удалённо: контент создаётся по 3D-модели в любой точке планеты, а выводится уже на местном оборудовании.
+            </li>
+          </ul>
+        </section>
+
+        <section id="types" class="prose-section">
+          <h2>Пять типов мэппинга</h2>
+          <p>
+            В зависимости от носителя и задачи технология делится на пять чётких категорий:
+          </p>
+
+          <div class="type-block">
+            <h3>Архитектурный мэппинг</h3>
+            <p>
+              Классика жанра: фасады, башни, монументы. В Стамбуле на Галатской башне художники студии Cream использовали фактурный рельеф верхушки башни для привязки геометрических иллюзий, превратив гладкий ствол в динамическое полотно. В Москве в 2011 году студия Сила Света на фасаде Манежа сделала клип рэпера Влади с кинетической типографикой и артикуляцией. В Альметьевске проект «Нокта» объединил семь промышленных лазеров и проекцию на здание котельной, поверх уже существовавшего мурала.
+            </p>
+          </div>
+
+          <div class="type-block">
+            <h3>Сценический мэппинг</h3>
+            <p>
+              Проекция на подвижные сценические декорации, костюмы артистов или планшет сцены. Клип Willow «Sweater» — эталонный ранний пример тонкой работы со сценографией. На больших шоу (например, кубы 2,5&nbsp;м на концертах Димы Билана от Ракетамедиа или «Великаны Дагестана») мэппинг соединяет декорации с природным горным ландшафтом.
+            </p>
+          </div>
+
+          <div class="type-block">
+            <h3>Объектный мэппинг</h3>
+            <p>
+              Работа с малыми и средними физическими формами: автомобили на презентациях автобрендов, керамическая посуда, кроссовки и даже лицо человека. Это лучший способ подчеркнуть промышленный дизайн и аэродинамику объекта без перекраски и физического вмешательства.
+            </p>
+          </div>
+
+          <div class="type-block">
+            <h3>Интерьерный мэппинг</h3>
+            <p>
+              Преображение пространства без пыли и стройки. От гастротеатра «Красота» в Москве, где аудиовизуальное шоу синхронизировано со сменой подачи блюд, до прощальной вечеринки в клубе «Мутабор», где Сила Света установила 26&nbsp;проекторов и 10&nbsp;лазеров, проявив уважение к голым стенам культового пространства.
+            </p>
+          </div>
+
+          <div class="type-block">
+            <h3>Интерактивный мэппинг</h3>
+            <p>
+              Проекция, реагирующая на человека в реальном времени. Сам по себе проектор — пассивное устройство. Чтобы картинка ожила, к медиасерверу подключают датчики движения, камеры глубины (Azure Kinect, LiDAR) или физические контроллеры.
+            </p>
+            <p>
+              В нашем проекте для интерактивного квеста в средневековом замке (совместно со студией ВИЖУ) мы создавали механику поиска артефактов среди пауков: камера <span translate="no">Azure Kinect</span> отслеживала движения гостя, привязывала виртуальный источник света к его руке, и человек своим движением буквально «светил фонарём» в проекцию, разгоняя графику.
+            </p>
+          </div>
+        </section>
+
+        <section id="tech" class="prose-section">
+          <h2>Техническая основа: люмены, сканирование и маски</h2>
+          <p>
+            Главная техническая величина, с которой начинается любой разговор о проекции: <strong>люмен (lm)</strong>. Это единица светового потока. Чем выше показатель люменов, тем «пробивнее» свет и тем насыщеннее картинка при паразитной засветке.
+          </p>
+          <div class="sunken-callout">
+            <h3 class="callout-title">Порядок величин</h3>
+            <p>
+              Офисный или домашний проектор выдаёт 2&nbsp;000 — 4&nbsp;000&nbsp;лм и стоит пару сотен долларов. Профессиональный инсталляционный проектор для архитектурного фасада выдаёт 20&nbsp;000 — 50&nbsp;000&nbsp;лм, весит десятки килограммов и стоит от \$50&nbsp;000 до \$150&nbsp;000. На масштабном проекте таких машин работают десятки.
+            </p>
+          </div>
+          <p>
+            Чтобы художники могли рисовать контент с ювелирной точностью до сантиметра, фасад сканируют лазерным 3D-сканером (LiDAR). На основе облака точек строится точная трёхмерная полигональная модель, делается UV-развёртка и формируется так называемая <strong>маска</strong> — шаблон, по которому создаётся графика.
+          </p>
+        </section>
+
+        <section id="pipeline" class="prose-section">
+          <h2>Пошаговый пайплайн проекта</h2>
+          <ol class="pipeline-list">
+            <li>
+              <strong>Смысл и бриф:</strong> формулируем, <em>зачем</em> здесь проекция, какова драматургия и что зритель должен почувствовать.
+            </li>
+            <li>
+              <strong>Осмотр и выбор плоскости:</strong> выезд технического директора на площадку для оценки перепадов высот, столбов, деревьев и углов падения лучей.
+            </li>
+            <li>
+              <strong>Лазерное 3D-сканирование:</strong> создание цифрового двойника объекта и точной проекционной маски.
+            </li>
+            <li>
+              <strong>Создание контента:</strong> работа CG-художников, аниматоров и саунд-дизайнеров по утверждённой маске с учётом оптических искажений.
+            </li>
+            <li>
+              <strong>Монтаж и сшивка на площадке:</strong> физическая установка проекторов на башни, сведение краёв (blending), сведение геометрии (warping) и цветокалибровка.
+            </li>
+            <li>
+              <strong>Генеральные ночные прогоны:</strong> обязательные сквозные репетиции в реальных световых условиях.
+            </li>
+            <li>
+              <strong>Чистовой показ:</strong> запуск шоу для зрителей.
+            </li>
+          </ol>
+        </section>
+
+        <section id="mistakes" class="prose-section">
+          <h2>Девять критических ошибок на площадке</h2>
+          <ol class="mistakes-grid" role="list">
+            <li class="mistake-card">
+              <h3>Неверная оценка поверхности</h3>
+              <p>Тёмные, зеркальные, стеклянные или мокрые фасады поглощают и рассеивают свет. Цвет и текстуру объекта нужно тестировать до утверждения концепта.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Дефицит люменов</h3>
+              <p>В городе всегда есть паразитная засветка: уличные фонари, реклама, витрины. Проекторы без запаса по яркости превратят графику в блёклое пятно.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Игнорирование архитектуры</h3>
+              <p>Светить обычное 2D-видео на фасад без привязки к пилястрам и аркам бессмысленно. Зритель сразу считывает фальшь и распад формы.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Звук по остаточному принципу</h3>
+              <p>Мэппинг — аудиовизуальное медиа. Слабый или рассинхронизированный звук убивает эффект погружения даже при безупречной 3D-графике.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Перекрытие луча толпой</h3>
+              <p>В галереях и на фестивалях луч проектора часто рассчитывают в пустом зале. Приходят гости и закрывают головами половину проекции.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Визуальные штампы</h3>
+              <p>«Разрушение здания на кирпичики» — моветон для искушённой публики. В городах с развитой культурой контент требует более тонкого языка.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Ошибочная скорость динамики</h3>
+              <p>То, что эффектно смотрится на мониторе 27&nbsp;дюймов, на 50-метровом фасаде вызывает укачивание. Динамику перемещения объектов на гигантских поверхностях нужно замедлять.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Несовпадение цветовой температуры</h3>
+              <p>Если проекторы в сшивке имеют разную цветовую температуру или выработку ламп, на фасаде появятся грязные полосы и шов, разрушающий симметрию.</p>
+            </li>
+
+            <li class="mistake-card">
+              <h3>Отказ от ночных репетиций</h3>
+              <p>Без проверки в темноте перед премьерой с высокой вероятностью вскроются сюрпризы: от сброшенных настроек до непредсказуемой подсветки соседних зданий.</p>
+            </li>
+          </ol>
+        </section>
+
+        <section id="summary" class="prose-section">
+          <h2>Резюме и чек-лист для заказчика</h2>
+          <p>
+            Перед тем как заказывать мэппинг и нанимать подрядчиков, задайте себе и команде три ключевых вопроса:
+          </p>
+          <div class="sunken-callout">
+            <ul class="checklist">
+              <li><strong>Зачем нам мэппинг?</strong> Решает ли он задачу события лучше, чем LED-экраны или кинетический свет?</li>
+              <li><strong>Подходит ли геометрия площадки?</strong> Есть ли место под проекционные башни без риска перекрытия луча зрителями?</li>
+              <li><strong>Готов ли бюджет на свет и звук одновременно?</strong> Экономия на аудиодорожке или яркости проекторов сводит ценность проекта к нулю.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Bottom Article Navigation -->
+        <footer class="essay-bottom-nav">
+          <div class="nav-next-box">
+            <span class="nav-label">Читать далее</span>
+            <a class="nav-next-link" href="/blog/music-video-classification">
+              Классификация музыкальных видео <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <a class="nav-return-link" href="/blog">← Вернуться в стрим блога</a>
+        </footer>
+      </main>
+    </div>
+  </article>
+
+  <script is:inline>
+    // Copy link handler
+    (function () {
+      const copyBtn = document.getElementById('copy-link-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            const label = copyBtn.querySelector('.copy-label');
+            const oldText = label ? label.textContent : '';
+            if (label) label.textContent = 'Скопировано!';
+            copyBtn.classList.add('is-copied');
+            setTimeout(() => {
+              if (label) label.textContent = oldText;
+              copyBtn.classList.remove('is-copied');
+            }, 2000);
+          } catch (e) {
+            console.error('Copy failed', e);
+          }
+        });
+      }
+
+      // Scroll spy for TOC
+      const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+      const sections = Array.from(document.querySelectorAll('.prose-section'));
+
+      if ('IntersectionObserver' in window && tocLinks.length && sections.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                tocLinks.forEach((link) => {
+                  const href = link.getAttribute('href');
+                  const match = href === '#' + id;
+                  link.classList.toggle('is-active', match);
+                });
+              }
+            });
+          },
+          { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+        );
+
+        sections.forEach((sec) => observer.observe(sec));
+      }
+    })();
+  </script>
+</Base>
+
+<style>
+  .essay-article {
+    background: var(--bg-canvas);
+    min-height: 100dvh;
+  }
+
+  .essay-hero {
+    background: var(--bg-surface);
+    padding-block: clamp(40px, 7vw, 88px) clamp(36px, 5vw, 64px);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 24px;
+    touch-action: manipulation;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .back-link:hover {
+    color: var(--signal);
+  }
+
+  .essay-headline {
+    margin: 0 0 24px;
+    max-width: 26ch;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .article-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+  }
+
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .meta-item.author {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .meta-item.format {
+    font-size: var(--type-small);
+    color: var(--signal);
+    font-weight: 500;
+  }
+
+  .meta-sep {
+    color: var(--rule-strong);
+  }
+
+  .copy-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: var(--type-small);
+    color: var(--ink);
+    background: var(--bg-sunken);
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+    touch-action: manipulation;
+    transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+
+  .copy-link-btn:hover {
+    background: var(--bg-canvas);
+  }
+
+  .copy-link-btn.is-copied {
+    background: var(--signal-subtle);
+    color: var(--signal);
+  }
+
+  .hero-cover {
+    margin: 0;
+    background: var(--bg-sunken);
+  }
+
+  .hero-cover-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-cover-caption {
+    padding: 12px 20px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    background: var(--bg-surface);
+  }
+
+  /* Two-column layout */
+  .essay-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: clamp(36px, 6vw, 80px);
+    padding-block: clamp(48px, 6vw, 88px);
+    align-items: start;
+  }
+
+  /* TOC Sidebar */
+  .toc-sidebar {
+    display: block;
+  }
+
+  .toc-sticky-box {
+    position: sticky;
+    top: 36px;
+    padding: 24px;
+    background: var(--bg-surface);
+  }
+
+  .toc-heading {
+    font-size: var(--type-small);
+    color: var(--mute);
+    margin: 0 0 16px;
+    font-weight: 500;
+  }
+
+  .toc-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .toc-link {
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    line-height: 1.35;
+    padding-left: 12px;
+    border-left: 2px solid transparent;
+    touch-action: manipulation;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .toc-link:hover {
+    color: var(--ink);
+    border-left-color: var(--rule-strong);
+  }
+
+  .toc-link.is-active {
+    color: var(--signal);
+    font-weight: 500;
+    border-left-color: var(--signal);
+  }
+
+  /* Main Prose */
+  .essay-prose {
+    max-width: 72ch;
+  }
+
+  .prose-section {
+    margin-bottom: clamp(48px, 7vw, 80px);
+    scroll-margin-top: 36px;
+  }
+
+  .prose-section h2 {
+    font-size: var(--type-heading);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+
+  .prose-section p {
+    font-size: var(--type-body);
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0 0 20px;
+  }
+
+  .lead-text {
+    font-size: var(--type-lead) !important;
+    line-height: 1.45 !important;
+    color: var(--ink) !important;
+    font-weight: 400;
+    margin-bottom: 28px !important;
+    text-wrap: pretty;
+  }
+
+  .sunken-callout {
+    background: var(--bg-sunken);
+    border-left: 3px solid var(--signal);
+    padding: clamp(24px, 4vw, 36px);
+    margin: 32px 0;
+  }
+
+  .callout-title {
+    font-size: var(--type-lead);
+    margin: 0 0 12px;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .sunken-callout p {
+    margin: 0;
+    font-size: var(--type-body);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .styled-list {
+    list-style: square;
+    padding-left: 20px;
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .styled-list li {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .type-block {
+    background: var(--bg-surface);
+    padding: clamp(24px, 3.5vw, 36px);
+    margin-bottom: 24px;
+  }
+
+  .type-block h3 {
+    font-size: var(--type-lead);
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .type-block p {
+    margin: 0;
+    font-size: var(--type-body);
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .type-block p + p {
+    margin-top: 14px;
+  }
+
+  .pipeline-list {
+    padding-left: 24px;
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pipeline-list li {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  /* Mistakes Grid */
+  .mistakes-grid {
+    padding: 0;
+    margin: 28px 0 0;
+    list-style-position: inside;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .mistake-card {
+    background: var(--bg-surface);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mistake-card h3 {
+    font-size: var(--type-lead);
+    margin: 0 0 10px;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .mistake-card p {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .checklist {
+    list-style: square;
+    padding-left: 20px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .checklist li {
+    font-size: var(--type-body);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* Bottom Navigation */
+  .essay-bottom-nav {
+    margin-top: 64px;
+    padding-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .nav-next-box {
+    background: var(--bg-surface);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .nav-next-box:hover {
+    background: #ffffff;
+  }
+
+  .nav-label {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .nav-next-link {
+    font-size: var(--type-lead);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    touch-action: manipulation;
+  }
+
+  .nav-next-link:hover {
+    color: var(--signal);
+  }
+
+  .nav-return-link {
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    width: fit-content;
+    touch-action: manipulation;
+  }
+
+  .nav-return-link:hover {
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .back-link,
+    .copy-link-btn,
+    .toc-link,
+    .nav-next-box,
+    .nav-next-link,
+    .nav-return-link {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .essay-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .toc-sidebar {
+      display: none;
+    }
+
+    .hero-cover-img {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>
