@@ -252,8 +252,20 @@ const counts = {
   current="education"
 >
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-text">
+    <figure class="hero-media">
+      <Image
+        src={stagePhoto}
+        alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
+        widths={[600, 1000, 1600, 1920]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption class="stage-caption">Keynote on creative technology &amp; neural production</figcaption>
+    </figure>
+
+    <div class="wrap hero-content">
+      <div class="hero-panel">
         <h1 class="display hero-title">Education &amp; Speaking</h1>
         <p class="lede hero-lede">
           I teach engineering and creative teams how to build with autonomous agents, generative video, and real-time tech.
@@ -262,49 +274,18 @@ const counts = {
           Keynotes and hands-on workshops for conferences, studios, and offsites. Based in Dubai, available worldwide and remotely.
         </p>
 
-        <ul class="credentials-list" role="list">
-          <li class="credential-item">
-            <span class="cred-dot" aria-hidden="true"></span>
-            <span>G8 Creative Industries Festival Speaker</span>
-          </li>
-          <li class="credential-item">
-            <span class="cred-dot" aria-hidden="true"></span>
-            <span>ArtMasters &amp; TIME CODE Lecturer</span>
-          </li>
-          <li class="credential-item">
-            <span class="cred-dot" aria-hidden="true"></span>
-            <span>Peer-Reviewed AI Paper Co-Author (eLibrary / RSCI)</span>
-          </li>
-          <li class="credential-item">
-            <span class="cred-dot" aria-hidden="true"></span>
-            <span>Featured in Reuters, Tinkoff Journal &amp; National TV</span>
-          </li>
-        </ul>
-
         <div class="hero-actions">
           <a class="btn btn-primary" href="#programs">
             Explore Programs <span aria-hidden="true">↓</span>
-          </a>
-          <a class="btn btn-ghost" href="#registry">
-            Track Record ({counts.all}) <span aria-hidden="true">↓</span>
           </a>
           <a class="btn btn-ghost" href="#contact">
             Book a Talk or Workshop <span aria-hidden="true">→</span>
           </a>
         </div>
+        <a class="hero-record-link" href="#registry">
+          Track Record ({counts.all}) <span aria-hidden="true">↓</span>
+        </a>
       </div>
-
-      <figure class="hero-stage-card">
-        <Image
-          src={stagePhoto}
-          alt="Alexander Zhiganov delivering a keynote on creative technology and neural production"
-          widths={[600, 1000, 1600]}
-          sizes="(max-width: 900px) 100vw, 48vw"
-          loading="eager"
-          fetchpriority="high"
-        />
-        <figcaption class="stage-caption">Keynote on creative technology &amp; neural production</figcaption>
-      </figure>
     </div>
   </section>
 
@@ -588,27 +569,51 @@ const counts = {
 <style>
   /* ---------- HERO ---------- */
   .hero {
-    padding-top: clamp(40px, 6vw, 88px);
-    padding-bottom: clamp(56px, 7vw, 104px);
+    position: relative;
+    isolation: isolate;
+    background: var(--bg-sunken);
   }
 
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    gap: clamp(32px, 5vw, 80px);
-    align-items: start;
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .hero-media img {
+    width: 112%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+    object-position: left 58%;
+  }
+
+  .hero-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(680px, 52vw, 780px);
+    box-sizing: border-box;
+    padding-block: clamp(48px, 5vw, 80px);
+  }
+
+  .hero-panel {
+    width: min(660px, 100%);
+    box-sizing: border-box;
+    padding: clamp(28px, 3vw, 44px);
+    background: var(--bg-surface);
   }
 
   .hero-title {
     font-size: var(--type-display);
-    margin-top: 18px;
     line-height: 1.02;
     letter-spacing: -0.025em;
   }
 
   .hero-lede {
     font-size: var(--type-lead);
-    margin-top: clamp(24px, 3vw, 40px);
+    margin-top: clamp(24px, 3vw, 32px);
     font-weight: 550;
     line-height: 1.35;
     color: var(--ink);
@@ -621,66 +626,31 @@ const counts = {
     max-width: 58ch;
   }
 
-  .credentials-list {
-    list-style: none;
-    margin: 28px 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .credential-item {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    font-size: var(--type-small);
-    color: var(--ink);
-    line-height: 1.45;
-  }
-
-  .cred-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--signal);
-    flex-shrink: 0;
-    transform: translateY(-1px);
-  }
-
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: clamp(32px, 4vw, 44px);
+    margin-top: 32px;
   }
 
-
-  .hero-stage-card {
-    margin: 0;
-    background: var(--bg-sunken);
-    border: 1px solid var(--rule);
-    overflow: hidden;
-    position: relative;
-  }
-
-  .hero-stage-card img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(10%);
-    transition: filter var(--dur-normal) var(--ease-out);
-  }
-
-  .hero-stage-card:hover img {
-    filter: grayscale(0%);
+  .hero-record-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 12px;
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--signal);
   }
 
   .stage-caption {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 20px;
     padding: 10px 14px;
     font-size: var(--type-small);
-    color: var(--mute);
+    color: var(--ink);
     background: var(--bg-surface);
     line-height: 1.4;
   }
@@ -1085,12 +1055,37 @@ const counts = {
     }
   }
 
-  @media (max-width: 900px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-      gap: 36px;
+  @media (max-width: 1280px) {
+    .hero {
+      background: var(--bg-canvas);
     }
 
+    .hero-media {
+      position: relative;
+      height: clamp(260px, 52vw, 460px);
+    }
+
+    .hero-media img {
+      width: 100%;
+      max-width: 100%;
+      object-position: center 58%;
+    }
+
+    .stage-caption {
+      right: 0;
+      bottom: 0;
+    }
+
+    .hero-content {
+      min-height: 0;
+      padding-block: 0 clamp(56px, 7vw, 84px);
+    }
+
+    .hero-panel {
+      max-width: 720px;
+      padding: clamp(28px, 5vw, 48px) 0 0;
+      background: transparent;
+    }
   }
 
   @media (max-width: 768px) {
