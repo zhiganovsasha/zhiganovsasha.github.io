@@ -54,6 +54,28 @@ agent working in this repository.
   `npm install` with long timeouts). Report the issue clearly to the owner in plain
   language and ask how to proceed.
 
+### Saving files on the Google Drive mount: `SetFileSecurityW` error 87
+
+- The working tree sits on drive `G:`, a Google Drive virtual mount that reports
+  itself to Windows as FAT32. FAT32 has no per-file permissions, so any API call
+  that assigns them fails with `ERROR_INVALID_PARAMETER` (Win32 87).
+- Tools that save atomically (write a temporary file, assign permissions, rename)
+  fail here with `SetFileSecurityW EIO (Win32 87)`. Under the `workspace-write`
+  sandbox, `pwsh` can fail to start at all with
+  `SetNamedSecurityInfoW failed (Win32 87): grantWrite(...)`, because the same
+  missing support breaks the sandbox's own write grant.
+- This is environmental and cannot be repaired from inside a session. Do not
+  retry the same write, do not re-run the sandbox, do not run ACL, ownership or
+  attribute repair commands (`takeown`, `icacls`), and do not invoke the
+  `diagnose-windows-sandbox-acl` skill for it: it already returned
+  `NOT_THIS_CLASS` on this path, with full control present for the signed-in user.
+- Write the content in place instead, after reading the current file, so no
+  temporary file or permission step is involved:
+  `[System.IO.File]::WriteAllText($path, $text, (New-Object System.Text.UTF8Encoding($false)))`.
+  Normalize line endings to LF and keep the encoding rules below.
+- `git` and README-style direct writes work normally on this path. Only the
+  atomic save path and the sandbox grant are affected.
+
 ## Publication
 
 - Public repository: https://github.com/zhiganovsasha/zhiganovsasha.github.io
