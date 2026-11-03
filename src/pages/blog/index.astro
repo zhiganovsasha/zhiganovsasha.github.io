@@ -9,10 +9,14 @@ interface BlogPost {
   href: string;
   type: 'essay' | 'note';
   typeName: string;
+  topics: string[];
   date: string;
   readTime: string;
   image?: ImageMetadata;
 }
+
+// Default topic catalog. Any new topics assigned to posts are automatically integrated.
+const defaultTopics = ['AI', 'Art', 'Personal'] as const;
 
 const posts: BlogPost[] = [
   {
@@ -22,6 +26,7 @@ const posts: BlogPost[] = [
     href: '/blog/projection-mapping',
     type: 'essay',
     typeName: 'Эссе',
+    topics: ['Art'],
     date: 'Ноябрь 2026',
     readTime: '12 минут чтения',
     image: projectionCover,
@@ -33,10 +38,13 @@ const posts: BlogPost[] = [
     href: '/blog/music-video-classification',
     type: 'note',
     typeName: 'Заметка',
+    topics: ['Art', 'Personal'],
     date: 'Ноябрь 2026',
     readTime: '3 минуты чтения',
   },
 ];
+
+const allTopics = Array.from(new Set([...defaultTopics, ...posts.flatMap((p) => p.topics)]));
 ---
 
 <Base
@@ -52,7 +60,7 @@ const posts: BlogPost[] = [
         Эссе о креативных технологиях, мультимедиа-продакшене и рабочие заметки из практики создания физических и цифровых продуктов.
       </p>
 
-      <div class="stream-filters" role="tablist" aria-label="Фильтр публикаций по формату">
+      <div class="stream-filters" role="tablist" aria-label="Фильтр публикаций по темам">
         <button
           type="button"
           class="filter-tab is-active"
@@ -62,30 +70,27 @@ const posts: BlogPost[] = [
           aria-controls="stream-panel"
           data-filter="all"
         >
-          Все материалы <span class="tab-count">2</span>
+          Все темы <span class="tab-count">{posts.length}</span>
         </button>
-        <button
-          type="button"
-          class="filter-tab"
-          role="tab"
-          id="tab-essay"
-          aria-selected="false"
-          aria-controls="stream-panel"
-          data-filter="essay"
-        >
-          Эссе <span class="tab-count">1</span>
-        </button>
-        <button
-          type="button"
-          class="filter-tab"
-          role="tab"
-          id="tab-note"
-          aria-selected="false"
-          aria-controls="stream-panel"
-          data-filter="note"
-        >
-          Заметки <span class="tab-count">1</span>
-        </button>
+        {
+          allTopics.map((topic) => {
+            const count = posts.filter((p) => p.topics.includes(topic)).length;
+            const filterKey = topic.toLowerCase();
+            return (
+              <button
+                type="button"
+                class="filter-tab"
+                role="tab"
+                id={`tab-${filterKey}`}
+                aria-selected="false"
+                aria-controls="stream-panel"
+                data-filter={filterKey}
+              >
+                {topic} <span class="tab-count">{count}</span>
+              </button>
+            );
+          })
+        }
       </div>
     </div>
   </header>
@@ -95,7 +100,11 @@ const posts: BlogPost[] = [
       <ul class="posts-list" role="list">
         {
           posts.map((post) => (
-            <li class="post-item" data-type={post.type}>
+            <li
+              class="post-item"
+              data-topics={post.topics.map((t) => t.toLowerCase()).join(',')}
+              data-type={post.type}
+            >
               {post.type === 'essay' ? (
                 <article class="essay-card">
                   {post.image && (
@@ -118,6 +127,8 @@ const posts: BlogPost[] = [
                     </h2>
                     <p class="essay-excerpt">{post.excerpt}</p>
                     <div class="post-meta">
+                      <span class="meta-topic">{post.topics.join(', ')}</span>
+                      <span class="meta-sep" aria-hidden="true">/</span>
                       <span class="meta-format">{post.typeName}</span>
                       <span class="meta-sep" aria-hidden="true">/</span>
                       <time class="meta-date" datetime="2026-11">{post.date}</time>
@@ -140,6 +151,8 @@ const posts: BlogPost[] = [
                     </h2>
                     <p class="note-excerpt">{post.excerpt}</p>
                     <div class="post-meta">
+                      <span class="meta-topic">{post.topics.join(', ')}</span>
+                      <span class="meta-sep" aria-hidden="true">/</span>
                       <span class="meta-format">{post.typeName}</span>
                       <span class="meta-sep" aria-hidden="true">/</span>
                       <time class="meta-date" datetime="2026-11">{post.date}</time>
@@ -153,6 +166,10 @@ const posts: BlogPost[] = [
           ))
         }
       </ul>
+
+      <p class="posts-empty" id="posts-empty" hidden>
+        В этой теме пока нет публикаций.
+      </p>
     </div>
   </section>
 
@@ -160,6 +177,7 @@ const posts: BlogPost[] = [
     (function () {
       const tabs = Array.from(document.querySelectorAll('.filter-tab'));
       const items = Array.from(document.querySelectorAll('.post-item'));
+      const emptyNotice = document.getElementById('posts-empty');
 
       function activate(filter, activeTab, updateUrl = true) {
         tabs.forEach((t) => {
@@ -168,30 +186,46 @@ const posts: BlogPost[] = [
           t.setAttribute('aria-selected', isTarget ? 'true' : 'false');
         });
 
+        const targetFilter = (filter || 'all').toLowerCase();
+        let visibleCount = 0;
+
         items.forEach((item) => {
-          const itemType = item.getAttribute('data-type');
-          const shouldShow = filter === 'all' || itemType === filter;
+          const itemTopics = (item.getAttribute('data-topics') || '')
+            .split(',')
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean);
+          const shouldShow = targetFilter === 'all' || itemTopics.includes(targetFilter);
           item.style.display = shouldShow ? '' : 'none';
+          if (shouldShow) {
+            visibleCount++;
+          }
         });
+
+        if (emptyNotice) {
+          emptyNotice.hidden = visibleCount > 0;
+        }
 
         if (updateUrl && window.history && window.history.replaceState) {
           const url = new URL(window.location.href);
-          if (filter === 'all') {
-            url.searchParams.delete('format');
+          if (targetFilter === 'all') {
+            url.searchParams.delete('topic');
           } else {
-            url.searchParams.set('format', filter);
+            url.searchParams.set('topic', targetFilter);
           }
+          url.searchParams.delete('format');
           window.history.replaceState({}, '', url.toString());
         }
       }
 
       // Check initial query parameter
       const params = new URLSearchParams(window.location.search);
-      const initialFormat = params.get('format');
-      if (initialFormat) {
-        const matchingTab = tabs.find((t) => t.getAttribute('data-filter') === initialFormat);
+      const initialTopic = params.get('topic');
+      if (initialTopic) {
+        const matchingTab = tabs.find(
+          (t) => (t.getAttribute('data-filter') || '').toLowerCase() === initialTopic.toLowerCase()
+        );
         if (matchingTab) {
-          activate(initialFormat, matchingTab, false);
+          activate(matchingTab.getAttribute('data-filter'), matchingTab, false);
         }
       }
 
@@ -243,6 +277,8 @@ const posts: BlogPost[] = [
     background: var(--bg-sunken);
     padding: 4px;
     gap: 4px;
+    flex-wrap: wrap;
+    max-width: 100%;
   }
 
   .filter-tab {
@@ -372,9 +408,24 @@ const posts: BlogPost[] = [
     color: var(--mute);
   }
 
-  .meta-format {
+  .meta-topic {
     font-weight: 500;
     color: var(--signal);
+  }
+
+  .meta-format {
+    color: var(--mute);
+  }
+
+  .posts-empty {
+    padding: clamp(32px, 5vw, 48px);
+    background: var(--bg-surface);
+    color: var(--mute);
+    font-size: var(--type-body);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 1040px;
+    text-wrap: pretty;
   }
 
   .meta-sep {
