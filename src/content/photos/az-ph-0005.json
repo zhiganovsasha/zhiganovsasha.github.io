@@ -1,0 +1,19 @@
+{
+  "code": "AZ-PH-0005",
+  "slug": "az-ph-0005",
+  "order": 5,
+  "alt": "Man in a red winter jacket and reflective vest posing with thumbs up beneath a large jet engine intake.",
+  "year": "2017",
+  "location": "Moscow",
+  "collections": [
+    "portraits",
+    "mobile"
+  ],
+  "featured": false,
+  "thumbSrc": "/images/art/photos/thumbs/az-ph-0005.webp",
+  "thumbWidth": 600,
+  "thumbHeight": 900,
+  "fullSrc": "/images/art/photos/full/az-ph-0005.jpg",
+  "fullWidth": 1280,
+  "fullHeight": 1920
+}

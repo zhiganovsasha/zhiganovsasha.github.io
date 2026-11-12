@@ -1,6 +1,6 @@
 ---
 interface Props {
-  current?: 'home' | 'development' | 'education' | 'contact' | 'blog';
+  current?: 'home' | 'development' | 'art' | 'education' | 'contact' | 'blog';
 }
 
 const { current } = Astro.props;
@@ -135,7 +135,7 @@ const { current } = Astro.props;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       font-size: var(--type-small);
     }
 
@@ -144,6 +144,7 @@ const { current } = Astro.props;
       align-items: center;
       min-height: 44px;
       padding-block: 0;
+      white-space: nowrap;
     }
 
     .cv-trigger {
@@ -153,9 +154,9 @@ const { current } = Astro.props;
     }
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 390px) {
     .main-nav {
-      gap: 6px;
+      gap: 4px;
       font-size: var(--type-small);
     }
 

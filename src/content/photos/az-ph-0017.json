@@ -1,0 +1,19 @@
+{
+  "code": "AZ-PH-0017",
+  "slug": "az-ph-0017",
+  "order": 17,
+  "alt": "Long-exposure night view through a raindrop-covered window showing glowing light trails of an aircraft moving along the dark runway.",
+  "year": "2017",
+  "location": "Moscow",
+  "collections": [
+    "street",
+    "film"
+  ],
+  "featured": true,
+  "thumbSrc": "/images/art/photos/thumbs/az-ph-0017.webp",
+  "thumbWidth": 900,
+  "thumbHeight": 600,
+  "fullSrc": "/images/art/photos/full/az-ph-0017.jpg",
+  "fullWidth": 1920,
+  "fullHeight": 1280
+}

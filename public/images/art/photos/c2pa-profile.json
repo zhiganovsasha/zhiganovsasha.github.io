@@ -1,0 +1,14 @@
+{
+  "tool": "Adobe Content Authenticity (Web App)",
+  "batchLimit": 50,
+  "authorPassportName": "Aleksandr Zhiganov",
+  "watermarkAndSiteName": "Alexander Zhiganov",
+  "socialAccounts": {
+    "linkedin": "https://linkedin.com/in/zhiganovsasha",
+    "instagram": "https://www.instagram.com/zhiganovsasha/"
+  },
+  "doNotTrainAiAssertion": true,
+  "licensingUrl": "https://zhiganovsasha.github.io/art/photography/licensing/",
+  "fullJpegDirectory": "public/images/art/photos/full/",
+  "processedCount": 22
+}

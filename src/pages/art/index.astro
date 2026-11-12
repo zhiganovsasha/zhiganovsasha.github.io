@@ -1,0 +1,301 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { PHOTO_COLLECTIONS } from '../../content.config';
+
+const allPhotos = (await getCollection('photos'))
+  .map((entry) => entry.data)
+  .sort((a, b) => a.order - b.order);
+
+const featuredPreview = allPhotos.filter((p) => p.featured).slice(0, 4);
+---
+
+<Base
+  title="Art — Alexander Zhiganov"
+  description="Art practice, photography, and visual experiments by Alexander Zhiganov across physical light, spatial systems, and documentary observation."
+  current="art"
+>
+  <header class="art-head">
+    <div class="wrap">
+      <h1 class="display">Art</h1>
+      <p class="lede art-lede">
+        Working at the intersection of art, technology, and AI. I use cameras,
+        physical space, and real-time software to study how people and machines
+        occupy the world.
+      </p>
+      <p class="art-statement muted">
+        Before a system becomes code or an installation reaches a stage, the
+        work begins with direct observation: light on engineered surfaces,
+        human presence in motion, and the quiet tension between infrastructure
+        and atmosphere.
+      </p>
+    </div>
+  </header>
+
+  <section class="section entry-section" aria-labelledby="photography-entry-title">
+    <div class="wrap">
+      <article class="photo-entry-card">
+        <div class="entry-copy">
+          <div class="entry-top">
+            <h2 id="photography-entry-title" class="entry-title">
+              <a href="/art/photography" class="entry-title-link">
+                Photography
+              </a>
+            </h2>
+            <p class="entry-lead">
+              An edited authorial portfolio across street observation,
+              portraits, landscapes, architecture, live events, mobile frames,
+              and monochrome film studies.
+            </p>
+            <p class="entry-body muted">
+              Curated in seven collections with fullscreen inspection,
+              Content Credentials, and direct inquiries for fine art prints or
+              individual licenses.
+            </p>
+          </div>
+
+          <div class="entry-collections">
+            <h3 class="collections-heading">Collections</h3>
+            <ul class="collection-pills" role="list">
+              {
+                PHOTO_COLLECTIONS.map((col) => {
+                  const count = allPhotos.filter((p) =>
+                    p.collections.includes(col.slug)
+                  ).length;
+                  return (
+                    <li>
+                      <a
+                        class="collection-pill"
+                        href={`/art/photography/${col.slug}`}
+                      >
+                        <span>{col.title}</span>
+                        <span class="pill-count">({count})</span>
+                      </a>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+          </div>
+
+          <div class="entry-actions">
+            <a class="btn btn-primary" href="/art/photography">
+              Explore Photography <span aria-hidden="true">↗</span>
+            </a>
+            <a class="btn btn-ghost" href="/art/photography/licensing">
+              Prints &amp; Licensing <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <a
+          class="entry-mosaic"
+          href="/art/photography"
+          aria-label="Open Photography gallery"
+        >
+          {
+            featuredPreview.map((photo) => (
+              <figure class="mosaic-cell">
+                <img
+                  src={photo.thumbSrc}
+                  width={photo.thumbWidth}
+                  height={photo.thumbHeight}
+                  alt={photo.alt}
+                  loading="eager"
+                  decoding="async"
+                />
+              </figure>
+            ))
+          }
+        </a>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .art-head {
+    padding-block: clamp(48px, 7vw, 104px) clamp(36px, 5vw, 64px);
+    background: var(--bg-surface);
+  }
+
+  .art-head h1 {
+    margin: 0;
+  }
+
+  .art-lede {
+    margin-top: 28px;
+    max-width: 58ch;
+    color: var(--ink);
+  }
+
+  .art-statement {
+    margin: 18px 0 0;
+    max-width: 64ch;
+    font-size: var(--type-body);
+    line-height: 1.55;
+  }
+
+  .entry-section {
+    padding-block: clamp(48px, 7vw, 96px) clamp(64px, 9vw, 128px);
+  }
+
+  .photo-entry-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-sm);
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(28px, 4vw, 56px);
+    padding: clamp(24px, 4vw, 48px);
+    align-items: stretch;
+  }
+
+  .entry-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    min-width: 0;
+  }
+
+  .entry-title {
+    font-size: var(--type-heading);
+    font-weight: 680;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    margin: 0 0 16px;
+  }
+
+  .entry-title-link {
+    text-decoration: none;
+    color: var(--ink);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .entry-title-link:hover {
+    color: var(--signal);
+  }
+
+  .entry-lead {
+    font-size: var(--type-lead);
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0 0 14px;
+    max-width: 54ch;
+  }
+
+  .entry-body {
+    font-size: var(--type-body);
+    line-height: 1.55;
+    margin: 0;
+    max-width: 58ch;
+  }
+
+  .entry-collections {
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    padding: 18px 20px;
+  }
+
+  .collections-heading {
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 12px;
+  }
+
+  .collection-pills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .collection-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    min-height: 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: var(--type-small);
+    font-weight: 550;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .collection-pill:hover {
+    border-color: var(--signal);
+    color: var(--signal);
+  }
+
+  .pill-count {
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .entry-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .entry-mosaic {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    text-decoration: none;
+    align-content: stretch;
+  }
+
+  .mosaic-cell {
+    margin: 0;
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .mosaic-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 380ms var(--ease-out);
+  }
+
+  .entry-mosaic:hover .mosaic-cell img {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 960px) {
+    .photo-entry-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .entry-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .entry-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .entry-mosaic {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+  }
+</style>

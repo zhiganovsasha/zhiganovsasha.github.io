@@ -1,0 +1,289 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PhotoGallery from '../../../components/PhotoGallery.astro';
+import { PHOTO_COLLECTIONS } from '../../../content.config';
+
+const allPhotos = (await getCollection('photos'))
+  .map((entry) => entry.data)
+  .sort((a, b) => a.order - b.order);
+
+const featuredPhotos = allPhotos.filter((p) => p.featured);
+---
+
+<Base
+  title="Photography — Alexander Zhiganov"
+  description="Authorial photography portfolio by Alexander Zhiganov: selected frames and seven curated collections across street, portraits, landscape, architecture, events, mobile, and film."
+  current="art"
+>
+  <header class="page-head">
+    <div class="wrap">
+      <a class="back" href="/art">
+        <span aria-hidden="true">←</span> Back to Art
+      </a>
+      <h1 class="display">Photography</h1>
+      <p class="lede page-lede">
+        Selected photographs and curated collections. Every image is available
+        for fullscreen inspection and direct print or licensing inquiry.
+      </p>
+    </div>
+  </header>
+
+  <section
+    class="section collections-section"
+    aria-labelledby="collections-title"
+  >
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="collections-title">Collections</h2>
+        <a class="licensing-inline" href="/art/photography/licensing">
+          Prints &amp; Licensing Terms <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <ul class="collections-grid" role="list">
+        {
+          PHOTO_COLLECTIONS.map((col) => {
+            const matching = allPhotos.filter((p) =>
+              p.collections.includes(col.slug)
+            );
+            const cover =
+              matching.find((p) => p.code === col.coverCode) ||
+              matching[0] ||
+              allPhotos[0];
+            return (
+              <li class="collection-card">
+                <a
+                  class="collection-link"
+                  href={`/art/photography/${col.slug}`}
+                  aria-label={`${col.title} collection (${matching.length} photographs)`}
+                >
+                  {cover && (
+                    <span class="collection-cover">
+                      <img
+                        src={cover.thumbSrc}
+                        width={cover.thumbWidth}
+                        height={cover.thumbHeight}
+                        alt={cover.alt}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </span>
+                  )}
+                  <span class="collection-body">
+                    <span class="collection-head-row">
+                      <h3 class="collection-name">{col.title}</h3>
+                      <span class="collection-arrow" aria-hidden="true">
+                        ↗
+                      </span>
+                    </span>
+                    <p class="collection-desc">{col.description}</p>
+                    <span class="collection-count">
+                      {matching.length}{' '}
+                      {matching.length === 1 ? 'photograph' : 'photographs'}
+                    </span>
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section selected-section" aria-labelledby="selected-title">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="selected-title">Selected Photographs</h2>
+        <p class="selected-note muted">
+          Click any frame to open fullscreen zoom, copy its catalog identifier,
+          or ask about a print or license.
+        </p>
+      </div>
+
+      <PhotoGallery
+        photos={featuredPhotos}
+        galleryId="selected-photography-gallery"
+        showCaptionPrototype={true}
+        includeJsonLd={true}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(40px, 6vw, 88px) clamp(32px, 4vw, 56px);
+    background: var(--bg-surface);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding-block: 4px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .back:hover {
+    color: var(--signal);
+  }
+
+  .back:active {
+    transform: translateX(-2px);
+  }
+
+  .page-head h1 {
+    margin: 0;
+  }
+
+  .page-lede {
+    margin-top: 24px;
+    max-width: 58ch;
+  }
+
+  .licensing-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--type-small);
+    font-weight: 550;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 8px 14px;
+    min-height: 40px;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule-strong);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .licensing-inline:hover {
+    border-color: var(--signal);
+    color: var(--signal);
+  }
+
+  .collections-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr));
+    gap: 24px;
+  }
+
+  .collection-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-xs);
+    display: flex;
+    transition:
+      border-color var(--dur-normal) var(--ease-out),
+      box-shadow var(--dur-normal) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .collection-card:hover,
+  .collection-card:focus-within {
+    border-color: var(--ink);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .collection-link {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .collection-cover {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-sunken);
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+
+  .collection-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 380ms var(--ease-out);
+  }
+
+  .collection-card:hover .collection-cover img {
+    transform: scale(1.03);
+  }
+
+  .collection-body {
+    padding: 20px 22px 22px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 10px;
+  }
+
+  .collection-head-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .collection-name {
+    font-size: var(--type-lead);
+    font-weight: 640;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .collection-arrow {
+    font-size: var(--type-lead);
+    color: var(--mute);
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .collection-card:hover .collection-arrow {
+    transform: translate(3px, -3px);
+    color: var(--signal);
+  }
+
+  .collection-desc {
+    margin: 0;
+    font-size: var(--type-body);
+    color: var(--mute);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .collection-count {
+    font-size: var(--type-small);
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .selected-note {
+    margin: 0;
+    max-width: 48ch;
+    font-size: var(--type-small);
+    line-height: 1.45;
+  }
+</style>

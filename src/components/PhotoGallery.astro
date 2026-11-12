@@ -1,0 +1,950 @@
+---
+import '../vendor/photoswipe/photoswipe.css';
+
+export interface PhotoEntry {
+  code: string;
+  slug: string;
+  order: number;
+  alt: string;
+  year?: string;
+  location?: string;
+  collections: string[];
+  featured: boolean;
+  thumbSrc: string;
+  thumbWidth: number;
+  thumbHeight: number;
+  fullSrc: string;
+  fullWidth: number;
+  fullHeight: number;
+}
+
+interface Props {
+  photos: PhotoEntry[];
+  galleryId?: string;
+  showCaptionPrototype?: boolean;
+  includeJsonLd?: boolean;
+}
+
+const {
+  photos,
+  galleryId = 'photo-gallery',
+  showCaptionPrototype = true,
+  includeJsonLd = true,
+} = Astro.props;
+
+const SITE_ORIGIN = 'https://zhiganovsasha.github.io';
+const LICENSING_URL = `${SITE_ORIGIN}/art/photography/licensing/`;
+
+const jsonLdPayload = includeJsonLd
+  ? {
+      '@context': 'https://schema.org',
+      '@graph': photos.map((photo) => ({
+        '@type': 'ImageObject',
+        '@id': `${SITE_ORIGIN}${photo.fullSrc}#${photo.slug}`,
+        identifier: photo.code,
+        name: photo.code,
+        caption: photo.alt,
+        contentUrl: `${SITE_ORIGIN}${photo.fullSrc}`,
+        thumbnailUrl: `${SITE_ORIGIN}${photo.thumbSrc}`,
+        width: photo.fullWidth,
+        height: photo.fullHeight,
+        encodingFormat: 'image/jpeg',
+        creator: {
+          '@type': 'Person',
+          name: 'Alexander Zhiganov',
+          alternateName: 'Aleksandr Zhiganov',
+          url: SITE_ORIGIN,
+          sameAs: [
+            'https://linkedin.com/in/zhiganovsasha',
+            'https://www.instagram.com/zhiganovsasha/',
+          ],
+        },
+        creditText: 'Alexander Zhiganov',
+        copyrightNotice: `Copyright ${photo.year || '2026'} Alexander Zhiganov. All rights reserved.`,
+        license: LICENSING_URL,
+        acquireLicensePage: LICENSING_URL,
+      })),
+    }
+  : null;
+---
+
+{
+  jsonLdPayload && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(jsonLdPayload)}
+    />
+  )
+}
+
+<div
+  class="photo-gallery-root"
+  data-photo-gallery-root
+  data-caption-mode="none"
+>
+  {
+    showCaptionPrototype && (
+      <div class="gallery-toolbar">
+        <div
+          class="caption-switcher"
+          role="group"
+          aria-label="Grid caption display mode"
+        >
+          <span class="switcher-label">Grid captions:</span>
+          <button
+            type="button"
+            class="caption-mode-btn is-active"
+            data-set-caption="none"
+            aria-pressed="true"
+          >
+            Clean grid
+          </button>
+          <button
+            type="button"
+            class="caption-mode-btn"
+            data-set-caption="code"
+            aria-pressed="false"
+          >
+            Catalog ID
+          </button>
+          <button
+            type="button"
+            class="caption-mode-btn"
+            data-set-caption="meta"
+            aria-pressed="false"
+          >
+            ID + year &amp; location
+          </button>
+        </div>
+        <p class="toolbar-count">
+          <span>{photos.length}</span>{' '}
+          {photos.length === 1 ? 'photograph' : 'photographs'}
+        </p>
+      </div>
+    )
+  }
+
+  <ul class="photo-grid" id={galleryId} data-pswp-gallery role="list">
+    {
+      photos.map((photo, index) => {
+        const metaParts = [photo.location, photo.year].filter(Boolean);
+        const metaText = metaParts.join(', ');
+        return (
+          <li class="photo-card">
+            <a
+              class="photo-link"
+              href={photo.fullSrc}
+              data-pswp-src={photo.fullSrc}
+              data-pswp-width={photo.fullWidth}
+              data-pswp-height={photo.fullHeight}
+              data-photo-code={photo.code}
+              data-photo-alt={photo.alt}
+              data-photo-meta={metaText}
+              aria-label={`Open photograph ${photo.code} in fullscreen viewer: ${photo.alt}`}
+            >
+              <span class="photo-frame">
+                <img
+                  class="photo-thumb"
+                  src={photo.thumbSrc}
+                  width={photo.thumbWidth}
+                  height={photo.thumbHeight}
+                  alt={photo.alt}
+                  loading={index < 6 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </span>
+              <span class="photo-caption">
+                <code class="photo-code">{photo.code}</code>
+                {metaText && <span class="photo-meta">{metaText}</span>}
+              </span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>
+
+<dialog
+  class="dir-dialog inquiry-dialog"
+  id="photo-inquiry-dialog"
+  aria-labelledby="photo-inquiry-title"
+>
+  <div class="inner">
+    <div class="inquiry-head">
+      <h3 id="photo-inquiry-title">Ask About a Print or License</h3>
+      <button
+        type="button"
+        class="inquiry-close-icon"
+        data-inquiry-close
+        aria-label="Close print or license dialog"
+      >
+        ×
+      </button>
+    </div>
+
+    <p class="inquiry-intro">
+      Fine art prints and individual commercial or editorial licenses are
+      arranged directly. Reference the photograph identifier below when reaching
+      out:
+    </p>
+
+    <div class="inquiry-well">
+      <div class="well-row">
+        <div class="well-info">
+          <span class="well-label">Photograph ID:</span>
+          <code class="well-code" data-inquiry-code>AZ-PH-0001</code>
+          <span class="well-meta" data-inquiry-meta></span>
+        </div>
+        <button
+          type="button"
+          class="well-btn"
+          data-copy-code
+          aria-label="Copy photograph identifier to clipboard"
+        >
+          Copy ID
+        </button>
+      </div>
+
+      <div class="well-row">
+        <div class="well-info">
+          <span class="well-label">Email:</span>
+          <span class="well-email">zhiganovalex@gmail.com</span>
+        </div>
+        <button
+          type="button"
+          class="well-btn"
+          data-copy-inquiry-email="zhiganovalex@gmail.com"
+          aria-label="Copy email address zhiganovalex@gmail.com to clipboard"
+        >
+          Copy Email
+        </button>
+      </div>
+    </div>
+
+    <div class="inquiry-channels">
+      <a
+        class="btn-channel"
+        href="https://t.me/zhiganovsasha"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Telegram <span aria-hidden="true">↗</span>
+      </a>
+      <a
+        class="btn-channel"
+        href="https://wa.me/79774613466"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        WhatsApp <span aria-hidden="true">↗</span>
+      </a>
+      <a class="btn-channel btn-channel-muted" href="/art/photography/licensing">
+        Licensing Terms <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="actions inquiry-footer">
+      <span class="sr-only" aria-live="polite" data-inquiry-live></span>
+      <button type="button" class="close" data-inquiry-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.js';
+  import PhotoSwipe from '../vendor/photoswipe/photoswipe.esm.js';
+
+  function initPhotoGalleries() {
+    // 1. Caption prototype switcher (persisted across photography pages in localStorage)
+    const roots = document.querySelectorAll<HTMLElement>('[data-photo-gallery-root]');
+    const savedMode = window.localStorage?.getItem('az-photo-caption-mode') || 'none';
+
+    const applyCaptionMode = (mode: string) => {
+      roots.forEach((root) => {
+        root.setAttribute('data-caption-mode', mode);
+        root.querySelectorAll<HTMLButtonElement>('[data-set-caption]').forEach((btn) => {
+          const active = btn.getAttribute('data-set-caption') === mode;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+      });
+      try {
+        window.localStorage?.setItem('az-photo-caption-mode', mode);
+      } catch {
+        // ignore storage quota errors
+      }
+    };
+
+    if (savedMode === 'none' || savedMode === 'code' || savedMode === 'meta') {
+      applyCaptionMode(savedMode);
+    }
+
+    roots.forEach((root) => {
+      root.querySelectorAll<HTMLButtonElement>('[data-set-caption]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-set-caption') || 'none';
+          applyCaptionMode(mode);
+        });
+      });
+    });
+
+    // 2. Inquiry dialog controller
+    const dialog = document.getElementById('photo-inquiry-dialog') as HTMLDialogElement | null;
+    const codeEl = dialog?.querySelector('[data-inquiry-code]') as HTMLElement | null;
+    const metaEl = dialog?.querySelector('[data-inquiry-meta]') as HTMLElement | null;
+    const copyCodeBtn = dialog?.querySelector('[data-copy-code]') as HTMLButtonElement | null;
+    const copyEmailBtn = dialog?.querySelector('[data-copy-inquiry-email]') as HTMLButtonElement | null;
+    const liveStatus = dialog?.querySelector('[data-inquiry-live]') as HTMLElement | null;
+
+    let lastTrigger: HTMLElement | null = null;
+
+    const openInquiry = (code: string, meta: string, trigger?: HTMLElement | null) => {
+      if (!dialog) return;
+      if (codeEl) codeEl.textContent = code;
+      if (metaEl) {
+        metaEl.textContent = meta ? `(${meta})` : '';
+        metaEl.toggleAttribute('hidden', !meta);
+      }
+      if (copyCodeBtn) copyCodeBtn.setAttribute('data-code-value', code);
+      lastTrigger = trigger || null;
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    };
+
+    if (dialog && !dialog.hasAttribute('data-bound')) {
+      dialog.setAttribute('data-bound', 'true');
+
+      dialog.querySelectorAll('[data-inquiry-close]').forEach((btn) => {
+        btn.addEventListener('click', () => dialog.close());
+      });
+
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+
+      dialog.addEventListener('close', () => {
+        if (lastTrigger) {
+          lastTrigger.focus();
+          lastTrigger = null;
+        }
+      });
+
+      copyCodeBtn?.addEventListener('click', async () => {
+        const code = copyCodeBtn.getAttribute('data-code-value') || codeEl?.textContent || '';
+        try {
+          await navigator.clipboard.writeText(code);
+          copyCodeBtn.textContent = 'Copied!';
+          if (liveStatus) liveStatus.textContent = `Photograph ID ${code} copied to clipboard.`;
+          window.setTimeout(() => {
+            copyCodeBtn.textContent = 'Copy ID';
+          }, 2000);
+        } catch {
+          copyCodeBtn.textContent = code;
+        }
+      });
+
+      copyEmailBtn?.addEventListener('click', async () => {
+        const email = copyEmailBtn.getAttribute('data-copy-inquiry-email') || 'zhiganovalex@gmail.com';
+        try {
+          await navigator.clipboard.writeText(email);
+          copyEmailBtn.textContent = 'Copied!';
+          if (liveStatus) liveStatus.textContent = 'Email address copied to clipboard.';
+          window.setTimeout(() => {
+            copyEmailBtn.textContent = 'Copy Email';
+          }, 2000);
+        } catch {
+          copyEmailBtn.textContent = 'Selected';
+        }
+      });
+    }
+
+    // 3. PhotoSwipe Lightbox
+    const galleries = document.querySelectorAll<HTMLElement>('[data-pswp-gallery]');
+    galleries.forEach((galleryEl) => {
+      if (galleryEl.hasAttribute('data-pswp-bound')) return;
+      galleryEl.setAttribute('data-pswp-bound', 'true');
+
+      let activeTriggerLink: HTMLElement | null = null;
+
+      galleryEl.querySelectorAll<HTMLElement>('a.photo-link').forEach((link) => {
+        link.addEventListener('click', () => {
+          activeTriggerLink = link;
+        });
+      });
+
+      const lightbox = new PhotoSwipeLightbox({
+        gallery: galleryEl,
+        children: 'a.photo-link',
+        pswpModule: PhotoSwipe,
+        bgOpacity: 0.96,
+        paddingFn: (viewportSize: { x: number; y: number }) => ({
+          top: viewportSize.x < 640 ? 56 : 64,
+          bottom: viewportSize.x < 640 ? 116 : 96,
+          left: viewportSize.x < 640 ? 12 : 40,
+          right: viewportSize.x < 640 ? 12 : 40,
+        }),
+        returnFocus: true,
+      });
+
+      lightbox.on('uiRegister', () => {
+        lightbox.pswp.ui.registerElement({
+          name: 'az-photo-bar',
+          order: 9,
+          isButton: false,
+          appendTo: 'root',
+          html: '',
+          onInit: (el: HTMLElement, pswp: any) => {
+            el.className = 'pswp__az-bar';
+
+            const renderBar = () => {
+              const currSlide = pswp.currSlide;
+              const linkEl = currSlide?.data?.element as HTMLElement | undefined;
+              const code = linkEl?.getAttribute('data-photo-code') || '';
+              const meta = linkEl?.getAttribute('data-photo-meta') || '';
+              const alt = linkEl?.getAttribute('data-photo-alt') || '';
+
+              el.innerHTML = `
+                <div class="pswp__az-bar-inner">
+                  <div class="pswp__az-info">
+                    <div class="pswp__az-id-row">
+                      <code class="pswp__az-code">${code}</code>
+                      <button type="button" class="pswp__az-copy" data-pswp-copy="${code}" aria-label="Copy photograph number ${code}">
+                        Copy ID
+                      </button>
+                      ${meta ? `<span class="pswp__az-meta">${meta}</span>` : ''}
+                    </div>
+                    ${alt ? `<p class="pswp__az-alt">${alt}</p>` : ''}
+                  </div>
+                  <div class="pswp__az-actions">
+                    <button type="button" class="pswp__az-inquire" data-pswp-inquire>
+                      Ask about a print or license for this image
+                    </button>
+                  </div>
+                </div>
+              `;
+
+              const copyBtn = el.querySelector<HTMLButtonElement>('[data-pswp-copy]');
+              copyBtn?.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                try {
+                  await navigator.clipboard.writeText(code);
+                  copyBtn.textContent = 'Copied!';
+                  window.setTimeout(() => {
+                    copyBtn.textContent = 'Copy ID';
+                  }, 1800);
+                } catch {
+                  copyBtn.textContent = code;
+                }
+              });
+
+              const inquireBtn = el.querySelector<HTMLButtonElement>('[data-pswp-inquire]');
+              inquireBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openInquiry(code, meta, inquireBtn);
+              });
+            };
+
+            pswp.on('change', renderBar);
+            renderBar();
+          },
+        });
+      });
+
+      lightbox.on('destroy', () => {
+        if (activeTriggerLink) {
+          activeTriggerLink.focus();
+        }
+      });
+
+      lightbox.init();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPhotoGalleries);
+  } else {
+    initPhotoGalleries();
+  }
+</script>
+
+<style>
+  .photo-gallery-root {
+    width: 100%;
+  }
+
+  .gallery-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .caption-switcher {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule);
+  }
+
+  .switcher-label {
+    font-size: var(--type-small);
+    color: var(--mute);
+    padding: 6px 10px 6px 12px;
+    font-weight: 500;
+  }
+
+  .caption-mode-btn {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--mute);
+    font-family: var(--font);
+    font-size: var(--type-small);
+    font-weight: 550;
+    padding: 6px 12px;
+    min-height: 36px;
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .caption-mode-btn:hover {
+    color: var(--ink);
+  }
+
+  .caption-mode-btn.is-active {
+    background: var(--bg-surface);
+    color: var(--ink);
+    border-color: var(--rule-strong);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .toolbar-count {
+    margin: 0;
+    font-size: var(--type-small);
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- PHOTO GRID ---------- */
+
+  .photo-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: clamp(16px, 2.2vw, 28px);
+    align-items: start;
+  }
+
+  .photo-card {
+    margin: 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-xs);
+    transition:
+      border-color var(--dur-normal) var(--ease-out),
+      box-shadow var(--dur-normal) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .photo-card:hover,
+  .photo-card:focus-within {
+    border-color: var(--ink);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .photo-link {
+    display: block;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 12px;
+  }
+
+  .photo-frame {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--bg-sunken);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .photo-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 360ms var(--ease-out);
+  }
+
+  .photo-card:hover .photo-thumb {
+    transform: scale(1.02);
+  }
+
+  /* Caption Prototype Variants */
+  .photo-caption {
+    display: none;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 10px;
+    font-size: var(--type-small);
+    line-height: 1.35;
+  }
+
+  .photo-code {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .photo-meta {
+    font-family: var(--font);
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .photo-gallery-root[data-caption-mode='code'] .photo-caption {
+    display: flex;
+  }
+
+  .photo-gallery-root[data-caption-mode='code'] .photo-meta {
+    display: none;
+  }
+
+  .photo-gallery-root[data-caption-mode='meta'] .photo-caption {
+    display: flex;
+  }
+
+  /* ---------- INQUIRY DIALOG ---------- */
+
+  .inquiry-dialog {
+    max-width: 540px;
+    z-index: 200000;
+  }
+
+  .inquiry-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .inquiry-head h3 {
+    margin: 0;
+  }
+
+  .inquiry-close-icon {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+    font-size: var(--type-lead);
+    line-height: 1;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .inquiry-close-icon:hover {
+    background: var(--bg-sunken);
+    border-color: var(--ink);
+  }
+
+  .inquiry-intro {
+    font-size: var(--type-body);
+    line-height: 1.5;
+    color: var(--mute);
+    margin: 0 0 20px;
+  }
+
+  .inquiry-well {
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule-strong);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .well-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+  }
+
+  .well-row + .well-row {
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .well-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .well-label {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .well-code {
+    font-family: var(--font-code);
+    font-size: var(--type-body);
+    font-weight: 500;
+    color: var(--ink);
+    user-select: all;
+  }
+
+  .well-meta {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .well-email {
+    font-size: var(--type-body);
+    font-weight: 550;
+    color: var(--ink);
+    user-select: all;
+    word-break: break-all;
+  }
+
+  .well-btn {
+    appearance: none;
+    background: var(--bg-surface);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
+    font-family: var(--font);
+    font-size: var(--type-small);
+    font-weight: 550;
+    min-height: 40px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .well-btn:hover {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #ffffff;
+  }
+
+  .inquiry-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .btn-channel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 10px 16px;
+    background: var(--ink);
+    color: #ffffff;
+    border: 1px solid var(--ink);
+    text-decoration: none;
+    font-size: var(--type-small);
+    font-weight: 550;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn-channel:hover {
+    background: var(--signal);
+    border-color: var(--signal);
+  }
+
+  .btn-channel-muted {
+    background: var(--bg-surface);
+    color: var(--ink);
+    border-color: var(--rule-strong);
+  }
+
+  .btn-channel-muted:hover {
+    background: var(--bg-sunken);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .inquiry-footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+
+  /* ---------- PHOTOSWIPE CUSTOM BOTTOM BAR ---------- */
+
+  :global(.pswp) {
+    --pswp-bg: #0b0b0b;
+  }
+
+  :global(.pswp__button) {
+    border-radius: 0 !important;
+  }
+
+  :global(.pswp__az-bar) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: rgba(11, 11, 11, 0.92);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    padding: 14px clamp(16px, 4vw, 48px);
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 0px));
+    pointer-events: auto;
+  }
+
+  :global(.pswp__az-bar-inner) {
+    max-width: var(--maxw);
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+
+  :global(.pswp__az-info) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1 1 320px;
+  }
+
+  :global(.pswp__az-id-row) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+
+  :global(.pswp__az-code) {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+  }
+
+  :global(.pswp__az-copy) {
+    appearance: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    font-family: var(--font);
+    font-size: var(--type-small);
+    font-weight: 550;
+    padding: 4px 10px;
+    min-height: 32px;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  :global(.pswp__az-copy:hover) {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #ffffff;
+  }
+
+  :global(.pswp__az-meta) {
+    font-family: var(--font);
+    font-size: var(--type-small);
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  :global(.pswp__az-alt) {
+    margin: 0;
+    font-family: var(--font);
+    font-size: var(--type-small);
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.4;
+    max-width: 74ch;
+  }
+
+  :global(.pswp__az-actions) {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  :global(.pswp__az-inquire) {
+    appearance: none;
+    background: #ffffff;
+    color: var(--ink);
+    border: 1px solid #ffffff;
+    font-family: var(--font);
+    font-size: var(--type-small);
+    font-weight: 600;
+    min-height: 42px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  :global(.pswp__az-inquire:hover) {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #ffffff;
+  }
+
+  @media (max-width: 640px) {
+    .photo-grid {
+      grid-template-columns: 1fr;
+    }
+
+    :global(.pswp__az-alt) {
+      display: none;
+    }
+
+    :global(.pswp__az-actions),
+    :global(.pswp__az-inquire) {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+</style>

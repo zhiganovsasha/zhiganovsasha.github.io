@@ -1,0 +1,289 @@
+---
+import Base from '../../../layouts/Base.astro';
+---
+
+<Base
+  title="Prints & Licensing — Photography — Alexander Zhiganov"
+  description="Copyright notice, print availability, and individual licensing inquiries for photographs by Alexander Zhiganov."
+  current="art"
+>
+  <header class="page-head">
+    <div class="wrap">
+      <a class="back" href="/art/photography">
+        <span aria-hidden="true">←</span> Back to Photography
+      </a>
+      <h1 class="display">Prints &amp; Licensing</h1>
+      <p class="lede page-lede">
+        All photographs on this website are protected by copyright. Any reproduction,
+        publication, or commercial use requires prior written permission.
+      </p>
+    </div>
+  </header>
+
+  <section class="section licensing-body" aria-label="Usage terms and contact details">
+    <div class="wrap licensing-grid">
+      <article class="licensing-card">
+        <h2>Copyright &amp; Usage</h2>
+        <p>
+          Every photograph published in the Photography section is original work
+          by Alexander Zhiganov. No image may be copied, redistributed, used in
+          editorial or commercial layouts, or included in automated dataset and
+          AI training pipelines without explicit prior authorization.
+        </p>
+        <p class="muted">
+          Published files carry embedded IPTC licensing metadata and Content
+          Credentials (C2PA) attributing authorship to Aleksandr Zhiganov.
+        </p>
+      </article>
+
+      <article class="licensing-card">
+        <h2>Prints &amp; Individual Licenses</h2>
+        <p>
+          Archival fine art prints and individual usage licenses (editorial,
+          exhibition, book cover, or commercial campaign) are arranged directly
+          on a per-image basis.
+        </p>
+        <p class="muted">
+          When reaching out, include the stable catalog identifier shown in the
+          fullscreen viewer (for example, <code>AZ-PH-0001</code>) and a brief
+          note on how or where you plan to use the photograph.
+        </p>
+      </article>
+
+      <article class="licensing-card contact-card">
+        <h2>Get in Touch</h2>
+        <p>
+          Reach out directly by email, Telegram, or WhatsApp to ask about a
+          print or license:
+        </p>
+
+        <div class="contact-well">
+          <div class="contact-email-group">
+            <span class="contact-label">Email:</span>
+            <span class="contact-email" id="licensing-email-text"
+              >zhiganovalex@gmail.com</span
+            >
+          </div>
+          <button
+            type="button"
+            class="copy-email-btn"
+            data-copy-licensing="zhiganovalex@gmail.com"
+            aria-label="Copy email address zhiganovalex@gmail.com to clipboard"
+          >
+            Copy Email
+          </button>
+          <span class="sr-only" aria-live="polite" data-licensing-copy-status></span>
+        </div>
+
+        <div class="direct-links">
+          <a
+            class="btn btn-primary"
+            href="https://t.me/zhiganovsasha"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Telegram <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            class="btn btn-ghost"
+            href="https://wa.me/79774613466"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    const copyBtn = document.querySelector<HTMLButtonElement>('[data-copy-licensing]');
+    const statusEl = document.querySelector<HTMLElement>('[data-licensing-copy-status]');
+
+    copyBtn?.addEventListener('click', async () => {
+      const email = copyBtn.getAttribute('data-copy-licensing') || 'zhiganovalex@gmail.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        copyBtn.textContent = 'Copied!';
+        if (statusEl) statusEl.textContent = 'Email address copied to clipboard.';
+        window.setTimeout(() => {
+          copyBtn.textContent = 'Copy Email';
+          if (statusEl) statusEl.textContent = '';
+        }, 2000);
+      } catch {
+        const emailSpan = document.getElementById('licensing-email-text');
+        if (emailSpan) {
+          const range = document.createRange();
+          range.selectNodeContents(emailSpan);
+          const sel = window.getSelection();
+          sel?.removeAllRanges();
+          sel?.addRange(range);
+        }
+        copyBtn.textContent = 'Selected';
+      }
+    });
+  </script>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(40px, 6vw, 88px) clamp(32px, 4vw, 56px);
+    background: var(--bg-surface);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding-block: 4px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .back:hover {
+    color: var(--signal);
+  }
+
+  .back:active {
+    transform: translateX(-2px);
+  }
+
+  .page-head h1 {
+    margin: 0;
+  }
+
+  .page-lede {
+    margin-top: 24px;
+    max-width: 60ch;
+  }
+
+  .licensing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .licensing-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow-xs);
+    padding: clamp(24px, 3.5vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .licensing-card h2 {
+    font-size: var(--type-lead);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0;
+  }
+
+  .licensing-card p {
+    margin: 0;
+    font-size: var(--type-body);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  .licensing-card code {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    background: var(--bg-sunken);
+    padding: 2px 6px;
+    border: 1px solid var(--rule);
+  }
+
+  .contact-card {
+    grid-column: 1 / -1;
+  }
+
+  .contact-well {
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule-strong);
+    padding: 18px 22px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    margin-top: 4px;
+  }
+
+  .contact-email-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .contact-label {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .contact-email {
+    font-size: var(--type-lead);
+    font-weight: 550;
+    color: var(--ink);
+    user-select: all;
+    word-break: break-all;
+  }
+
+  .copy-email-btn {
+    appearance: none;
+    background: var(--bg-surface);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
+    font-family: var(--font);
+    font-size: var(--type-small);
+    font-weight: 600;
+    min-height: 44px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .copy-email-btn:hover {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #ffffff;
+  }
+
+  .direct-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  @media (max-width: 860px) {
+    .licensing-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .direct-links {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .direct-links .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+</style>

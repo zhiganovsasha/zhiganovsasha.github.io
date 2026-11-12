@@ -1,0 +1,19 @@
+{
+  "code": "AZ-PH-0003",
+  "slug": "az-ph-0003",
+  "order": 3,
+  "alt": "Airport security officer in a high-visibility neon jacket standing on a snow-swept apron at dusk with airliners parked behind.",
+  "year": "2017",
+  "location": "Moscow",
+  "collections": [
+    "street",
+    "portraits"
+  ],
+  "featured": true,
+  "thumbSrc": "/images/art/photos/thumbs/az-ph-0003.webp",
+  "thumbWidth": 900,
+  "thumbHeight": 600,
+  "fullSrc": "/images/art/photos/full/az-ph-0003.jpg",
+  "fullWidth": 1920,
+  "fullHeight": 1280
+}

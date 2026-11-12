@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PhotoGallery from '../../../components/PhotoGallery.astro';
+import {
+  PHOTO_COLLECTIONS,
+  type PhotoCollectionMeta,
+} from '../../../content.config';
+
+export function getStaticPaths() {
+  return PHOTO_COLLECTIONS.map((col) => ({
+    params: { collection: col.slug },
+    props: { collectionMeta: col },
+  }));
+}
+
+interface Props {
+  collectionMeta: PhotoCollectionMeta;
+}
+
+const { collectionMeta } = Astro.props;
+
+const allPhotos = (await getCollection('photos'))
+  .map((entry) => entry.data)
+  .sort((a, b) => a.order - b.order);
+
+const collectionPhotos = allPhotos.filter((p) =>
+  p.collections.includes(collectionMeta.slug)
+);
+---
+
+<Base
+  title={`${collectionMeta.title} — Photography — Alexander Zhiganov`}
+  description={`${collectionMeta.title} photography collection by Alexander Zhiganov: ${collectionMeta.description}`}
+  current="art"
+>
+  <header class="page-head">
+    <div class="wrap">
+      <a class="back" href="/art/photography">
+        <span aria-hidden="true">←</span> Back to Photography
+      </a>
+      <h1 class="display">{collectionMeta.title}</h1>
+      <p class="lede page-lede">{collectionMeta.description}</p>
+
+      <nav
+        class="collection-nav"
+        aria-label="Photography collections"
+      >
+        <a class="col-tab" href="/art/photography">Selected</a>
+        {
+          PHOTO_COLLECTIONS.map((col) => {
+            const count = allPhotos.filter((p) =>
+              p.collections.includes(col.slug)
+            ).length;
+            const isCurrent = col.slug === collectionMeta.slug;
+            return (
+              <a
+                class:list={['col-tab', { 'is-active': isCurrent }]}
+                href={`/art/photography/${col.slug}`}
+                aria-current={isCurrent ? 'page' : undefined}
+              >
+                <span>{col.title}</span>
+                <span class="col-count">({count})</span>
+              </a>
+            );
+          })
+        }
+      </nav>
+    </div>
+  </header>
+
+  <section class="section gallery-section" aria-label={`${collectionMeta.title} photographs`}>
+    <div class="wrap">
+      <PhotoGallery
+        photos={collectionPhotos}
+        galleryId={`collection-${collectionMeta.slug}-gallery`}
+        showCaptionPrototype={true}
+        includeJsonLd={true}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(40px, 6vw, 88px) clamp(28px, 4vw, 48px);
+    background: var(--bg-surface);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding-block: 4px;
+    font-size: var(--type-small);
+    color: var(--mute);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .back:hover {
+    color: var(--signal);
+  }
+
+  .back:active {
+    transform: translateX(-2px);
+  }
+
+  .page-head h1 {
+    margin: 0;
+  }
+
+  .page-lede {
+    margin-top: 20px;
+    max-width: 60ch;
+    color: var(--mute);
+  }
+
+  .collection-nav {
+    margin-top: 32px;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bg-sunken);
+    border: 1px solid var(--rule);
+    max-width: 100%;
+  }
+
+  .col-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    min-height: 38px;
+    font-size: var(--type-small);
+    font-weight: 550;
+    color: var(--mute);
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .col-tab:hover {
+    color: var(--ink);
+  }
+
+  .col-tab.is-active {
+    background: var(--bg-surface);
+    color: var(--ink);
+    border-color: var(--rule-strong);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .col-count {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.72;
+  }
+</style>

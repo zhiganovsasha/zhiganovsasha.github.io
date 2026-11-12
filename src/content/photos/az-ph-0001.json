@@ -1,0 +1,19 @@
+{
+  "code": "AZ-PH-0001",
+  "slug": "az-ph-0001",
+  "order": 1,
+  "alt": "Singapore Airlines Airbus A350-900 parked on a snow-covered apron during snowfall, showing curved winglet, turbofan engine, and forward fuselage.",
+  "year": "2017",
+  "location": "Moscow",
+  "collections": [
+    "events",
+    "architecture"
+  ],
+  "featured": true,
+  "thumbSrc": "/images/art/photos/thumbs/az-ph-0001.webp",
+  "thumbWidth": 900,
+  "thumbHeight": 600,
+  "fullSrc": "/images/art/photos/full/az-ph-0001.jpg",
+  "fullWidth": 1920,
+  "fullHeight": 1280
+}

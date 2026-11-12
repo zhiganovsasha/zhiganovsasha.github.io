@@ -1,0 +1,18 @@
+{
+  "code": "AZ-PH-0006",
+  "slug": "az-ph-0006",
+  "order": 6,
+  "alt": "Portrait of a spotter in a grey beanie and red parka standing on snowy tarmac in front of a turbofan engine.",
+  "year": "2017",
+  "location": "Moscow",
+  "collections": [
+    "portraits"
+  ],
+  "featured": false,
+  "thumbSrc": "/images/art/photos/thumbs/az-ph-0006.webp",
+  "thumbWidth": 600,
+  "thumbHeight": 900,
+  "fullSrc": "/images/art/photos/full/az-ph-0006.jpg",
+  "fullWidth": 1280,
+  "fullHeight": 1920
+}
