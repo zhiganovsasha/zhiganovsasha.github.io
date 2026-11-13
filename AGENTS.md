@@ -23,10 +23,13 @@ agent working in this repository.
 
 ## Git workflow
 
-- The git directory is relocated outside Google Drive to `E:\gitdirs\my-personal-website.git`
-  for performance. The `.git` file in this project is a gitfile pointer.
-  Git tools work transparently, but plain file sync through Drive no longer
-  backs up the repository history. Do not delete `E:\gitdirs\my-personal-website.git`.
+- Each machine works in its own local clone of this repository. On macOS it is at
+  `~/Documents/agents/projects/my-personal-website`, where `.git` is a normal
+  directory holding the full history. Git tools work normally there.
+- The copy inside Google Drive (`My Drive/Agents/Projects/my-personal-website`)
+  is a backup, not a working copy. There is no offline access to it; it opens
+  online only. Do not try to run Git there: its `.git` is a stale gitfile
+  pointer to a bare repository that is no longer reachable.
 - `main` is the stable branch. `dev` is the normal working branch.
 - Start work by checking `git status --short --branch`. Preserve changes that
   are already present and may belong to the owner or another agent.
@@ -39,10 +42,12 @@ agent working in this repository.
 
 ## Dependencies, Node.js, and Google Drive
 
-- The working tree is located inside Google Drive. Google Drive's background
-  sync aggressively locks files and directories when many small files change.
+- The working tree is a local clone outside Google Drive, so ordinary Node.js
+  commands (`npm install`, `npm ci`, `npm run build`) work normally there.
+- The Google Drive copy is a backup only. Google Drive's background sync
+  aggressively locks files and directories when many small files change.
 - Never run `npm install`, `npm ci`, `npm update`, or delete/move `node_modules`
-  inside the Google Drive folder without explicit approval from the owner. Doing
+  inside the Google Drive backup folder without explicit approval from the owner. Doing
   so causes sync conflicts, file locking errors (`EPERM`, `ENOTEMPTY`, `TAR_ENTRY_ERROR`),
   and hangs the agent session indefinitely.
 - Production builds and package installations are handled automatically by
@@ -53,28 +58,6 @@ agent working in this repository.
   do not attempt destructive "fixes" (such as wiping `node_modules` or running
   `npm install` with long timeouts). Report the issue clearly to the owner in plain
   language and ask how to proceed.
-
-### Saving files on the Google Drive mount: `SetFileSecurityW` error 87
-
-- The working tree sits on drive `G:`, a Google Drive virtual mount that reports
-  itself to Windows as FAT32. FAT32 has no per-file permissions, so any API call
-  that assigns them fails with `ERROR_INVALID_PARAMETER` (Win32 87).
-- Tools that save atomically (write a temporary file, assign permissions, rename)
-  fail here with `SetFileSecurityW EIO (Win32 87)`. Under the `workspace-write`
-  sandbox, `pwsh` can fail to start at all with
-  `SetNamedSecurityInfoW failed (Win32 87): grantWrite(...)`, because the same
-  missing support breaks the sandbox's own write grant.
-- This is environmental and cannot be repaired from inside a session. Do not
-  retry the same write, do not re-run the sandbox, do not run ACL, ownership or
-  attribute repair commands (`takeown`, `icacls`), and do not invoke the
-  `diagnose-windows-sandbox-acl` skill for it: it already returned
-  `NOT_THIS_CLASS` on this path, with full control present for the signed-in user.
-- Write the content in place instead, after reading the current file, so no
-  temporary file or permission step is involved:
-  `[System.IO.File]::WriteAllText($path, $text, (New-Object System.Text.UTF8Encoding($false)))`.
-  Normalize line endings to LF and keep the encoding rules below.
-- `git` and README-style direct writes work normally on this path. Only the
-  atomic save path and the sandbox grant are affected.
 
 ## Publication
 
@@ -173,13 +156,14 @@ agent working in this repository.
 - Never create small kicker tags, category badges, overlines, or eyebrow labels (e.g. `<p class="ve-label">Premise</p>`, `<p class="case-meta">Case Study</p>`, tiny tracked caps above headings or cards) anywhere on the website, unless the owner explicitly and targetly asks for them. The owner explicitly dislikes eyebrow labels.
 - Section headings, page titles, and card headers must speak for themselves directly. If context is needed, fold it into the narrative headline or the opening lead sentence.
 
-## Windows, paths, and text encoding
+## Paths and text encoding
 
-- This repository is used on Windows and may contain Cyrillic paths and text.
-  Configure PowerShell and Python console I/O for UTF-8 before commands that may
-  read or print Unicode content.
-- Pass paths as separate arguments. In PowerShell use `-LiteralPath`; do not use
-  `Invoke-Expression` or build commands by interpolating file paths or contents.
+- This repository is used on macOS and may contain Cyrillic paths and text.
+  Configure the shell and Python console I/O for UTF-8 (`LANG`, `LC_CTYPE`,
+  `PYTHONIOENCODING`, `PYTHONUTF8`) before commands that may read or print
+  Unicode content.
+- Pass paths as separate arguments in quotes; do not build commands by
+  interpolating file paths or contents and do not use `eval`.
 - Before editing an existing non-empty text file, detect its encoding from the
   complete file: check for a BOM, then attempt strict UTF-8 decoding. If that
   fails, use a reliable detector and proceed only with high confidence.

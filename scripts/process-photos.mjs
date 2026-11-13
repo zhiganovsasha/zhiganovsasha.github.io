@@ -276,7 +276,7 @@ function extractYearFromExif(exifBuffer) {
 
 function parseArgs(argv) {
   const opts = {
-    source: 'D:/Фотографии/DME Spotting 18.12.2017/Обработанные',
+    source: null,
     pilot: false,
     limit: 0,
   };
@@ -297,6 +297,13 @@ function parseArgs(argv) {
 async function main() {
   const opts = parseArgs(process.argv);
   const sourceDir = opts.source;
+
+  if (!sourceDir) {
+    throw new Error(
+      'Missing required argument --source <folder with photos>. ' +
+        'Example: node scripts/process-photos.mjs --source "/path/to/processed" --pilot',
+    );
+  }
 
   if (!fs.existsSync(sourceDir)) {
     throw new Error(`Source directory not found: ${sourceDir}`);
