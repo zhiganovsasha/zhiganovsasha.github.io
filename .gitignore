@@ -1,6 +1,8 @@
 .DS_Store
 Thumbs.db
 node_modules/
+.astro/
+package-lock.json
 .playwright/
 .playwright-mcp/
 preview-*.png
@@ -16,3 +18,8 @@ opencode.json
 /src/screen-recordings/
 /public/shum-brain-local-preview.*
 
+# Agent scratch artifacts, screenshots, and local outputs.
+.taste-skill/
+.playwright-cli/
+scratch/
+outputs/

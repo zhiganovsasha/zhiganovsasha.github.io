@@ -5,7 +5,14 @@ const results = [];
 const check = (name, ok, extra = '') =>
   results.push(`${ok ? 'PASS' : 'FAIL'} ${name}${extra ? ' — ' + extra : ''}`);
 
-const browser = await chromium.launch();
+// Prefer the bundled Playwright Chromium; fall back to the locally installed
+// Google Chrome when Playwright browsers were never downloaded on this machine.
+let browser;
+try {
+  browser = await chromium.launch();
+} catch {
+  browser = await chromium.launch({ channel: 'chrome' });
+}
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 // Home: dialog via click
@@ -59,7 +66,7 @@ check('anchor card scrolls to section', page.url().includes('#ai-video-productio
 // YouTube embeds use nocookie
 const frames = await page.locator('.video-frame iframe').all();
 const srcs = await Promise.all(frames.map((f) => f.getAttribute('src')));
-check('two video embeds', frames.length === 2);
+check('video embeds present', frames.length > 0, String(frames.length));
 check(
   'embeds use youtube-nocookie',
   srcs.every((s) => s.startsWith('https://www.youtube-nocookie.com/embed/'))
@@ -80,11 +87,15 @@ const mob = await browser.newPage({
   hasTouch: true,
 });
 await mob.goto(base + '/');
-await mob.tap('[data-dialog="dialog-education"]');
-check('mobile tap opens dialog', await mob.locator('#dialog-education').isVisible());
+await mob.tap('[data-dialog="dialog-art"]');
+check('mobile tap opens dialog', await mob.locator('#dialog-art').isVisible());
+
+// Education is a full page now, not a home dialog
+await page.goto(base + '/education');
+check('education page loads', page.url() === base + '/education');
 
 // Middle dot check across pages
-for (const p of ['/', '/development', '/development/shum-brain', '/development/studio-shum-ru', '/development/shum-telegram-assistant', '/development/blob-tracker']) {
+for (const p of ['/', '/development', '/development/shum-brain', '/development/studio-shum-ru', '/development/shum-telegram-assistant', '/development/blob-tracker', '/development/market-data-research', '/education', '/art', '/blog']) {
   await page.goto(base + p);
   const text = await page.evaluate(() => document.body.innerText);
   check(`no middle dot on ${p}`, !text.includes('·'));

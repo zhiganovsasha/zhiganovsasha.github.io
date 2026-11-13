@@ -9,21 +9,16 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 function loadSharp() {
-  const candidates = [
-    path.join(PROJECT_ROOT, 'package.json'),
-    'E:/studio-shum-ru/package.json',
-  ];
-  for (const pkgPath of candidates) {
-    try {
-      if (fs.existsSync(pkgPath)) {
-        const req = createRequire(pkgPath);
-        return req('sharp');
-      }
-    } catch {
-      // try next candidate
-    }
+  const req = createRequire(path.join(PROJECT_ROOT, 'package.json'));
+  try {
+    return req('sharp');
+  } catch {
+    // fall through to the message below
   }
-  throw new Error('Could not resolve "sharp" module.');
+  throw new Error(
+    'Could not resolve "sharp" module. Install it beside this project, ' +
+      'for example "npm install --no-save sharp" in the project root.',
+  );
 }
 
 const sharp = loadSharp();
@@ -281,7 +276,7 @@ function extractYearFromExif(exifBuffer) {
 
 function parseArgs(argv) {
   const opts = {
-    source: 'D:/Фотографии/DME Spotting 18.12.2017/Обработанные',
+    source: null,
     pilot: false,
     limit: 0,
   };
@@ -302,6 +297,13 @@ function parseArgs(argv) {
 async function main() {
   const opts = parseArgs(process.argv);
   const sourceDir = opts.source;
+
+  if (!sourceDir) {
+    throw new Error(
+      'Missing required argument --source <folder with photos>. ' +
+        'Example: node scripts/process-photos.mjs --source "/path/to/processed" --pilot',
+    );
+  }
 
   if (!fs.existsSync(sourceDir)) {
     throw new Error(`Source directory not found: ${sourceDir}`);
