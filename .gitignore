@@ -16,3 +16,8 @@ opencode.json
 /src/screen-recordings/
 /public/shum-brain-local-preview.*
 
+# Agent scratch artifacts, screenshots, and local outputs.
+.taste-skill/
+.playwright-cli/
+scratch/
+outputs/
