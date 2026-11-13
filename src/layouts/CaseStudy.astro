@@ -20,9 +20,11 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
   <article class="case">
     <header class="case-head">
       <div class="wrap">
-        <a class="back" href="/development"
-          ><span aria-hidden="true">←</span> Back to AI Development</a
-        >
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a class="back" href="/development"
+            ><span aria-hidden="true">←</span> Back to AI Development</a
+          >
+        </nav>
         <div class="case-title-row">
           <h1 class:list={['display', 'case-title', { 'rainbow-gradient': rainbowTitle }]}>{title}</h1>
           {
@@ -64,7 +66,6 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
   .case-head {
     padding-block: clamp(40px, 6vw, 88px) clamp(32px, 4vw, 56px);
     background: var(--bg-surface);
-    border-bottom: 1px solid var(--rule);
   }
 
   .back {
@@ -117,8 +118,8 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
     box-decoration-break: clone;
     background: var(--grad-spectrum);
     background-size: 280% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
+    -webkit-background-clip: text; /* taste-skill-ignore: approved rainbowTitle (AGENTS.md) */
+    background-clip: text; /* taste-skill-ignore: approved rainbowTitle (AGENTS.md) */
     -webkit-text-fill-color: transparent;
     color: transparent;
     animation: rainbow-shimmer 14s ease-in-out infinite;
@@ -251,17 +252,14 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
   .case-body :global(.stack-list li) {
     font-size: var(--type-small);
     padding: 6px 12px;
-    border: 1px solid var(--rule-strong);
+    background: var(--bg-sunken);
     margin: 0;
     white-space: nowrap;
-    transition:
-      border-color var(--dur-fast) var(--ease-out),
-      background-color var(--dur-fast) var(--ease-out);
+    transition: background-color var(--dur-fast) var(--ease-out);
   }
 
   .case-body :global(.stack-list li:hover) {
-    border-color: var(--ink);
-    background-color: var(--field);
+    background-color: rgba(11, 11, 11, 0.14);
   }
 
   .case-body :global(.pull-quote) {
@@ -276,7 +274,6 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
 
   .case-body :global(.case-figure) {
     margin: 0 0 2em;
-    border: 1px solid var(--rule);
     background: var(--field);
     overflow: hidden;
   }
@@ -291,7 +288,6 @@ const { title, role, pageTitle, rainbowTitle = true, clientLogo, clientName, cli
     padding: 10px 16px;
     font-size: var(--type-small);
     color: var(--mute);
-    border-top: 1px solid var(--rule);
     background: var(--bg);
   }
 
