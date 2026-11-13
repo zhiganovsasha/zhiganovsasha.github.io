@@ -132,6 +132,13 @@ agent working in this repository.
 - Visual style: Instrumental Style (approved 2026-10-27). Tonal elevation uses
   `#f6f6f7` for page canvas (`--bg-canvas`), `#ffffff` for elevated cards and
   surfaces (`--bg-surface`), and `#ececee` for sunken fields/wells (`--bg-sunken`).
+- Flat surfaces only (updated 2026-11-13): no box-shadows on resting elements
+  (shadows are reserved for real overlays: the CV menu, dialogs, the PhotoSwipe
+  bar) and no 1px hairline borders or divider rules. Surfaces separate by tone
+  steps, space, and scale. The only kept lines are real tables/form fields, the
+  current-page nav underline, and interface mocks marked with `data-ui` (for
+  example `ShumAssistantExplainer`). Ghost buttons and chips use `--bg-sunken`
+  fills instead of outlines.
 - Accent color: `#960018` (crimson) and subtle accent `--signal-subtle: rgba(150, 0, 24, 0.08)`.
 - Sharp 90-degree corners: keep `border-radius: 0` across all interface components,
   including buttons, project cards, dialogue boxes, menus, chips, and the hero portrait.

@@ -70,8 +70,6 @@ const groups = [
 
   .toolkit-group {
     background: var(--bg-surface);
-    border: 1px solid var(--rule);
-    box-shadow: var(--shadow-sm);
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -102,17 +100,14 @@ const groups = [
     font-size: var(--type-small);
     padding: 6px 12px;
     background: var(--bg-sunken);
-    border: 1px solid transparent;
     white-space: nowrap;
     transition:
-      border-color var(--dur-fast) var(--ease-out),
-      background-color var(--dur-fast) var(--ease-out);
+      background-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
   .chip:hover {
-    border-color: var(--ink);
     background-color: #ffffff;
-    box-shadow: var(--shadow-xs);
     transform: translateY(-1px);
   }
 </style>

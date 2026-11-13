@@ -142,8 +142,6 @@ const featuredPreview = allPhotos.filter((p) => p.featured).slice(0, 4);
 
   .photo-entry-card {
     background: var(--bg-surface);
-    border: 1px solid var(--rule);
-    box-shadow: var(--shadow-sm);
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
     gap: clamp(28px, 4vw, 56px);
@@ -194,7 +192,6 @@ const featuredPreview = allPhotos.filter((p) => p.featured).slice(0, 4);
 
   .entry-collections {
     background: var(--bg-sunken);
-    border: 1px solid var(--rule);
     padding: 18px 20px;
   }
 
@@ -221,19 +218,17 @@ const featuredPreview = allPhotos.filter((p) => p.featured).slice(0, 4);
     padding: 6px 12px;
     min-height: 36px;
     background: var(--bg-surface);
-    border: 1px solid var(--rule-strong);
     color: var(--ink);
     text-decoration: none;
     font-size: var(--type-small);
     font-weight: 550;
     transition:
-      border-color var(--dur-fast) var(--ease-out),
       background var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out);
   }
 
   .collection-pill:hover {
-    border-color: var(--signal);
+    background: var(--signal-subtle);
     color: var(--signal);
   }
 
@@ -259,7 +254,6 @@ const featuredPreview = allPhotos.filter((p) => p.featured).slice(0, 4);
   .mosaic-cell {
     margin: 0;
     background: var(--bg-sunken);
-    border: 1px solid var(--rule);
     aspect-ratio: 4 / 3;
     overflow: hidden;
   }

@@ -32,7 +32,7 @@
   --grad-6: #38bdf8;
   --grad-7: #4f5bd5;
   --grad-angle: 115deg;
-  --grad-spectrum: linear-gradient(
+  --grad-spectrum: linear-gradient( /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
     var(--grad-angle, 115deg),
     var(--grad-1) 0%,
     var(--grad-2) 16%,
@@ -223,9 +223,8 @@ summary,
 .wrap {
   max-width: var(--maxw);
   margin-inline: auto;
-  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px));
-  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
-  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px))
+    max(var(--gutter), env(safe-area-inset-right, 0px));
 }
 
 /* ---------- typography ---------- */
@@ -265,7 +264,6 @@ summary,
   background: rgba(246, 246, 247, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top, 0px);
 }
 
@@ -300,8 +298,8 @@ summary,
   align-items: center;
   background: var(--grad-spectrum);
   background-size: 280% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
+  background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: rainbow-shimmer 14s ease-in-out infinite;
@@ -315,7 +313,7 @@ summary,
   opacity: 1;
 }
 
-@supports (-webkit-background-clip: text) {
+@supports (-webkit-background-clip: text) { /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
   .brand:hover {
     color: transparent;
   }
@@ -337,13 +335,11 @@ summary,
   text-decoration: none;
   color: var(--mute);
   padding: 6px 0;
-  border-bottom: 1px solid transparent;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   transition:
     color var(--dur-normal) var(--ease-out),
-    border-color var(--dur-normal) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
@@ -355,8 +351,8 @@ summary,
   align-items: center;
   background: var(--grad-spectrum);
   background-size: 280% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
+  background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: rainbow-shimmer 14s ease-in-out infinite;
@@ -371,7 +367,7 @@ summary,
   color: var(--ink);
 }
 
-@supports (-webkit-background-clip: text) {
+@supports (-webkit-background-clip: text) { /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
   .main-nav > a:hover,
   .main-nav > a[aria-current='page']:hover {
     color: transparent;
@@ -401,7 +397,10 @@ summary,
 
 .main-nav > a[aria-current='page'] {
   color: var(--ink);
-  border-bottom-color: var(--signal);
+  text-decoration: underline;
+  text-decoration-color: var(--signal);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
 }
 
 /* ---------- CV dropdown ---------- */
@@ -420,8 +419,6 @@ summary,
   padding: 8px 14px;
   background: var(--ink);
   color: #fff;
-  border: 1px solid var(--ink);
-  box-shadow: var(--shadow-xs);
   cursor: pointer;
   white-space: nowrap;
   transition:
@@ -457,8 +454,8 @@ summary,
   padding: 6px;
   list-style: none;
   background: var(--bg-surface);
-  border: 1px solid var(--rule-strong);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--rule-strong); /* taste-skill-ignore: floating menu keeps its frame */
+  box-shadow: var(--shadow-lg); /* taste-skill-ignore: a real floating overlay */
   overscroll-behavior: contain;
   display: none;
   opacity: 0;
@@ -540,9 +537,9 @@ summary,
   line-height: 1.2;
   font-size: var(--type-small);
   letter-spacing: 0;
-  color: var(--faint);
-  border: 1px solid var(--rule);
-}
+    color: var(--faint);
+    border: 1px solid var(--rule); /* taste-skill-ignore: status chip inside the floating CV menu */
+  }
 
 /* ---------- buttons ---------- */
 
@@ -555,7 +552,6 @@ summary,
   font-weight: 550;
   text-decoration: none;
   padding: 14px 22px;
-  border: 1px solid var(--ink);
   cursor: pointer;
   transition:
     background var(--dur-fast) var(--ease-out),
@@ -571,26 +567,20 @@ summary,
 .btn-primary {
   background: var(--ink);
   color: #fff;
-  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:hover {
   background: var(--signal);
-  border-color: var(--signal);
-  box-shadow: 0 4px 12px rgba(150, 0, 24, 0.25);
 }
 
 
 .btn-ghost {
-  background: var(--bg-surface);
+  background: var(--bg-sunken);
   color: var(--ink);
-  border: 1px solid var(--rule-strong);
-  box-shadow: var(--shadow-xs);
 }
 
 .btn-ghost:hover {
-  background: var(--bg-sunken);
-  border-color: rgba(11, 11, 11, 0.32);
+  background: rgba(11, 11, 11, 0.14);
   color: var(--ink);
 }
 
@@ -598,7 +588,6 @@ summary,
 
 .section {
   padding-block: clamp(64px, 9vw, 128px);
-  border-top: 1px solid var(--rule);
 }
 
 .section-head {
@@ -647,7 +636,6 @@ summary,
   flex-wrap: wrap;
   gap: 28px 40px;
   padding-top: 36px;
-  border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .email-row {
@@ -677,9 +665,8 @@ summary,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.92);
   cursor: pointer;
   transition:
     color var(--dur-fast) var(--ease-out),
@@ -690,7 +677,6 @@ summary,
 
 .copy-btn:hover {
   background: var(--signal);
-  border-color: var(--signal);
   color: #ffffff;
 }
 
@@ -730,14 +716,14 @@ summary,
 /* ---------- dialog ---------- */
 
 dialog.dir-dialog {
-  border: 1px solid var(--rule-strong);
+  border: 1px solid var(--rule-strong); /* taste-skill-ignore: overlay dialog keeps its frame */
   padding: 0;
   max-width: 480px;
   width: calc(100vw - 40px);
   background: var(--paper);
   color: var(--ink);
   background: var(--bg-surface);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg); /* taste-skill-ignore: a real floating overlay */
   overscroll-behavior: contain;
 }
 
@@ -748,7 +734,6 @@ dialog.dir-dialog[open] {
 dialog.dir-dialog[open]::backdrop {
   animation: backdrop-appear var(--dur-normal) var(--ease-out);
   background: rgba(11, 11, 11, 0.45);
-  backdrop-filter: blur(2px);
 }
 
 @keyframes dialog-appear {
@@ -765,11 +750,9 @@ dialog.dir-dialog[open]::backdrop {
 @keyframes backdrop-appear {
   from {
     background: rgba(11, 11, 11, 0);
-    backdrop-filter: blur(0px);
   }
   to {
     background: rgba(11, 11, 11, 0.45);
-    backdrop-filter: blur(2px);
   }
 }
 
@@ -807,10 +790,8 @@ dialog.dir-dialog[open]::backdrop {
   padding: 10px 16px;
   background: var(--ink);
   color: #fff;
-  border: 1px solid var(--ink);
   transition:
     background var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
@@ -828,19 +809,16 @@ dialog.dir-dialog[open]::backdrop {
   font-size: var(--type-small);
   min-height: 44px;
   padding: 10px 18px;
-  background: transparent;
+  background: var(--bg-sunken);
   color: var(--ink);
-  border: 1px solid var(--rule-strong);
   cursor: pointer;
   transition:
-    border-color var(--dur-fast) var(--ease-out),
     background var(--dur-fast) var(--ease-out),
     transform var(--dur-fast) var(--ease-out);
 }
 
 .dir-dialog .close:hover {
-  border-color: var(--ink);
-  background: var(--field);
+  background: rgba(11, 11, 11, 0.14);
 }
 
 .dir-dialog .close:active {
@@ -870,8 +848,8 @@ dialog.dir-dialog[open]::backdrop {
   box-decoration-break: clone;
   background: var(--grad-spectrum);
   background-size: 280% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  -webkit-background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
+  background-clip: text; /* taste-skill-ignore: approved brand rainbow hover (AGENTS.md) */
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: rainbow-shimmer 14s ease-in-out infinite;

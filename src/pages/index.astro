@@ -67,8 +67,8 @@ import portrait from '../assets/portrait.jpg';
     font-weight: 650;
     background: var(--grad-spectrum);
     background-size: 280% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
+    -webkit-background-clip: text; /* taste-skill-ignore: approved hero accent (AGENTS.md) */
+    background-clip: text; /* taste-skill-ignore: approved hero accent (AGENTS.md) */
     -webkit-text-fill-color: transparent;
     color: transparent;
     animation: rainbow-shimmer 14s ease-in-out infinite;
@@ -132,8 +132,6 @@ import portrait from '../assets/portrait.jpg';
     aspect-ratio: 4 / 5;
     object-fit: cover;
     object-position: center 20%;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--rule);
   }
 
   @media (max-width: 900px) {

@@ -9,9 +9,11 @@ import Base from '../../../layouts/Base.astro';
 >
   <header class="page-head">
     <div class="wrap">
-      <a class="back" href="/art/photography">
-        <span aria-hidden="true">←</span> Back to Photography
-      </a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a class="back" href="/art/photography">
+          <span aria-hidden="true">←</span> Back to Photography
+        </a>
+      </nav>
       <h1 class="display">Prints &amp; Licensing</h1>
       <p class="lede page-lede">
         All photographs on this website are protected by copyright. Any reproduction,
@@ -172,8 +174,6 @@ import Base from '../../../layouts/Base.astro';
 
   .licensing-card {
     background: var(--bg-surface);
-    border: 1px solid var(--rule);
-    box-shadow: var(--shadow-xs);
     padding: clamp(24px, 3.5vw, 40px);
     display: flex;
     flex-direction: column;
@@ -200,7 +200,6 @@ import Base from '../../../layouts/Base.astro';
     font-size: var(--type-small);
     background: var(--bg-sunken);
     padding: 2px 6px;
-    border: 1px solid var(--rule);
   }
 
   .contact-card {
@@ -209,7 +208,6 @@ import Base from '../../../layouts/Base.astro';
 
   .contact-well {
     background: var(--bg-sunken);
-    border: 1px solid var(--rule-strong);
     padding: 18px 22px;
     display: flex;
     flex-wrap: wrap;
@@ -243,7 +241,6 @@ import Base from '../../../layouts/Base.astro';
     appearance: none;
     background: var(--bg-surface);
     color: var(--ink);
-    border: 1px solid var(--rule-strong);
     font-family: var(--font);
     font-size: var(--type-small);
     font-weight: 600;
@@ -252,13 +249,11 @@ import Base from '../../../layouts/Base.astro';
     cursor: pointer;
     transition:
       background var(--dur-fast) var(--ease-out),
-      border-color var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out);
   }
 
   .copy-email-btn:hover {
     background: var(--signal);
-    border-color: var(--signal);
     color: #ffffff;
   }
 

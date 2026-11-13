@@ -98,21 +98,14 @@ const skills = [
 
   .skill-card {
     background: var(--bg-surface);
-    border: 1px solid var(--rule);
-    box-shadow: var(--shadow-sm);
     padding: 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    transition:
-      border-color var(--dur-normal) var(--ease-out),
-      box-shadow var(--dur-normal) var(--ease-out),
-      transform var(--dur-normal) var(--ease-out);
+    transition: transform var(--dur-normal) var(--ease-out);
   }
 
   .skill-card:hover {
-    border-color: rgba(11, 11, 11, 0.2);
-    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
   }
 
@@ -121,7 +114,6 @@ const skills = [
     font-size: var(--type-lead);
     font-weight: 650;
     letter-spacing: -0.02em;
-    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
     overflow-wrap: break-word;
     min-width: 0;
   }
@@ -144,19 +136,15 @@ const skills = [
     text-decoration: none;
     color: #1f2328;
     background: #f6f8fa;
-    border: 1px solid rgba(31, 35, 40, 0.15);
-    box-shadow: var(--shadow-xs);
     min-height: 44px;
     padding: 10px 16px;
     transition:
       background var(--dur-fast) var(--ease-out),
-      border-color var(--dur-fast) var(--ease-out),
       transform var(--dur-fast) var(--ease-out);
   }
 
   .gh-btn:hover {
-    background: #eef1f4;
-    border-color: rgba(31, 35, 40, 0.3);
+    background: #e8ebee;
   }
 
   .gh-btn:active {

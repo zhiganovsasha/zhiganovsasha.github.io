@@ -36,9 +36,11 @@ const collectionPhotos = allPhotos.filter((p) =>
 >
   <header class="page-head">
     <div class="wrap">
-      <a class="back" href="/art/photography">
-        <span aria-hidden="true">←</span> Back to Photography
-      </a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a class="back" href="/art/photography">
+          <span aria-hidden="true">←</span> Back to Photography
+        </a>
+      </nav>
       <h1 class="display">{collectionMeta.title}</h1>
       <p class="lede page-lede">{collectionMeta.description}</p>
 
@@ -128,7 +130,6 @@ const collectionPhotos = allPhotos.filter((p) =>
     gap: 4px;
     padding: 4px;
     background: var(--bg-sunken);
-    border: 1px solid var(--rule);
     max-width: 100%;
   }
 
@@ -142,7 +143,6 @@ const collectionPhotos = allPhotos.filter((p) =>
     font-weight: 550;
     color: var(--mute);
     text-decoration: none;
-    border: 1px solid transparent;
     transition:
       color var(--dur-fast) var(--ease-out),
       background var(--dur-fast) var(--ease-out),
@@ -156,8 +156,7 @@ const collectionPhotos = allPhotos.filter((p) =>
   .col-tab.is-active {
     background: var(--bg-surface);
     color: var(--ink);
-    border-color: var(--rule-strong);
-    box-shadow: var(--shadow-xs);
+    font-weight: 650;
   }
 
   .col-count {
