@@ -1,6 +1,8 @@
 .DS_Store
 Thumbs.db
 node_modules/
+.astro/
+package-lock.json
 .playwright/
 .playwright-mcp/
 preview-*.png
