@@ -9,21 +9,16 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
 function loadSharp() {
-  const candidates = [
-    path.join(PROJECT_ROOT, 'package.json'),
-    'E:/studio-shum-ru/package.json',
-  ];
-  for (const pkgPath of candidates) {
-    try {
-      if (fs.existsSync(pkgPath)) {
-        const req = createRequire(pkgPath);
-        return req('sharp');
-      }
-    } catch {
-      // try next candidate
-    }
+  const req = createRequire(path.join(PROJECT_ROOT, 'package.json'));
+  try {
+    return req('sharp');
+  } catch {
+    // fall through to the message below
   }
-  throw new Error('Could not resolve "sharp" module.');
+  throw new Error(
+    'Could not resolve "sharp" module. Install it beside this project, ' +
+      'for example "npm install --no-save sharp" in the project root.',
+  );
 }
 
 const sharp = loadSharp();
