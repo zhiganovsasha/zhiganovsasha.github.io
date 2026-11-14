@@ -1,0 +1,2260 @@
+---
+const worksTotal = 6739;
+const sectorCounts = [2985, 1246, 1435, 426, 344];
+const sectorRest = worksTotal - sectorCounts.reduce((sum, value) => sum + value, 0);
+
+const sectors = [
+  { name: 'Film', count: 2985, tone: 'one' },
+  { name: 'Portfolio cases', count: 1246, tone: 'two' },
+  { name: 'Music tracks and albums', count: 1435, tone: 'three' },
+  { name: 'Animation', count: 426, tone: 'four' },
+  { name: 'Theatre', count: 344, tone: 'five' },
+  { name: 'Digital art and games', count: sectorRest, tone: 'six', remainder: true },
+].map((row) => ({
+  ...row,
+  pct: (row.count / worksTotal) * 100,
+}));
+
+const milestoneCells = [
+  ...Array.from({ length: 58 }, () => 'antigravity'),
+  ...Array.from({ length: 34 }, () => 'opencode'),
+  ...Array.from({ length: 4 }, () => 'codex'),
+];
+
+const recoveredYears = 529;
+const boxOfficeNaive = 16.4;
+const boxOfficeDeduped = 10.48;
+const boxOfficePct = (boxOfficeDeduped / boxOfficeNaive) * 100;
+
+const audienceMax = 17.4;
+const audienceTheatrical = 11.0;
+const audienceMusic = 17.4;
+---
+<div class="dossier">
+  <nav class="case-nav" aria-label="Case sections">
+    <a href="#brief">The brief</a>
+    <a href="#scale">130M+ rows</a>
+    <a href="#scraping">Web scraping</a>
+    <a href="#filtering">Entity resolution</a>
+    <a href="#market-model">Market model</a>
+    <a href="#agents">Agent pipeline</a>
+    <a href="#delivery">Delivery</a>
+    <a href="#stack">Stack</a>
+  </nav>
+
+  <section class="dsec" id="brief" aria-labelledby="brief-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">1,886</span>
+      <span class="mark-note">participation rows on input. 186 carried a profile link.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="brief-title">Eight days to measure seven seasons of an industry.</h2>
+      <p class="standfirst">
+        A national talent competition needed to measure the industry footprint of its finalists
+        across seven seasons. The team had started collecting credits by hand and asked whether automated
+        scrapers could extract the rest: films, series, music releases, theatre
+        productions, games, and festival projects since 2020, with audience reach, box office revenue,
+        and ratings.
+      </p>
+    </div>
+
+    <div class="ledger">
+      <ol class="ledger-rows" role="list">
+        <li class="ledger-row">
+          <span class="ledger-n">1,886</span>
+          <span class="ledger-t">
+            participation rows on a flat spreadsheet, across 1,513 professionals in film, theatre,
+            music, digital, and events. Only 186 carried a single profile link.
+          </span>
+        </li>
+        <li class="ledger-row">
+          <span class="ledger-n">130M+</span>
+          <span class="ledger-t">
+            records screened from bulk dumps, state registries, streaming catalogs, and live
+            scrapers, mirrored into local SQLite FTS5 indexes.
+          </span>
+        </li>
+        <li class="ledger-row">
+          <span class="ledger-n">6,739</span>
+          <span class="ledger-t">
+            credited works resolved, with 2,735 verified professional profiles behind them.
+          </span>
+        </li>
+      </ol>
+      <p class="ledger-foot">
+        Eight days. 585 Python scripts. 20 source modules. 70 canonical sources. One encrypted deck.
+      </p>
+    </div>
+
+    <div class="sbody">
+      <p>
+        On input I received a flat spreadsheet of 1,886 participation rows covering 1,513 unique
+        professionals across five creative sectors: film, theatre, music, digital, and events. The
+        rest of each row held a name, a birth date, a city, a discipline, and a season.
+      </p>
+      <p>
+        Searching 1,513 people one by one through live web queries would have hit rate limits on the
+        first afternoon and drowned in namesake noise. I built a data-engineering pipeline to resolve
+        the roster at scale: eight logged days of ingestion and screening that ended with 6,739
+        credited works and 2,735 verified profiles.
+      </p>
+      <p class="note">
+        Client identity, participant names, and project titles are withheld by agreement.
+        The metrics, source classes, and throughput figures below come from production logs.
+      </p>
+    </div>
+  </section>
+
+  <section class="dsec" id="scale" aria-labelledby="scale-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">130M+</span>
+      <span class="mark-note">records screened against 1,513 names, through 70 canonical sources.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="scale-title">I pulled external catalogs onto local disk before matching a single name.</h2>
+      <p>
+        Live APIs cap requests at 200 to 500 calls a day, making cross-referencing 1,513 people across four
+        name variants impractical over the network. To bypass quota walls, I downloaded bulk dumps and open
+        registries, converted them into local SQLite databases with FTS5 indexes, and streamed
+        multi-gigabyte archives in constant memory. Local queries run in under 1 millisecond and consume zero API quota.
+      </p>
+    </div>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">IMDb held four rows in five.</h3>
+      <p class="cap">
+        Rows screened per bulk source, full ingest. Crimson marks the IMDb pass. One tick = 1M
+        rows, rounded to the nearest million; registries and Steam fall below the unit and stand
+        as short stubs with exact labels. The axis is honest: no break, no log scale, IMDb simply
+        towers.
+      </p>
+      <svg
+        id="lf-sources"
+        viewBox="0 0 760 344"
+        role="img"
+        aria-label="Tick rows of rows screened per bulk source: IMDb 102.6 million, Discogs and MusicBrainz 10.28 million, Yandex Music 6.04 million, TMDB 5.05 million, Kinopoisk 1.06 million, state registries 380 thousand, Steam 148,909."
+      ></svg>
+      <figcaption class="cap">
+        All seven sources share one linear scale, so the IMDb dump alone is almost the whole
+        picture. It was filtered in a single 150 s streaming pass across 15.8M names and 12.9M
+        titles.
+      </figcaption>
+      <table class="sr-only">
+        <caption>Rows screened per bulk source, with run detail where logged</caption>
+        <thead>
+          <tr><th scope="col">Source</th><th scope="col">Rows</th><th scope="col">Run</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">IMDb official TSV datasets</th><td>102.6M</td><td>150 s streaming pass</td></tr>
+          <tr><th scope="row">Discogs and MusicBrainz</th><td>10,284,281</td><td>288 s via iterparse</td></tr>
+          <tr><th scope="row">Yandex Music</th><td>6,039,445</td><td>Sub-millisecond B-tree lookups</td></tr>
+          <tr><th scope="row">TMDB</th><td>5,051,606</td><td>56,598 rows/s in constant memory</td></tr>
+          <tr><th scope="row">Kinopoisk</th><td>1,060,836</td><td>38 MB constant RAM</td></tr>
+          <tr><th scope="row">State registries (MKRF, UNF, FPG, PFKI)</th><td>380,000+</td><td>Certificates, plays, grants</td></tr>
+          <tr><th scope="row">Steam Games dataset</th><td>148,909</td><td>16 s full ingest</td></tr>
+        </tbody>
+      </table>
+    </figure>
+
+    <div class="sbody sbody-tail">
+      <div class="pair">
+        <div class="pair-cell">
+          <p class="pair-n">22.4M</p>
+          <p>
+            artist and creator records indexed locally across Discogs, Yandex Music, TMDB, and
+            Kinopoisk dumps.
+          </p>
+        </div>
+        <div class="pair-cell">
+          <p class="pair-n">56,598/s</p>
+          <p>rows screened per second against the person index with a flat 38 MB RAM ceiling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="dsec" id="scraping" aria-labelledby="scraping-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">32</span>
+      <span class="mark-note">platforms scraped. Five of them needed a different way through.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="scraping-title">Browser relays and direct protocol calls handled the live web.</h2>
+      <p>
+        Bulk dumps cover encyclopedias and state registries. Creative professionals publish across
+        dozens of live platforms: Vimeo showreels, Behance and Dprofile portfolios, ArtStation,
+        VKontakte, Telegram channels, rights societies, and legacy cinema portals. Each one blocks
+        automated collection differently: strict daily quotas, Cloudflare Turnstile, DDOS-GUARD image
+        captchas, JA3/JA4 TLS fingerprinting, or 401 walls on unauthenticated endpoints.
+      </p>
+      <p>
+        Five target layers carried the load. Open a layer to read what the wall was and how it fell.
+      </p>
+    </div>
+
+    <figure class="fig fig-flat">
+      <div class="evidence-list">
+        <details class="evidence">
+          <summary>
+            <span class="ev-name">Vimeo and Next.js state JWTs</span>
+            <span class="ev-yield">
+              353 video works across 30 verified channels and 43 finalists, plus full crew lists
+              that exposed cross-disciplinary collaborations.
+            </span>
+          </summary>
+          <div class="ev-body">
+            <p>
+              Extracted the public client JWT embedded inside the Next.js state of any profile page,
+              then queried the internal catalog API at 0.2 s per channel.
+            </p>
+          </div>
+        </details>
+
+        <details class="evidence">
+          <summary>
+            <span class="ev-name">Dprofile and Кино-Театр.РУ behind auth and captchas</span>
+            <span class="ev-yield">
+              650+ design cases, unmasked contacts, and legacy filmographies that returned HTTP 401
+              or image captchas to headless browsers.
+            </span>
+          </summary>
+          <div class="ev-body">
+            <p>
+              Attached the Playwright MCP Extension to a live authenticated desktop Chrome session
+              and ran batched in-page fetch loops inside the origin.
+            </p>
+          </div>
+        </details>
+
+        <details class="evidence">
+          <summary>
+            <span class="ev-name">Rights society (RAO) and federal portals</span>
+            <span class="ev-yield">
+              314 registered musical scores, stage designs, and scripts across 1,532 scanned names,
+              plus 37 subsidized cinema PDFs.
+            </span>
+          </summary>
+          <div class="ev-body">
+            <p>
+              The WAF dropped Python HTTP clients on TLS fingerprinting. Requests went through the
+              OS native Schannel stack with curl at a 100% pass rate, and PDFs parsed at 340 pages/s.
+            </p>
+          </div>
+        </details>
+
+        <details class="evidence">
+          <summary>
+            <span class="ev-name">Kinopoisk APIs and EAIS box office</span>
+            <span class="ev-yield">
+              Box office revenue, ticketed attendance, and viewer ratings across commercial
+              theatrical releases and streaming originals.
+            </span>
+          </summary>
+          <div class="ev-body">
+            <p>
+              Paired a two-tier SQLite disk cache (MAX_SAFE_LIVE_CALLS = 175) with direct JSON
+              lookups by state certificate number at 0.05 s per film.
+            </p>
+          </div>
+        </details>
+
+        <details class="evidence">
+          <summary>
+            <span class="ev-name">VKontakte, Telegram, Exa, Apify and OSINT</span>
+            <span class="ev-yield">
+              3,880 profiles across 32 platforms, 660 works from a 7,060-message Telegram archive,
+              and 240 Tilda results pages parsed by coordinates.
+            </span>
+          </summary>
+          <div class="ev-body">
+            <p>
+              Server-side VKScript execute batches carried 25 profiles per call, backed by a
+              35,000-member community index, Exa semantic search, Maigret, and GHunt.
+            </p>
+          </div>
+        </details>
+      </div>
+      <figcaption class="cap">
+        Network routing split by geography. International platforms ran through a transparent VLESS
+        Reality TUN adapter (happ-xray) or Apify cloud actors, while domestic registries ran direct
+        to avoid geo-blocks.
+      </figcaption>
+    </figure>
+
+    <div class="sbody sbody-tail">
+      <p>
+        The highest-yield trick was the Cross-Credits Graph on Vimeo and YouTube. Video descriptions
+        list full crews: director, cinematographer, editor, colorist,
+        sound designer, and VFX artist. Parsing crew blocks from 30 verified channels and
+        matching names against the 1,513-person index verified works for several finalists across
+        disciplines from one scrape.
+      </p>
+      <p>
+        When a legacy cinema portal blocked the IP after 100 requests and held only 0.7% of 698
+        scanned finalists, I stopped broad collection. I used the live browser relay to finish the
+        5 pending hits.
+      </p>
+    </div>
+  </section>
+
+  <section class="dsec" id="filtering" aria-labelledby="filtering-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">97%</span>
+      <span class="mark-note">of raw name matches were noise before the gates.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="filtering-title">Matching 1,513 people against 130 million rows is a filtering problem.</h2>
+      <p>
+        Thousands of people share the same first and last name. Among the participants, 441 were
+        juniors aged 14 to 17 with minimal public records, unlisted birth years, or stage names.
+      </p>
+    </div>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">97% of raw name matches belonged to somebody else.</h3>
+      <div class="noise">
+        <div class="noise-row">
+          <div class="noise-head">
+            <span class="noise-src">IMDb name matches</span>
+            <span class="noise-val">2.8% real</span>
+          </div>
+          <div class="noise-track" aria-hidden="true">
+            <span class="noise-hit" style="width:2.8%"></span>
+          </div>
+        </div>
+        <div class="noise-row">
+          <div class="noise-head">
+            <span class="noise-src">MobyGames name matches</span>
+            <span class="noise-val">4.3% real</span>
+          </div>
+          <div class="noise-track" aria-hidden="true">
+            <span class="noise-hit" style="width:4.3%"></span>
+          </div>
+        </div>
+      </div>
+      <p class="noise-key" aria-hidden="true">
+        <span class="noise-dot"></span> crimson is the actual finalist. Ink is everyone with the same name.
+      </p>
+      <figcaption class="cap">
+        Raw name matching produced 97% noise across the corpus: only 2.8% of IMDb matches and 4.3%
+        of MobyGames matches belonged to the actual finalist.
+      </figcaption>
+    </figure>
+
+    <div class="sbody sbody-tail">
+      <p>Every enricher ran a multi-factor filter stack before a candidate record could touch the database.</p>
+      <div class="gates">
+        <div class="gate">
+          <h3>Bilingual Cyrillic and Latin, plus stage names</h3>
+          <p>
+            Every person was queried across four representations: Cyrillic forms, bidirectional
+            Latin transliteration (-iy/-y, kh/h, zh/j), social handles, and verified stage names.
+            Adding Latin search uncovered 400+ releases for media composers who publish exclusively
+            in English.
+          </p>
+        </div>
+        <div class="gate">
+          <h3>Token-set intersection, never substring matching</h3>
+          <p>
+            Substring checks matched a German specialist named <em>Anna Simon</em> inside the Russian
+            surname <em>Simonova</em>. The matcher requires exact token-set intersection with
+            normalized Slavic gender endings (-ov/-ova, -in/-ina, -sky/-skaya).
+          </p>
+        </div>
+        <div class="gate">
+          <h3>Anti-Senior chronological filter</h3>
+          <p>
+            The dominant error is not a random stranger. It is an older industry veteran with the
+            same name and decades of credits. Any candidate with a work released before the
+            finalist’s birth year plus 13, or plus 16 for adults, is disqualified in full.
+          </p>
+        </div>
+        <div class="gate">
+          <h3>Patronymic checks and institutional exclusions</h3>
+          <p>
+            Where a registry or track credit carried a conflicting patronymic, the match was dropped
+            immediately. Context regexes also stripped institutional false positives such as film
+            schools or foundations named after a famous surname.
+          </p>
+        </div>
+      </div>
+      <p class="cap">
+        Retrieval and verification stayed separate gates. Even when a hard target came out of an
+        authenticated human browser session, three of five retrieved candidates were still rejected
+        on a birth-date mismatch.
+      </p>
+    </div>
+
+    <div class="outcomes">
+      <div class="kept">
+        <h3>6,739 works survived the filter.</h3>
+        <div class="stack-bar" aria-hidden="true">
+          {
+            sectors.map((sector) => (
+              <span class={`seg seg-${sector.tone}`} style={`width:${sector.pct.toFixed(3)}%`}></span>
+            ))
+          }
+        </div>
+        <ul class="stack-legend" role="list">
+          {
+            sectors.map((sector) => (
+              <li class={`legend-row legend-${sector.tone}`}>
+                <span class="legend-sw" aria-hidden="true"></span>
+                <span class="legend-name">{sector.name}</span>
+                <span class="legend-count">{sector.count.toLocaleString('en-US')}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="cap">
+          6,739 active credited works. Digital art and games account for the remaining 303.
+        </p>
+
+        <div class="waffles">
+          <div class="waffle-cell">
+            <h3>95 of every 100 finalists were enriched.</h3>
+            <svg
+              id="lf-enriched"
+              viewBox="0 0 400 320"
+              role="img"
+              aria-label="Tick gauge showing 95.0 percent of the 1,513-person roster enriched, 76 people without a verified record."
+            ></svg>
+            <p class="waffle-t">
+              Roster coverage after eight days: 1,437 of 1,513 professionals. Crimson ticks mark
+              the enriched; one tick = 1% of the roster. The 76 people without a verified record
+              stay on file as not found rather than guessed.
+            </p>
+            <table class="sr-only">
+              <caption>Roster enrichment coverage</caption>
+              <thead>
+                <tr><th scope="col">State</th><th scope="col">People</th><th scope="col">Share</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Enriched with verified profiles or works</th><td>1,437</td><td>95.0%</td></tr>
+                <tr><th scope="row">Without a verified record</th><td>76</td><td>5.0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="waffle-cell">
+            <div class="waffle" aria-hidden="true">
+              {Array.from({ length: 100 }, (_, i) => <span class={i < 92 ? 'on' : 'off'}></span>)}
+            </div>
+            <p class="waffle-n">91.8%</p>
+            <p class="waffle-t">6,186 works carry a direct source URL. 1,034 people have confirmed projects on file.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rejected">
+        <h3>1.87M+ rows were rejected.</h3>
+        <ul class="reject-list" role="list">
+          <li>
+            <span class="reject-n">1,304,911</span>
+            <span>senior namesake records, plus 569,429 unrelated cast and crew rows, rejected in the Kinopoisk dump pass alone.</span>
+          </li>
+          <li>
+            <span class="reject-n">648</span>
+            <span>false namesakes rejected on TMDB, and 160 works from 3 senior namesakes blocked at the rights registry.</span>
+          </li>
+          <li>
+            <span class="reject-n">76</span>
+            <span>people left honestly as not found rather than padded with unverified guesses.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="dsec" id="market-model" aria-labelledby="market-model-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">56%</span>
+      <span class="mark-note">overstatement from summing box office per person.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="market-model-title">Translating scraped rows into market metrics.</h2>
+      <p>
+        The client needed headline numbers for a seven-year impact report across five creative
+        sectors: total projects, active specialists, audience reach, and financial volume. Turning
+        6,739 scraped works into numbers that survive executive scrutiny meant solving three
+        analytical traps: double-counting collaborative blockbusters, mixing project budgets with
+        personal income, and missing release years.
+      </p>
+    </div>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">One blockbuster was counted once per finalist.</h3>
+      <div class="bo">
+        <div class="bo-row">
+          <div class="bo-head">
+            <span>Summed per finalist</span>
+            <span class="bo-val">16.4B</span>
+          </div>
+          <div class="bo-track" aria-hidden="true">
+            <span class="bo-block bo-naive" style="width:100%"></span>
+          </div>
+        </div>
+        <div class="bo-row">
+          <div class="bo-head">
+            <span>Grouped by work, MAX</span>
+            <span class="bo-val">10.48B</span>
+          </div>
+          <div class="bo-track" aria-hidden="true">
+            <span class="bo-block bo-true" style={`width:${boxOfficePct.toFixed(2)}%`}></span>
+            <span class="bo-gap">56% inflation removed</span>
+          </div>
+        </div>
+      </div>
+      <figcaption class="cap">
+        RUB. Two finalists on the same feature film produced two revenue rows. Summing them
+        overstated box office by 56%, 16.4B against 10.48B. The rule: group by work, take MAX,
+        never SUM.
+      </figcaption>
+    </figure>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">Market output and personal income are not the same money.</h3>
+      <div class="layers">
+        <div class="layer-row">
+          <div class="layer-head">
+            <span>Gross market output</span>
+            <span class="bo-val">14B+</span>
+          </div>
+          <div class="layer-out" aria-hidden="true">
+            <span ></span>
+          </div>
+          <p class="layer-note">Box office, stage budgets, grants, game capitalization.</p>
+        </div>
+        <div class="layer-row">
+          <div class="layer-head">
+            <span>Direct specialist income and royalties</span>
+            <span class="bo-val">1.2–1.8B</span>
+          </div>
+          <div class="layer-in-wrap" aria-hidden="true">
+            <span class="layer-in"></span>
+          </div>
+          <p class="layer-note">Fees and royalties. Separated from film gross.</p>
+        </div>
+      </div>
+      <figcaption class="cap">
+        The two layers that never get summed: a composer’s royalty and a feature film’s box office
+        are measured separately and reported separately.
+      </figcaption>
+    </figure>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">Reach came in three contours that do not add up cleanly.</h3>
+      <div class="reach">
+        <div class="reach-row">
+          <div class="reach-head">
+            <span>Deduplicated theatrical admissions</span>
+            <span class="bo-val">11.0M</span>
+          </div>
+          <div class="reach-track" aria-hidden="true">
+            <span style={`width:${((audienceTheatrical / audienceMax) * 100).toFixed(2)}%`}></span>
+          </div>
+        </div>
+        <div class="reach-row">
+          <div class="reach-head">
+            <span>Six-year music streaming plus soundtrack cinema reach</span>
+            <span class="bo-val">17.4M</span>
+          </div>
+          <div class="reach-track" aria-hidden="true">
+            <span style="width:100%"></span>
+          </div>
+        </div>
+        <div class="reach-row reach-row--text">
+          <div class="reach-head">
+            <span>Steam players, domestic and global</span>
+            <span class="bo-val">held apart</span>
+          </div>
+          <p class="layer-note">Player counts stay separate from the audience total.</p>
+        </div>
+      </div>
+      <figcaption class="cap">
+        Two audience contours on one scale, plus a third that is reported separately. 36.8M viewer
+        votes across 1,956 rated works sit behind them.
+      </figcaption>
+    </figure>
+
+    <div class="sbody sbody-tail">
+      <p>
+        Because the client asked specifically for works released since 2020, an undated row was a
+        direct loss of reporting coverage. At the start, 1,340 active works, 26.0% of the corpus, had
+        no release year. I built a seven-stage cascade ordered from free local indexes to
+        quota-capped APIs.
+      </p>
+
+      <div class="cascade-wrap">
+        <p class="cascade-axis mono">free local index <span aria-hidden="true">→</span> quota-capped API</p>
+        <ol class="cascade" role="list">
+          <li>Local ministry registry title matching</li>
+          <li>Title year regexes</li>
+          <li>Vimeo v2 upload timestamps</li>
+          <li>Yandex Music track credits</li>
+          <li>PoiskKino searches</li>
+          <li>Kinopoisk Unofficial keyword lookups</li>
+          <li>Studio date cards</li>
+        </ol>
+        <div class="cascade-out">
+          <p class="cascade-n">529</p>
+          <p class="cascade-t">
+            release years recovered. Undated works fell from 26.0% to 15.8% of the corpus, then the
+            cascade stopped where the data ends.
+          </p>
+        </div>
+        <p class="cap">
+          165 works live in a rights registry with no date column at all, and 22 one-word short films
+          cannot be disambiguated from older films with the same title.
+        </p>
+      </div>
+
+      <div class="boundary">
+        <p>
+          <strong>Null is unknown, never zero.</strong> When a film had fewer votes than a platform’s
+          publication threshold, 138 titles, or no public box office, the database stores NULL rather
+          than 0. Averages and medians stay honest: 7.20 mean and 7.4 median across film and
+          animation.
+        </p>
+      </div>
+
+      <p class="note">
+        Every macro metric is backed by a SQL view and a formula printed on the slide. The 2020–2026
+        competition window counts 5,259 works, 2,449 of them in cinema; the full-career retrospective
+        counts 6,739.
+      </p>
+    </div>
+  </section>
+  <section class="dsec" id="agents" aria-labelledby="agents-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">96</span>
+      <span class="mark-note">logged steps across three agent platforms.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="agents-title">Three agent platforms wrote 55,000 lines of scraper code. I ran the architecture.</h2>
+      <p>
+        I directed the eight-day sprint in natural language without writing SQL or
+        scraper boilerplate by hand. Three agent platforms worked in sequential rotation over a single
+        project state. Google Antigravity executed 58 logged milestones, OpenCode ran 34 data-hygiene
+        and dump-streaming passes, and OpenAI Codex handled legal redlines, transactional audits, and
+        the anonymized export in 4 steps.
+      </p>
+    </div>
+
+    <figure class="fig fig-flat">
+      <h3 class="fig-head">Every logged step, one mark each.</h3>
+      <div class="milestones" aria-hidden="true">
+        {milestoneCells.map((cell) => <span class={`ms ms-${cell}`}></span>)}
+      </div>
+      <ul class="ms-legend" role="list">
+        <li class="ms-tone ms-tone--antigravity"><span aria-hidden="true"></span><span>Antigravity</span><b>58</b></li>
+        <li class="ms-tone ms-tone--opencode"><span aria-hidden="true"></span><span>OpenCode</span><b>34</b></li>
+        <li class="ms-tone ms-tone--codex"><span aria-hidden="true"></span><span>Codex</span><b>4</b></li>
+      </ul>
+      <figcaption class="cap">
+        96 logged steps, the same count the pipeline appended to PROGRESS.md. Sequential rotation, one
+        project state, no model-specific rulebooks.
+      </figcaption>
+    </figure>
+
+    <div class="sbody sbody-tail">
+      <div class="chain">
+        <div class="chain-step">
+          <span class="chain-n" aria-hidden="true">1</span>
+          <div>
+            <h3>Single regulation</h3>
+            <p>
+              One 348 KB AGENTS.md file holds the schema, 32 source playbooks, 59 success patterns,
+              and 75 failure patterns. No model-specific copies.
+            </p>
+          </div>
+        </div>
+        <div class="chain-step">
+          <span class="chain-n" aria-hidden="true">2</span>
+          <div>
+            <h3>Database queue</h3>
+            <p>
+              Agents pull work batches from SQLite views: pending, enriched with zero works,
+              needs_review, preventing arbitrary task drift.
+            </p>
+          </div>
+        </div>
+        <div class="chain-step">
+          <span class="chain-n" aria-hidden="true">3</span>
+          <div>
+            <h3>Read-only subagents</h3>
+            <p>
+              Parallel subagents fan out across APIs, caches, and browsers to harvest candidates and
+              return structured JSON without touching SQLite.
+            </p>
+          </div>
+        </div>
+        <div class="chain-step">
+          <span class="chain-n" aria-hidden="true">4</span>
+          <div>
+            <h3>Atomic write and log</h3>
+            <p>
+              The parent agent takes a dated pre-flight backup, writes one transaction, recomputes
+              active views, and appends to the 96-step PROGRESS.md log.
+            </p>
+          </div>
+        </div>
+      </div>
+      <p class="cap">
+        A single-writer architecture allowed 20+ parallel research subagents to run without SQLite lock
+        collisions or state corruption.
+      </p>
+
+      <h3 class="lessons-head">Four rules the sprint paid for.</h3>
+      <div class="lessons">
+        <div class="lesson">
+          <h3>Pilots on top performers misrepresent the full cohort.</h3>
+          <p>
+            Testing a new source on the 30 most visible participants gave a 17% hit rate; running the full
+            698-person cohort yielded 0.7%. Pilots must sample across the roster, including low-visibility profiles.
+          </p>
+        </div>
+        <div class="lesson">
+          <h3>Separate identity verification from project harvesting.</h3>
+          <p>
+            Initial passes marked profiles with a verified VK account as enriched, hiding 581 people
+            who had zero works attached. Splitting identity queues from project-harvest queues closed the gap.
+          </p>
+        </div>
+        <div class="lesson">
+          <h3>Preserve raw records with soft deletes.</h3>
+          <p>
+            When a Tilda results parser mistook participation rows for projects and wrote 1,004 false records,
+            pre-flight backups and soft-delete pointers (merged_into) allowed an audited rollback within the same session.
+          </p>
+        </div>
+        <div class="lesson">
+          <h3>Naive batch APIs shift array indices.</h3>
+          <p>
+            Batch user lookups drop deleted accounts and return shorter arrays, misaligning subsequent
+            profiles. I rewrote the batch scripts to return explicit (query, record) pairs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dsec" id="delivery" aria-labelledby="delivery-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">29</span>
+      <span class="mark-note">slides in the password-gated deck.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="delivery-title">I delivered live workbooks, an anonymized database, and an encrypted deck.</h2>
+      <p>
+        To protect personal data, the master database with raw contacts, birth dates, and search logs
+        stayed on the local machine. I generated all client deliverables from an anonymized replica
+        verified against schema constraints.
+      </p>
+    </div>
+
+    <div class="deliver">
+      <div class="deliver-step">
+        <p class="deliver-n" aria-hidden="true">1</p>
+        <h3>Anonymized SQLite</h3>
+        <p>
+          Rebuilt without phones, emails, birth dates, or internal logs. Verified by an automated
+          check for zero foreign-key violations and schema compliance.
+        </p>
+      </div>
+      <div class="deliver-step">
+        <p class="deliver-n" aria-hidden="true">2</p>
+        <h3>Analytical workbooks</h3>
+        <p>
+          Generated with openpyxl: executive summary matrices, 3 live dashboard charts, a 2,449-row
+          cinema registry, top box-office sheets, and 72 award records.
+        </p>
+      </div>
+      <div class="deliver-step">
+        <p class="deliver-n" aria-hidden="true">3</p>
+        <h3>Password-gated deck</h3>
+        <p>
+          29 slides in Reveal.js 5.1 with custom SVG charts, encrypted with PBKDF2-HMAC-SHA256 at
+          600,000 iterations and AES-256-CBC for in-browser WebCrypto decryption.
+        </p>
+      </div>
+    </div>
+
+    <div class="sbody sbody-tail">
+      <p class="cap">
+        Before shipping, an automated verification script cross-checked the SQLite views, the Excel
+        summary tabs, and the presentation slides to eliminate discrepancies between period counts and
+        career totals.
+      </p>
+    </div>
+  </section>
+
+  <section class="dsec" id="stack" aria-labelledby="stack-title">
+    <div class="mark" aria-hidden="true">
+      <span class="mark-n">54,832</span>
+      <span class="mark-note">lines across 585 scripts.</span>
+    </div>
+
+    <div class="sbody">
+      <h2 id="stack-title">What runs underneath.</h2>
+    </div>
+
+    <dl class="stackspec">
+      <div>
+        <dt>Python 3.12, SQLite 3.45, FTS5</dt>
+        <dd>
+          585 scripts across 54,832 lines, a master database with 12 tables, 11 views, and 7,356 audit
+          events, plus 20 local FTS5 source mirrors with sub-millisecond lookup.
+        </dd>
+      </div>
+      <div>
+        <dt>ijson, xml.etree.iterparse, gzip and csv</dt>
+        <dd>
+          Constant-memory streaming parsers for multi-gigabyte dumps: IMDb 102.6M rows, Kinopoisk
+          1.06M titles, Discogs 10.28M artists, TMDB 5.05M names, Steam 149K games.
+        </dd>
+      </div>
+      <div>
+        <dt>Playwright, MCP Extension, Crawl4AI, Scrapling</dt>
+        <dd>
+          Browser automation, a live authenticated Chrome session relay for 401 and captcha walls,
+          coordinate-based Tilda parsing, and Next.js state JWT extraction.
+        </dd>
+      </div>
+      <div>
+        <dt>Exa, Apify, VKScript, Maigret, GHunt</dt>
+        <dd>
+          Semantic web search for hard blind spots, cloud actors for social batches, 25-user VKScript
+          loops, nickname pivoting, and account triangulation.
+        </dd>
+      </div>
+      <div>
+        <dt>PyMuPDF (fitz), openpyxl</dt>
+        <dd>
+          PDF table extraction at 340 pages/s on grant registries, two-column spatial almanac parsing,
+          and automated Excel workbooks with live charts and data bars.
+        </dd>
+      </div>
+      <div>
+        <dt>Reveal.js 5.1, WebCrypto AES-256-CBC</dt>
+        <dd>
+          A self-contained 29-slide analytical deck with inlined CSS assertions, PBKDF2 at 600k
+          iterations, and live DOM style verification on GitHub Pages.
+        </dd>
+      </div>
+      <div>
+        <dt>lieflat-charts SVG grammar</dt>
+        <dd>
+          The tick-row and tick-gauge charts on this page adapt the hand-built SVG grammar of
+          lieflat-charts by 躺在废墟里 (Lying in the Ruins),
+          <a href="https://lieflat.work" target="_blank" rel="noopener noreferrer">lieflat.work <span aria-hidden="true">↗</span></a>,
+          used under the PolyForm Noncommercial license.
+        </dd>
+      </div>
+    </dl>
+  </section>
+</div>
+
+<script>
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.case-nav a'));
+  if ('IntersectionObserver' in window && links.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((link) => {
+            if (link.hash === `#${entry.target.id}`) {
+              link.setAttribute('aria-current', 'location');
+            } else {
+              link.removeAttribute('aria-current');
+            }
+          });
+        });
+      },
+      { rootMargin: '-20% 0px -65% 0px' }
+    );
+    links.forEach((link) => {
+      const target = document.querySelector<HTMLElement>(link.hash);
+      if (target) observer.observe(target);
+    });
+  }
+
+  // lieflat-charts Mono grammar (F5 tick rows, F11 tick gauge), adapted to this site:
+  // square corners, flat surfaces, one crimson accent per chart, deterministic rnd,
+  // reveal-on-scroll with a prefers-reduced-motion fallback.
+  (() => {
+    const INK = '#0b0b0b';
+    const SIGNAL = '#960018';
+    const MUTED = '#6a6a6a';
+    const FAINT = '#b0b0b0';
+    const GRID = '#dedede';
+    const L5 = '#c6c6c6';
+
+    const NS = 'http://www.w3.org/2000/svg';
+    const el = (p: Element, t: string, a: Record<string, string | number>) => {
+      const n = document.createElementNS(NS, t);
+      for (const k in a) n.setAttribute(k, String(a[k]));
+      p.appendChild(n);
+      return n;
+    };
+    const txt = (p: Element, a: Record<string, string | number>, s: string) => {
+      const n = el(p, 'text', a);
+      n.textContent = s;
+      return n;
+    };
+    const tip = (n: Element, s: string) => {
+      const t = document.createElementNS(NS, 'title');
+      t.textContent = s;
+      n.appendChild(t);
+    };
+    const rnd = (i: number, k: number) => Math.abs(((i * 73856093) ^ (k * 19349663)) % 1000) / 1000;
+    const D2R = Math.PI / 180;
+    const pol = (cx: number, cy: number, r: number, deg: number) => [
+      cx + r * Math.cos(deg * D2R),
+      cy + r * Math.sin(deg * D2R),
+    ];
+
+    const obsReveal = (id: string, fn: (s: SVGSVGElement) => void) => {
+      const n = document.getElementById(id) as SVGSVGElement | null;
+      if (!n) return;
+      const go = () => {
+        n.innerHTML = '';
+        fn(n);
+      };
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (es) => {
+            if (es[0].isIntersecting) {
+              go();
+              io.disconnect();
+            }
+          },
+          { threshold: 0.3 }
+        );
+        io.observe(n);
+      } else {
+        go();
+      }
+    };
+
+    // F5 tick rows, bulk sources (wide)
+    obsReveal('lf-sources', (s) => {
+      const D: Array<[string, number, string, boolean]> = [
+        ['IMDB', 103, '102.6M', true],
+        ['DISCOGS + MUSICBRAINZ', 10, '10,284,281', false],
+        ['YANDEX MUSIC', 6, '6,039,445', false],
+        ['TMDB', 5, '5,051,606', false],
+        ['KINOPOISK', 1, '1,060,836', false],
+        ['STATE REGISTRIES', 0, '380,000+', false],
+        ['STEAM', 0, '148,909', false],
+      ];
+      const X0 = 196, PX = 4.9, MAX = 103;
+      const y0 = (i: number) => 46 + i * 40;
+      D.forEach(([name, v, exact, hero], i) => {
+        const y = y0(i);
+        txt(s, { x: 186, y: y + 3, 'font-size': 8, 'font-weight': 700, fill: '#4a4a4a',
+          'text-anchor': 'end', 'letter-spacing': '.08em', class: 'lf-fade',
+          style: `animation-delay:${i * 0.08}s` }, name);
+        el(s, 'line', { x1: X0, y1: y + 9, x2: X0 + MAX * PX, y2: y + 9, stroke: GRID,
+          'stroke-width': 0.6, class: 'lf-fade', style: `animation-delay:${i * 0.08}s` });
+        if (v === 0) {
+          // below the 1M unit: one short stub with the exact value labeled
+          el(s, 'line', { x1: X0 + PX / 2, y1: y + 9, x2: X0 + PX / 2, y2: y + 4.5,
+            stroke: L5, 'stroke-width': 0.9, opacity: 0.9, class: 'lf-fade',
+            style: `animation-delay:${i * 0.08}s` });
+        }
+        for (let k = 0; k < v; k++) {
+          const x = X0 + k * PX + PX / 2, h = 9 + rnd(k + 1, i + 2) * 6;
+          el(s, 'line', { x1: x, y1: y + 9, x2: x, y2: y + 9 - h,
+            stroke: hero ? SIGNAL : INK, 'stroke-width': 0.9,
+            opacity: 0.55 + rnd(k + 3, i + 5) * 0.45, class: 'lf-fade',
+            style: `animation-delay:${i * 0.08 + k * 0.006}s` });
+          if (k % 5 === 4) el(s, 'circle', { cx: x, cy: y + 13.5, r: 0.8, fill: L5,
+            class: 'lf-fade', style: `animation-delay:${i * 0.08 + k * 0.006}s` });
+        }
+        const lab = txt(s, { x: X0 + Math.max(v, 1) * PX + 10, y: y + 4, 'font-size': 11,
+          'font-weight': 800, fill: hero ? SIGNAL : INK, class: 'lf-fade',
+          style: `animation-delay:${0.4 + i * 0.08}s` }, exact);
+        tip(lab, `${name} — ${exact} rows screened`);
+      });
+      txt(s, { x: 380, y: 332, 'font-size': 7, 'font-weight': 600, fill: FAINT,
+        'text-anchor': 'middle', 'letter-spacing': '.12em', class: 'lf-fade',
+        style: 'animation-delay:1s' },
+        '1 TICK = 1M ROWS, ROUNDED TO THE NEAREST MILLION, DOT MARKS EVERY FIFTH, SHORT STUBS FALL BELOW THE UNIT');
+    });
+
+    // F11 tick gauge, roster coverage
+    obsReveal('lf-enriched', (s) => {
+      const GOAL = 95;
+      const cx = 200, cy = 190, R0 = 104, A0 = -195, SW = 210; // -195 deg to +15 deg
+      for (let k = 0; k < 100; k++) {
+        const a = A0 + (k / 100) * SW, inked = k < GOAL;
+        const len = inked ? 13 + rnd(k + 1, 3) * 6 : 5 + rnd(k + 1, 7) * 2.5;
+        const [x1, y1] = pol(cx, cy, R0, a), [x2, y2] = pol(cx, cy, R0 + len, a);
+        el(s, 'line', { x1, y1, x2, y2, stroke: inked ? SIGNAL : '#cfcfcf',
+          'stroke-width': inked ? 1 : 0.6, class: 'lf-fade',
+          style: `animation-delay:${k * 0.012}s` });
+      }
+      [25, 50, 75, 100].forEach((m) => {
+        const a = A0 + (m / 100) * SW, [dx, dy] = pol(cx, cy, R0 - 7, a),
+          [tx2, ty2] = pol(cx, cy, R0 - 19, a);
+        el(s, 'circle', { cx: dx, cy: dy, r: 1, fill: FAINT, class: 'lf-fade',
+          style: 'animation-delay:.8s' });
+        txt(s, { x: tx2, y: ty2 + 3, 'font-size': 7, 'font-weight': 600, fill: L5,
+          'text-anchor': 'middle', class: 'lf-fade', style: 'animation-delay:.85s' }, String(m));
+      });
+      const aT = A0 + (GOAL / 100) * SW, [ex, ey] = pol(cx, cy, R0 + 20, aT);
+      el(s, 'circle', { cx: ex, cy: ey, r: 2.4, fill: SIGNAL, class: 'lf-pop',
+        style: 'animation-delay:1.1s' });
+      const num = txt(s, { x: cx, y: cy - 4, 'font-size': 34, 'font-weight': 800, fill: INK,
+        'text-anchor': 'middle', class: 'lf-fade', style: 'animation-delay:1s' }, '95.0%');
+      tip(num, '1,437 of 1,513 professionals enriched');
+      txt(s, { x: cx, y: cy + 16, 'font-size': 8, 'font-weight': 600, fill: MUTED,
+        'text-anchor': 'middle', 'letter-spacing': '.1em', class: 'lf-fade',
+        style: 'animation-delay:1.05s' }, '1,437 OF 1,513 ENRICHED');
+      txt(s, { x: 200, y: 300, 'font-size': 7, 'font-weight': 600, fill: FAINT,
+        'text-anchor': 'middle', 'letter-spacing': '.12em', class: 'lf-fade',
+        style: 'animation-delay:1.2s' },
+        'ONE TICK = 1% OF THE ROSTER, INKED = ENRICHED, 76 WITHOUT A VERIFIED RECORD');
+    });
+  })();
+</script>
+
+<style is:global>
+  /* lieflat chart animation classes and SVG text font must reach elements created at runtime,
+     which never carry Astro's scoping attribute. Names are lf- prefixed to stay contained. */
+  .lf-pop {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: lf-pop 0.5s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  @keyframes lf-pop {
+    from { transform: scale(0); }
+    to { transform: none; }
+  }
+  .lf-fade {
+    animation: lf-fade 0.9s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+  @keyframes lf-fade {
+    from { opacity: 0; }
+  }
+  #lf-sources text,
+  #lf-enriched text {
+    font-family: 'Inter', sans-serif;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lf-pop,
+    .lf-fade {
+      animation: none;
+    }
+  }
+</style>
+
+<style>
+  .dossier {
+    --d-ink: #0b0b0b;
+    --d-graphite: #34343a;
+    --d-slate: #5c5c63;
+    --d-stone: #8d8d94;
+    --d-mist: #bfbfc5;
+    --d-paper: #ececee;
+    grid-column: 1 / -1;
+    display: grid;
+    gap: clamp(64px, 8vw, 112px);
+    min-width: 0;
+  }
+
+  .dossier :where(p, h2, h3, figure, figcaption, dl, dd, dt, ul, ol, li) {
+    margin: 0;
+  }
+
+  .dossier p {
+    max-width: 66ch;
+  }
+
+  .dossier code,
+  .mono {
+    font-family: var(--font-code);
+    font-variant-ligatures: none;
+  }
+
+  .dossier code {
+    font-size: var(--type-small);
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- section nav ---------- */
+
+  .case-nav {
+    position: sticky;
+    top: 64px;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 22px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    padding-block: 10px;
+    margin-block: -32px calc(-1 * clamp(32px, 5vw, 72px));
+    background: var(--bg-canvas);
+    font-size: var(--type-small);
+  }
+
+  .case-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--mute);
+    text-decoration: none;
+  }
+
+  .case-nav a:hover,
+  .case-nav a:focus-visible,
+  .case-nav a[aria-current='location'] {
+    color: var(--signal);
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  /* ---------- section frame ---------- */
+
+  .dsec {
+    display: grid;
+    grid-template-columns: minmax(0, 216px) minmax(0, 1fr);
+    column-gap: clamp(28px, 4vw, 64px);
+    row-gap: clamp(26px, 3.2vw, 44px);
+    align-items: start;
+    min-width: 0;
+    scroll-margin-top: 132px;
+  }
+
+  .mark {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    gap: 8px;
+    max-width: 22ch;
+  }
+
+  .mark-n {
+    font-size: var(--type-heading);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    color: var(--d-stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mark-note {
+    font-size: var(--type-small);
+    line-height: 1.45;
+    color: var(--mute);
+  }
+
+  .sbody {
+    grid-column: 2;
+    display: grid;
+    gap: clamp(18px, 2.2vw, 28px);
+    min-width: 0;
+  }
+
+  .sbody h2 {
+    max-width: 24ch;
+    font-size: var(--type-heading);
+    font-weight: 640;
+    letter-spacing: -0.032em;
+    line-height: 1.06;
+    color: var(--ink);
+  }
+
+  .sbody p {
+    max-width: 64ch;
+  }
+
+  .standfirst {
+    font-size: var(--type-lead);
+    line-height: 1.4;
+    letter-spacing: -0.012em;
+    max-width: 46ch;
+  }
+
+  .note {
+    font-size: var(--type-small);
+    color: var(--mute);
+    max-width: 74ch;
+  }
+
+  figure.fig,
+  .outcomes,
+  .deliver,
+  .stackspec {
+    grid-column: 2;
+  }
+
+  .fig {
+    display: grid;
+    gap: clamp(16px, 2.2vw, 24px);
+    min-width: 0;
+  }
+
+  .fig-head {
+    font-size: var(--type-lead);
+    font-weight: 620;
+    letter-spacing: -0.022em;
+    line-height: 1.2;
+    max-width: 34ch;
+  }
+
+  .fig figcaption,
+  .cap {
+    display: block;
+    padding: 0;
+    background: none;
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+    max-width: 68ch;
+  }
+
+  /* ---------- the ledger slab ---------- */
+
+  .ledger {
+    grid-column: 1 / -1;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: calc(var(--gutter) + clamp(16px, 2vw, 32px));
+    padding-block: clamp(30px, 4.6vw, 58px);
+    background: var(--d-ink);
+    color: #f6f6f7;
+    display: grid;
+    gap: clamp(24px, 3.4vw, 44px);
+  }
+
+  .ledger-rows {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 44px);
+  }
+
+  .ledger-row {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .ledger-n {
+    font-size: var(--type-display);
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.86;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ledger-t {
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: rgba(246, 246, 247, 0.68);
+    max-width: 34ch;
+  }
+
+  .ledger-foot {
+    font-size: var(--type-small);
+    letter-spacing: 0.01em;
+    color: rgba(246, 246, 247, 0.58);
+  }
+
+  /* ---------- lieflat svg charts ---------- */
+
+  #lf-sources,
+  #lf-enriched {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---------- paired figures ---------- */
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 44px);
+    padding-top: clamp(6px, 1vw, 12px);
+  }
+
+  .pair-cell {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .pair-n {
+    font-size: var(--type-heading);
+    font-weight: 680;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pair-cell p + p,
+  .pair-cell .pair-n + p {
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+    max-width: 40ch;
+  }
+
+  /* ---------- evidence accordion ---------- */
+
+  .evidence-list {
+    display: grid;
+    gap: 6px;
+  }
+
+  .evidence {
+    background: var(--bg-surface);
+    min-width: 0;
+  }
+
+  .evidence summary {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr) 20px;
+    gap: 6px 28px;
+    align-items: baseline;
+    min-height: 44px;
+    padding: 16px 20px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .evidence summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ev-name {
+    font-size: var(--type-body);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .ev-yield {
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+  }
+
+  .evidence summary::after {
+    content: '+';
+    font-family: var(--font-code);
+    font-size: var(--type-body);
+    line-height: 1;
+    color: var(--signal);
+    justify-self: end;
+  }
+
+  .evidence[open] summary::after {
+    content: '−';
+  }
+
+  .ev-body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr) 20px;
+    gap: 6px 28px;
+    padding: 0 20px 20px;
+  }
+
+  .ev-body p {
+    grid-column: 2;
+    font-size: var(--type-small);
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 58ch;
+    background: var(--bg-canvas);
+    padding: 12px 14px;
+  }
+
+  /* ---------- noise rate ---------- */
+
+  .noise {
+    display: grid;
+    gap: 16px;
+  }
+
+  .noise-row {
+    display: grid;
+    gap: 6px;
+  }
+
+  .noise-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .noise-src {
+    font-size: var(--type-small);
+  }
+
+  .noise-val {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    color: var(--signal);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .noise-track {
+    height: 22px;
+    background: var(--d-graphite);
+  }
+
+  .noise-hit {
+    display: block;
+    height: 100%;
+    background: var(--signal);
+  }
+
+  .noise-key {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .noise-dot {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    background: var(--signal);
+  }
+
+  /* ---------- gates ---------- */
+
+  .gates {
+    display: grid;
+    gap: 6px;
+  }
+
+  .gate {
+    display: grid;
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+    gap: 6px 28px;
+    align-items: baseline;
+    padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 26px);
+    background: var(--bg-surface);
+    min-width: 0;
+  }
+
+  .gate h3 {
+    font-size: var(--type-body);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .gate p {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    max-width: 60ch;
+  }
+
+  /* ---------- outcome ledgers ---------- */
+
+  .outcomes {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .kept {
+    display: grid;
+    gap: clamp(18px, 2.4vw, 28px);
+    padding: clamp(20px, 3vw, 36px);
+    background: var(--bg-surface);
+    min-width: 0;
+  }
+
+  .kept h3,
+  .rejected h3 {
+    font-size: var(--type-lead);
+    font-weight: 640;
+    letter-spacing: -0.024em;
+    line-height: 1.2;
+    max-width: 30ch;
+  }
+
+  .stack-bar {
+    display: flex;
+    gap: 2px;
+    height: clamp(40px, 5.6vw, 58px);
+  }
+
+  .seg {
+    display: block;
+    height: 100%;
+    min-width: 2px;
+  }
+
+  .seg-one {
+    background: var(--d-graphite);
+  }
+
+  .seg-two {
+    background: #4e4e55;
+  }
+
+  .seg-three {
+    background: #63636a;
+  }
+
+  .seg-four {
+    background: #7c7c83;
+  }
+
+  .seg-five {
+    background: #9a9aa1;
+  }
+
+  .seg-six {
+    background: #c2c2c8;
+  }
+
+  .stack-legend {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px clamp(20px, 3vw, 40px);
+  }
+
+  .legend-row {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: baseline;
+    font-size: var(--type-small);
+    min-width: 0;
+  }
+
+  .legend-sw {
+    display: block;
+    width: 12px;
+    height: 12px;
+    align-self: center;
+  }
+
+  .legend-one .legend-sw {
+    background: var(--d-graphite);
+  }
+
+  .legend-two .legend-sw {
+    background: #4e4e55;
+  }
+
+  .legend-three .legend-sw {
+    background: #63636a;
+  }
+
+  .legend-four .legend-sw {
+    background: #7c7c83;
+  }
+
+  .legend-five .legend-sw {
+    background: #9a9aa1;
+  }
+
+  .legend-six .legend-sw {
+    background: #c2c2c8;
+  }
+
+  .legend-count {
+    font-family: var(--font-code);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .waffles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(24px, 3.4vw, 48px);
+  }
+
+  .waffle-cell {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .waffle {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 3px;
+    max-width: 240px;
+  }
+
+  .waffle span {
+    display: block;
+    aspect-ratio: 1;
+    background: var(--d-paper);
+  }
+
+  .waffle span.on {
+    background: var(--d-graphite);
+  }
+
+  .waffle-n {
+    font-size: var(--type-lead);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .waffle-t {
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+    max-width: 34ch;
+  }
+
+  .rejected {
+    display: grid;
+    gap: clamp(16px, 2.2vw, 24px);
+    padding: clamp(20px, 3vw, 36px);
+    background: var(--bg-sunken);
+    min-width: 0;
+  }
+
+  .reject-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .reject-list li {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 4px 20px;
+    align-items: baseline;
+    font-size: var(--type-small);
+    line-height: 1.5;
+  }
+
+  .reject-n {
+    font-family: var(--font-code);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- money and reach ---------- */
+
+  .bo,
+  .layers,
+  .reach {
+    display: grid;
+    gap: clamp(18px, 2.6vw, 30px);
+  }
+
+  .bo-row,
+  .layer-row,
+  .reach-row {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .bo-head,
+  .layer-head,
+  .reach-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: var(--type-small);
+  }
+
+  .bo-val {
+    flex: 0 0 auto;
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bo-track {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+
+  .bo-block {
+    display: block;
+    height: 30px;
+  }
+
+  .bo-naive {
+    background: var(--d-mist);
+  }
+
+  .bo-true {
+    background: var(--d-graphite);
+  }
+
+  .bo-gap {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    color: var(--signal);
+    white-space: nowrap;
+  }
+
+  .layer-out span {
+    display: block;
+    height: 46px;
+    background: var(--d-graphite);
+  }
+
+  .layer-in-wrap {
+    display: flex;
+  }
+
+  .layer-in {
+    display: block;
+    height: 24px;
+    width: 11%;
+    min-width: 78px;
+    background: var(--d-stone);
+  }
+
+  .layer-note {
+    font-size: var(--type-small);
+    line-height: 1.5;
+    color: var(--mute);
+    max-width: 54ch;
+  }
+
+  .reach-track {
+    height: 18px;
+    background: var(--d-paper);
+  }
+
+  .reach-track span {
+    display: block;
+    height: 100%;
+    background: var(--d-graphite);
+  }
+
+  .reach-row--text .bo-val {
+    color: var(--mute);
+  }
+
+  /* ---------- seven-stage cascade ---------- */
+
+  .cascade-wrap {
+    display: grid;
+    gap: 16px;
+  }
+
+  .cascade-axis {
+    font-size: var(--type-small);
+    color: var(--mute);
+  }
+
+  .cascade-axis span {
+    color: var(--signal);
+  }
+
+  .cascade {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+    counter-reset: stage;
+  }
+
+  .cascade li {
+    counter-increment: stage;
+    display: grid;
+    grid-template-columns: 2.6em minmax(0, 1fr);
+    gap: 12px;
+    align-items: baseline;
+    padding: 12px 16px;
+    font-size: var(--type-small);
+    line-height: 1.4;
+    background: #dcdce0;
+  }
+
+  .cascade li::before {
+    content: counter(stage);
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    color: rgba(11, 11, 11, 0.72);
+  }
+
+  .cascade li:nth-child(2) {
+    background: #e1e1e5;
+  }
+
+  .cascade li:nth-child(3) {
+    background: #e6e6e9;
+  }
+
+  .cascade li:nth-child(4) {
+    background: #ebebed;
+  }
+
+  .cascade li:nth-child(5) {
+    background: #efeff1;
+  }
+
+  .cascade li:nth-child(6) {
+    background: #f3f3f4;
+  }
+
+  .cascade li:nth-child(7) {
+    background: #f7f7f8;
+  }
+
+  .cascade-out {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 24px;
+    align-items: baseline;
+    padding: 18px 20px;
+    background: var(--signal-subtle);
+  }
+
+  .cascade-n {
+    font-size: var(--type-heading);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    color: var(--signal);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cascade-t {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+
+  .boundary {
+    padding: 18px 22px;
+    background: var(--signal-subtle);
+  }
+
+  .boundary p {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    max-width: 74ch;
+  }
+
+  .boundary strong {
+    font-weight: 600;
+  }
+
+  /* ---------- milestone strip ---------- */
+
+  .milestones {
+    display: grid;
+    grid-template-columns: repeat(96, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .ms {
+    display: block;
+    height: clamp(30px, 4vw, 44px);
+  }
+
+  .ms-antigravity {
+    background: var(--d-graphite);
+  }
+
+  .ms-opencode {
+    background: var(--d-stone);
+  }
+
+  .ms-codex {
+    background: var(--signal);
+  }
+
+  .ms-legend {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-size: var(--type-small);
+  }
+
+  .ms-tone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ms-tone > span:first-child {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+
+  .ms-tone b {
+    font-family: var(--font-code);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ms-tone--antigravity > span:first-child {
+    background: var(--d-graphite);
+  }
+
+  .ms-tone--opencode > span:first-child {
+    background: var(--d-stone);
+  }
+
+  .ms-tone--codex > span:first-child {
+    background: var(--signal);
+  }
+
+  /* ---------- agent chain ---------- */
+
+  .chain {
+    display: grid;
+    gap: 6px;
+  }
+
+  .chain-step {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    padding: clamp(16px, 2.2vw, 24px) clamp(18px, 2.4vw, 26px);
+    background: var(--bg-surface);
+    min-width: 0;
+  }
+
+  .chain-step:nth-child(2) {
+    margin-left: clamp(0px, 1.6vw, 28px);
+  }
+
+  .chain-step:nth-child(3) {
+    margin-left: clamp(0px, 3.2vw, 56px);
+  }
+
+  .chain-step:nth-child(4) {
+    margin-left: clamp(0px, 4.8vw, 84px);
+  }
+
+  .chain-n {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    color: var(--mute);
+    line-height: 1.4;
+  }
+
+  .chain-step h3 {
+    font-size: var(--type-body);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+
+  .chain-step p {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    max-width: 62ch;
+  }
+
+  .lessons-head {
+    font-size: var(--type-lead);
+    font-weight: 640;
+    letter-spacing: -0.024em;
+    line-height: 1.2;
+    margin-top: clamp(8px, 1.6vw, 18px);
+    max-width: 30ch;
+  }
+
+  .lessons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 40px) clamp(24px, 4vw, 56px);
+  }
+
+  .lesson {
+    min-width: 0;
+  }
+
+  .lesson h3 {
+    font-size: var(--type-body);
+    font-weight: 640;
+    letter-spacing: -0.018em;
+    line-height: 1.28;
+    margin-bottom: 8px;
+    max-width: 26ch;
+  }
+
+  .lesson p {
+    font-size: var(--type-body);
+    line-height: 1.5;
+    max-width: 42ch;
+  }
+
+  /* ---------- delivery and stack ---------- */
+
+  .deliver {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(20px, 3vw, 34px);
+    background: var(--bg-surface);
+  }
+
+  .deliver-step {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    min-width: 0;
+  }
+
+  .deliver-n {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    color: var(--signal);
+  }
+
+  .deliver-step h3 {
+    font-size: var(--type-body);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .deliver-step p {
+    font-size: var(--type-small);
+    line-height: 1.55;
+  }
+
+  .stackspec {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .stackspec > div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+    gap: 6px 32px;
+    align-items: baseline;
+    padding: 16px 20px;
+    background: var(--bg-surface);
+    min-width: 0;
+  }
+
+  .stackspec dt {
+    font-family: var(--font-code);
+    font-size: var(--type-small);
+    line-height: 1.45;
+  }
+
+  .stackspec dd {
+    font-size: var(--type-small);
+    line-height: 1.55;
+    max-width: 66ch;
+  }
+
+  /* ---------- responsive ---------- */
+
+  @media (max-width: 900px) {
+    .dsec {
+      grid-template-columns: minmax(0, 168px) minmax(0, 1fr);
+    }
+
+    .gate {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stackspec > div {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .dsec {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 20px;
+      scroll-margin-top: 108px;
+    }
+
+    .mark,
+    .sbody,
+    figure.fig,
+    .outcomes,
+    .deliver,
+    .stackspec {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .mark {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      max-width: none;
+    }
+
+    .mark-note {
+      max-width: 40ch;
+    }
+
+    .ledger {
+      grid-column: 1;
+      padding-block: 28px;
+    }
+
+    .ledger-rows {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    .ledger-t {
+      max-width: 52ch;
+    }
+
+    .case-nav {
+      position: static;
+      margin-block: -12px 0;
+    }
+
+    .evidence summary,
+    .ev-body {
+      grid-template-columns: minmax(0, 1fr) 20px;
+    }
+
+    .ev-yield {
+      grid-column: 1 / -1;
+    }
+
+    .ev-body p {
+      grid-column: 1 / -1;
+    }
+
+    .waffles,
+    .pair,
+    .lessons,
+    .stack-legend {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .deliver {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .chain-step:nth-child(2),
+    .chain-step:nth-child(3),
+    .chain-step:nth-child(4) {
+      margin-left: 0;
+    }
+
+    .chain-step {
+      grid-template-columns: 28px minmax(0, 1fr);
+    }
+
+    .milestones {
+      grid-template-columns: repeat(48, minmax(0, 1fr));
+    }
+
+    .reject-list li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dossier {
+      gap: 56px;
+    }
+
+    .ledger {
+      margin-inline: calc(-1 * var(--gutter));
+      padding-inline: calc(var(--gutter) + 4px);
+    }
+
+    .ledger-n {
+      letter-spacing: -0.045em;
+    }
+
+    .mark {
+      display: grid;
+      gap: 4px;
+    }
+
+    .bo-track {
+      gap: 8px;
+    }
+
+    .bo-gap {
+      white-space: normal;
+    }
+
+    .cascade li {
+      grid-template-columns: 2em minmax(0, 1fr);
+      padding: 10px 12px;
+    }
+
+    .cascade-out {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .milestones {
+      grid-template-columns: repeat(24, minmax(0, 1fr));
+    }
+
+    .ms {
+      height: 26px;
+    }
+
+    .kept,
+    .rejected {
+      padding: 18px 16px;
+    }
+  }
+
+  /* ---------- motion ---------- */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .evidence[open] .ev-body {
+      animation: panel-in 260ms var(--ease-out) both;
+    }
+
+    .evidence summary::after {
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .evidence * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>

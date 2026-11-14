@@ -229,6 +229,25 @@ button {
   border: 0;
 }
 
+/* Tables ignore width: 1px under auto layout (min-content wins) and leak
+   horizontal overflow on narrow viewports; fixed layout honors the 1px clip,
+   and clipped cells keep long content from painting past it. */
+table.sr-only {
+  table-layout: fixed;
+}
+
+table.sr-only th,
+table.sr-only td {
+  overflow: hidden;
+}
+
+/* A no-wrap caption's min-content stretches even a fixed-layout table back
+   to full width; let it wrap and break anywhere so the 1px clip holds. */
+table.sr-only caption {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .wrap {
   max-width: var(--maxw);
   margin-inline: auto;
