@@ -29,22 +29,22 @@
         </div>
       </div>
       <figcaption>
-        Manual search could not answer an industry-scale question in eight days. The solution was to pull the external catalogs onto local disk, stream millions of credit rows against a normalized person index, and scrape the open web for the long tail.
+        Manual lookup could not cover 1,513 people in eight days. I mirrored external catalogs to local disk, streamed credit rows against a normalized person index, and scraped live platforms for remaining credits.
       </figcaption>
     </figure>
 
     <div class="section-copy">
       <p>
-        Eight days before an executive review, a national talent competition needed to measure the cumulative industry footprint of its finalists over seven seasons. The team had started collecting credits by hand and asked if AI could extract the rest from the internet: every film, series, music release, theatre production, game, and festival project created since 2020, along with audience reach, box office revenue, and average ratings.
+        Eight days before an executive review, a national talent competition needed to measure the industry footprint of its finalists over seven seasons. The team had started collecting credits by hand and asked if automated scrapers could extract the rest: films, series, music releases, theatre productions, games, and festival projects created since 2020, along with audience reach, box office revenue, and ratings.
       </p>
       <p>
         On input, I received a flat spreadsheet of 1,886 participation rows covering 1,513 unique professionals across five creative sectors: film, theatre, music, digital, and events. Only 186 rows contained a social link; the rest held a name, a birth date, a city, a discipline, and a season. Searching 1,513 people one by one through live web queries would have hit rate limits on the first afternoon and drowned in namesake noise.
       </p>
       <p>
-        Instead of treating the request as manual lookup, I built a web-scraping and data-engineering pipeline. Over eight days of logged work, 585 Python scripts and 20 source modules ingested and screened more than 130 million records across encyclopedic dumps, state registries, streaming APIs, and authenticated browser sessions, resolving 6,739 credited works and 2,735 verified professional profiles.
+        I built a data-engineering pipeline to resolve the roster at scale. Over eight days of logged work, 585 Python scripts and 20 source modules screened more than 130 million records across encyclopedic dumps, state registries, streaming APIs, and authenticated browser sessions, resolving 6,739 credited works and 2,735 verified profiles.
       </p>
       <p class="measurement-note">
-        Client identity, participant names, and individual project titles are withheld by agreement. Every pipeline metric, source class, and throughput figure below comes from the production logs.
+        Client identity, participant names, and project titles are withheld by agreement. The pipeline metrics, source classes, and throughput figures below come from production logs.
       </p>
     </div>
   </section>
@@ -62,9 +62,9 @@
 
   <section id="scale" aria-labelledby="scale-title">
     <div class="section-copy">
-      <h2 id="scale-title">We pulled the internet onto local disk before matching a single name.</h2>
+      <h2 id="scale-title">I pulled external catalogs onto local disk before matching a single name.</h2>
       <p>
-        Live APIs are built for single lookups, not for cross-referencing 1,513 people across four name representations each. Public film and music APIs cap requests at 200 to 500 calls a day. To run at web scale without quota walls, the pipeline first downloaded bulk dumps and open registries, converted them into local SQLite databases with FTS5 full-text indexes, and streamed multi-gigabyte archives in constant memory.
+        Live APIs cap requests at 200 to 500 calls a day, making cross-referencing 1,513 people across four name variants impractical over the network. To bypass quota walls, I downloaded bulk dumps and open registries, converted them into local SQLite databases with FTS5 indexes, and streamed multi-gigabyte archives in constant memory.
       </p>
     </div>
 
@@ -119,14 +119,14 @@
         </div>
       </dl>
       <figcaption>
-        Every bulk source was reduced to a local SQLite mirror or constant-memory stream (<code>ijson</code>, <code>iterparse</code> with immediate element clearing, or <code>gzip</code> line generators). Local FTS5 queries run in under 1 millisecond and cost zero API quota.
+        I converted bulk sources into local SQLite mirrors or constant-memory streams (<code>ijson</code>, <code>iterparse</code> with immediate element clearing, or <code>gzip</code> line generators). Local FTS5 queries run in under 1 millisecond and consume zero API quota.
       </figcaption>
     </figure>
   </section>
 
   <section id="scraping" aria-labelledby="scraping-title">
     <div class="section-copy">
-      <h2 id="scraping-title">When bulk dumps ended, browser relays and protocol tricks took over.</h2>
+      <h2 id="scraping-title">Browser relays and direct protocol calls handled the live web.</h2>
       <p>
         Bulk dumps cover encyclopedias and state registries, but creative professionals publish across dozens of live platforms: Vimeo showreels, Behance and Dprofile portfolios, ArtStation, VKontakte, Telegram channels, rights societies, and legacy cinema portals. Each platform blocks automated collection differently: strict daily quotas, Cloudflare Turnstile, DDOS-GUARD image captchas, JA3/JA4 TLS fingerprinting, or 401 walls on unauthenticated endpoints.
       </p>
@@ -166,16 +166,16 @@
         </div>
       </div>
       <figcaption>
-        Network routing was split by geography: international platforms ran through a transparent VLESS Reality TUN adapter (<code>happ-xray</code>) or Apify cloud actors, while domestic registries ran direct to avoid geo-blocks.
+        I split network routing by geography: international platforms routed through a transparent VLESS Reality TUN adapter (<code>happ-xray</code>) or Apify cloud actors, while domestic registries ran direct to avoid geo-blocks.
       </figcaption>
     </figure>
 
     <div class="section-copy">
       <p>
-        One of the highest-yield techniques was the Cross-Credits Graph on Vimeo and YouTube. Video descriptions rarely name just the channel owner: they list the director, cinematographer, editor, colorist, sound designer, and VFX artist. By parsing full crew blocks from 30 verified channels and matching every line back against the 1,513-person index, a single scraped video simultaneously verified works for multiple finalists across different disciplines.
+        The Cross-Credits Graph on Vimeo and YouTube delivered high yield. Video descriptions list full crews: director, cinematographer, editor, colorist, sound designer, and VFX artist. By parsing crew blocks from 30 verified channels and matching names against the 1,513-person index, one video verified works for several finalists across disciplines.
       </p>
       <p>
-        Equally important was knowing when to stop scraping a dead source. When a legacy cinema portal blocked the IP after 100 requests and only 0.7% of 698 scanned finalists were present on the platform, we used the live browser relay only to finish the 5 pending hits rather than building a proxy farm for an empty well.
+        When a legacy cinema portal blocked the IP after 100 requests and only 0.7% of 698 scanned finalists appeared on the platform, I stopped broad collection. I used the live browser relay to resolve the 5 remaining hits.
       </p>
     </div>
   </section>
@@ -184,10 +184,10 @@
     <div class="section-copy">
       <h2 id="filtering-title">Matching 1,513 people against 130 million rows is a filtering problem.</h2>
       <p>
-        Scraping the data is only half the engineering; keeping false positives out of the database is the other half. Thousands of people share the same first and last name, and 441 of the 1,513 participants were juniors aged 14 to 17 with thin public footprints, hidden birth years, or stage names. Raw name matching produced 97% noise: only 2.8% of name matches on IMDb and 4.3% on MobyGames belonged to the actual finalist.
+        Thousands of people share the same first and last name. Among the participants, 441 were juniors aged 14 to 17 with minimal public records, unlisted birth years, or stage names. Raw name matching produced 97% noise: only 2.8% of matches on IMDb and 4.3% on MobyGames belonged to the target finalist.
       </p>
       <p>
-        Every enricher therefore enforced a strict multi-factor filter stack before a candidate record could touch the database.
+        Each enricher ran a multi-factor filter stack before writing candidate records to the database.
       </p>
     </div>
 
@@ -196,11 +196,11 @@
         <div class="gate">
           <h3>Bilingual Cyrillic + Latin transliteration and stage names</h3>
           <p>
-            Every person was queried across four representations: Cyrillic forms, bidirectional Latin transliteration (<code>-iy/-y</code>, <code>kh/h</code>, <code>zh/j</code>), social handles, and verified stage names. Adding Latin search uncovered 400+ releases for media composers who publish exclusively in English.
+            I queried each person across four representations: Cyrillic forms, bidirectional Latin transliteration (<code>-iy/-y</code>, <code>kh/h</code>, <code>zh/j</code>), social handles, and verified stage names. Latin search uncovered 400+ releases for media composers publishing in English.
           </p>
         </div>
         <div class="gate">
-          <h3>Token-set intersection, never substring matching</h3>
+          <h3>Token-set intersection</h3>
           <p>
             Substring checks matched a German specialist named <em>Anna Simon</em> inside the Russian surname <em>Simonova</em>. The matcher requires exact token-set intersection with normalized Slavic gender endings (<code>-ov/-ova</code>, <code>-in/-ina</code>, <code>-sky/-skaya</code>).
           </p>
@@ -208,18 +208,18 @@
         <div class="gate">
           <h3>Anti-Senior chronological filter</h3>
           <p>
-            The dominant error is not a random stranger; it is an older industry veteran with the same name and decades of credits. Any candidate with a work released before the finalist’s birth year plus 13 (or 16 for adults) is disqualified in full.
+            Most false positives came from older industry veterans with identical names and decades of credits. The filter drops any candidate record with credits released before the finalist’s birth year plus 13 (16 for adults).
           </p>
         </div>
         <div class="gate">
           <h3>Patronymic verification and institutional exclusions</h3>
           <p>
-            Where a registry or track credit carried a conflicting patronymic, the match was dropped immediately. Context regexes also stripped institutional false positives such as film schools or foundations named after a famous surname.
+            Where a registry or track credit carried a conflicting patronymic, the pipeline dropped the match. Regex filters stripped institutional entities such as film schools or foundations named after a famous surname.
           </p>
         </div>
       </div>
       <figcaption>
-        Retrieval and verification remained separate gates. Even when a hard target was extracted through an authenticated human browser session, three of five retrieved candidates were still rejected on birth-date mismatch.
+        Retrieval and verification remained separate stages. Even with profiles extracted through authenticated browser sessions, birth-date checks rejected three of five candidate matches.
       </figcaption>
     </figure>
 
@@ -239,7 +239,7 @@
         <ul>
           <li>1,304,911 senior namesake records and 569,429 unrelated cast/crew rows rejected in the Kinopoisk dump pass alone.</li>
           <li>648 false namesakes rejected on TMDB and 160 works from 3 senior namesakes blocked at the rights registry.</li>
-          <li>66 people left honestly as not found rather than padded with unverified guesses.</li>
+          <li>66 people recorded as not found to avoid unverified records.</li>
         </ul>
       </div>
     </div>
@@ -247,7 +247,7 @@
 
   <section id="market-model" aria-labelledby="market-model-title">
     <div class="section-copy">
-      <h2 id="market-model-title">Raw rows are not market metrics.</h2>
+      <h2 id="market-model-title">Translating scraped rows into market metrics.</h2>
       <p>
         The client needed headline numbers for a seven-year impact report across five creative sectors: total projects, active specialists, audience reach, and financial volume. Turning 6,739 scraped works into numbers that survive executive scrutiny required solving three analytical traps: double-counting collaborative blockbusters, mixing project budgets with personal income, and missing release years.
       </p>
@@ -258,7 +258,7 @@
         <div class="flow-node">
           <h3>Deduplicated box office</h3>
           <p>When two finalists worked on the same feature film, summing per-person rows inflated box office by 56% (16.4B vs 10.48B RUB).</p>
-          <span class="node-tag">Rule: group by work, take MAX, never SUM.</span>
+          <span class="node-tag">Rule: group by work, take MAX instead of SUM.</span>
         </div>
         <div class="flow-connector" aria-hidden="true">
           <span>separate</span>
@@ -267,7 +267,7 @@
         <div class="flow-node is-accent">
           <h3>Two-layer financials</h3>
           <p>Gross market output (box office, stage budgets, grants, game capitalization: 14B+ RUB) is separated from direct specialist income and royalties (1.2B–1.8B RUB).</p>
-          <span class="node-tag">Never mix film gross with composer royalties.</span>
+          <span class="node-tag">Rule: separate film gross from composer royalties.</span>
         </div>
         <div class="flow-connector" aria-hidden="true">
           <span>syndicate</span>
@@ -280,22 +280,22 @@
         </div>
       </div>
       <figcaption>
-        Every macro metric in the client report is backed by a SQL view and an explicit formula printed on the slide, separating the 2020–2026 competition window (5,259 works; 2,449 in cinema) from full-career retrospectives (6,739 works).
+        Each macro metric in the report links to a SQL view and a documented formula on the slide, separating the 2020–2026 competition window (5,259 works; 2,449 in cinema) from full-career totals (6,739 works).
       </figcaption>
     </figure>
 
     <div class="section-copy">
       <p>
-        Because the client specifically asked for works released since 2020, undated rows were a direct loss of reporting coverage. Initially, 1,340 active works (26.0%) lacked a release year. I built a seven-stage date-recovery cascade ordered from free local indexes to quota-capped APIs: local ministry registry title matching, title year regexes, Vimeo v2 upload timestamps, Yandex Music track credits, PoiskKino searches, Kinopoisk Unofficial keyword lookups, and studio date cards.
+        The client scoped the evaluation to works released since 2020, making undated rows a reporting loss. In the raw scrape, 1,340 active works (26.0%) lacked a release year. I built a seven-stage date-recovery cascade ordered from local indexes to quota-capped APIs: ministry registry matches, title regexes, Vimeo upload timestamps, Yandex Music track credits, PoiskKino searches, Kinopoisk keyword lookups, and studio date cards.
       </p>
       <p>
-        The cascade recovered 529 release years, cutting undated works from 26.0% to 15.8%, and then stopped where the data genuinely ends: 165 works live in a rights registry that has no date column at all, and 22 one-word short films cannot be disambiguated from older films with the same title.
+        The cascade recovered 529 release years, cutting undated records to 15.8%. It stopped where data limits were reached: 165 works came from a rights registry without date fields, and 22 short films shared single-word titles with earlier productions.
       </p>
     </div>
 
     <div class="boundary-note">
       <p>
-        <strong>Null is unknown, never zero.</strong> Where a film had fewer votes than a platform’s publication threshold (138 titles) or no public box office, the database stores <code>NULL</code> rather than <code>0</code> so averages and medians (7.20 mean, 7.4 median across film and animation) are never dragged down by missing data.
+        <strong>Null represents unknown, not zero.</strong> Where a film had fewer votes than a platform threshold (138 titles) or lacked public box office data, the database stores <code>NULL</code> instead of <code>0</code>. This prevents missing values from skewing averages and medians (7.20 mean, 7.4 median across film and animation).
       </p>
     </div>
   </section>
@@ -304,7 +304,7 @@
     <div class="section-copy">
       <h2 id="agents-title">Three agent platforms wrote 55,000 lines of scraper code. I ran the architecture.</h2>
       <p>
-        One person directed the entire eight-day sprint in natural language without writing SQL or scraper boilerplate by hand. Three agent platforms worked in sequential rotation over a single project state: Google Antigravity executed 58 logged milestones, OpenCode ran 34 data-hygiene and dump-streaming passes, and OpenAI Codex handled legal redlines, transactional audits, and the anonymized export (4 steps).
+        I directed the eight-day sprint in natural language without writing SQL or scraper boilerplate by hand. Three agent platforms worked in sequential rotation over a single project state: Google Antigravity executed 58 logged milestones, OpenCode ran 34 data-hygiene and dump-streaming passes, and OpenAI Codex handled legal redlines, transactional audits, and the anonymized export (4 steps).
       </p>
     </div>
 
@@ -317,7 +317,7 @@
         </div>
         <div class="agent-step">
           <h3>Database queue</h3>
-          <p>Work batches are pulled from SQLite views (<code>pending</code>, <code>enriched</code> with zero works, <code>needs_review</code>). No agent invents its own scope.</p>
+          <p>Agents pull work batches from SQLite views (<code>pending</code>, <code>enriched</code> with zero works, <code>needs_review</code>), preventing arbitrary task drift.</p>
           <span aria-hidden="true">→</span>
         </div>
         <div class="agent-step">
@@ -331,33 +331,33 @@
         </div>
       </div>
       <figcaption>
-        Strict single-writer orchestration allowed 20+ parallel research subagents to run without SQLite lock collisions or state corruption.
+        A single-writer architecture allowed 20+ parallel research subagents to run without SQLite lock collisions or state corruption.
       </figcaption>
     </figure>
 
     <div class="lesson-grid">
       <div class="lesson">
-        <h3>A top-30 pilot lies about the long tail.</h3>
+        <h3>Pilots on top performers misrepresent the full cohort.</h3>
         <p>
-          Testing a new source on the 30 most famous participants gave a 17% hit rate; running the full 698-person cohort yielded 0.7%. Pilots must sample the middle and bottom of the roster, never the head.
+          Testing a new source on the 30 most visible participants gave a 17% hit rate; running the full 698-person cohort yielded 0.7%. Pilots must sample across the roster, including low-visibility profiles.
         </p>
       </div>
       <div class="lesson">
-        <h3>Identity found is not content found.</h3>
+        <h3>Separate identity verification from project harvesting.</h3>
         <p>
-          Early passes marked anyone with a verified VK profile as <code>enriched</code>, hiding 581 verified people who still had zero works. Splitting identity queues from project-harvest queues closed the gap.
+          Initial passes marked profiles with a verified VK account as <code>enriched</code>, hiding 581 people who had zero works attached. Splitting identity queues from project-harvest queues closed the gap.
         </p>
       </div>
       <div class="lesson">
-        <h3>Never run destructive deletes on scraped data.</h3>
+        <h3>Preserve raw records with soft deletes.</h3>
         <p>
-          When a Tilda results parser mistook participation rows for projects and wrote 1,004 rows, pre-flight backups and soft-delete pointers (<code>merged_into</code>) allowed an instant, audited rollback within the same session.
+          When a Tilda results parser mistook participation rows for projects and wrote 1,004 false records, pre-flight backups and soft-delete pointers (<code>merged_into</code>) allowed an audited rollback within the same session.
         </p>
       </div>
       <div class="lesson">
         <h3>Naive batch APIs shift array indices.</h3>
         <p>
-          Batch user lookups silently drop deleted accounts and return shorter arrays, shifting every subsequent profile onto the wrong person. All batch scripts were rewritten to return explicit <code>(query, record)</code> pairs.
+          Batch user lookups drop deleted accounts and return shorter arrays, misaligning subsequent profiles. I rewrote the batch scripts to return explicit <code>(query, record)</code> pairs.
         </p>
       </div>
     </div>
@@ -365,9 +365,9 @@
 
   <section id="delivery" aria-labelledby="delivery-title">
     <div class="section-copy">
-      <h2 id="delivery-title">Delivery shipped as live workbooks, an anonymized database, and an encrypted deck.</h2>
+      <h2 id="delivery-title">I delivered live workbooks, an anonymized database, and an encrypted deck.</h2>
       <p>
-        Personal-data rules shaped the final mile as strictly as the scraping: the master database with raw contacts, birth dates, and search logs remained on the local machine, while every deliverable was generated from a clean, contract-checked anonymized replica.
+        To protect personal data, the master database with raw contacts, birth dates, and search logs stayed on the local machine. I generated all client deliverables from an anonymized replica verified against schema constraints.
       </p>
     </div>
 
@@ -396,7 +396,7 @@
 
   <section id="stack" aria-labelledby="stack-title">
     <div class="section-copy">
-      <h2 id="stack-title">What runs underneath.</h2>
+      <h2 id="stack-title">System architecture and toolchain.</h2>
     </div>
 
     <dl class="stack-spec">
