@@ -33,8 +33,7 @@ agent working in this repository.
 - `main` is the stable branch. `dev` is the normal working branch.
 - Start work by checking `git status --short --branch`. Preserve changes that
   are already present and may belong to the owner or another agent.
-- Work directly on `dev`. Do not create additional branches or worktrees unless
-  the owner explicitly asks for one.
+- Work directly on `dev`.
 - Do not switch away from `dev`, merge into `main`, commit, push, open a pull
   request, publish, or deploy unless the owner explicitly asks for that action.
 - Stage only files that belong to the current task. Never discard unrelated
@@ -93,68 +92,11 @@ agent working in this repository.
   area. Do not invent missing product facts, content, credentials, or commands.
 - Prefer the smallest change that satisfies the request. Verify the changed
   behavior before reporting completion.
-- Do not use the middle dot character as a separator anywhere in the project.
-  Use commas, colons, slashes, dashes, or separate lines instead.
-- Do not convert editorial section headings in case studies and visual explainers
-  to Chicago Title Case. Keep the owner's sentence-case narrative headlines (e.g.
-  "The input is never clean. The system is built for that.").
-- Preserve authentic first-person statements ("I conceived, designed, and built...",
-  "with me directing, reviewing...") in case study role descriptions and personal
-  portfolio copy. Do not rewrite them into impersonal or documentation-style third person.
-- Never add local filesystem paths from the owner's PC (for example `G:\...` or
-  `E:\...`) to website articles, explainers, or published pages. Refer to files
-  by repository-relative paths instead.
-- Do not capitalize the first word after a colon in running text, explanations,
-  parameter descriptions, or inline labels (for example, write «Отличительные
-  черты: наличие…», never «Отличительные черты: Наличие…»). Capitalizing after
-  a colon is an artificial AI writing marker. Use lowercase unless the word is a
-  proper noun, brand name, or quoted direct speech.
 
 ## Visual system and design rules
 
-- Visual style: Instrumental Style (approved 2026-10-27). Tonal elevation uses
-  `#f6f6f7` for page canvas (`--bg-canvas`), `#ffffff` for elevated cards and
-  surfaces (`--bg-surface`), and `#ececee` for sunken fields/wells (`--bg-sunken`).
-- Flat surfaces only (updated 2026-11-13): no box-shadows on resting elements
-  (shadows are reserved for real overlays: the CV menu, dialogs, the PhotoSwipe
-  bar) and no 1px hairline borders or divider rules. Surfaces separate by tone
-  steps, space, and scale. The only kept lines are real tables/form fields, the
-  current-page nav underline, and interface mocks marked with `data-ui` (for
-  example `ShumAssistantExplainer`). Ghost buttons and chips use `--bg-sunken`
-  fills instead of outlines.
-- Accent color: `#960018` (crimson) and subtle accent `--signal-subtle: rgba(150, 0, 24, 0.08)`.
-- Sharp 90-degree corners: keep `border-radius: 0` across all interface components,
-  including buttons, project cards, dialogue boxes, menus, chips, and the hero portrait.
-  Do not introduce rounded corners or default radii.
-- Rainbow / spectrum gradients:
-  - Allowed placements:
-    1. Home hero statement accent (`art, technology, and AI`).
-    2. Case study titles in `/development/*` via `rainbowTitle: true`.
-    3. Header brand and navigation links on hover via `data-text` overlay.
-  - Prohibited placements:
-    - Never apply rainbow gradients or rainbow borders to catalog project cards or direction
-      cards in "What Would You Like to Explore?". Keep them crisp white surfaces.
-  - Hover animation: two-layer cross-fade (`opacity: 0 -> 1`) with duration
-    `260ms cubic-bezier(0.16, 1, 0.3, 1)`. Under `-webkit-background-clip: text`,
-    the underlying base text must transition to `color: transparent` on hover to
-    eliminate dark glyph anti-aliasing outlines/fringes.
-- Spectrum randomizer:
-  - Generative inline script in `Base.astro` rotates between three themes
-    (Apple Intelligence, Instagram Sunset, Cyber Prismatic), varies gradient angles,
-    and sets random initial phases and hover delays on `pointerenter`.
-- Typographic system (5-step canonical scale):
-  - All typography across the site strictly adheres to exactly 5 canonical fluid steps defined in `src/styles/global.css`:
-    1. `--type-small`: `clamp(13px, 0.8rem + 0.1vw, 14px)` — metadata, captions, footers, tags, status badges, small UI buttons.
-    2. `--type-body`: `clamp(17px, 1.02rem + 0.15vw, 18px)` — running paragraphs, bullet items, descriptions. (Intermediate 15px/16px body copy is prohibited).
-    3. `--type-lead`: `clamp(20px, 1.1rem + 0.55vw, 24px)` — lead intros, pull statements, lede paragraphs, card titles (h3), dialog titles.
-    4. `--type-heading`: `clamp(32px, 3.6vw, 48px)` — section headings (h2), catalog direction names, metric values.
-    5. `--type-display`: `clamp(36px, 7.4vw, 108px)` — hero titles and case study titles (h1 / `.display`).
-  - Rule against arbitrary font sizes: Never introduce intermediate or hardcoded font sizes (e.g. 12px, 14px, 15px, 16px, 20px, 24px, 28px, 36px) in page styles or components. Always reference the canonical CSS variables.
-
-### Prohibited: Eyebrows, kickers, and overlines
-
-- Never create small kicker tags, category badges, overlines, or eyebrow labels (e.g. `<p class="ve-label">Premise</p>`, `<p class="case-meta">Case Study</p>`, tiny tracked caps above headings or cards) anywhere on the website, unless the owner explicitly and targetly asks for them. The owner explicitly dislikes eyebrow labels.
-- Section headings, page titles, and card headers must speak for themselves directly. If context is needed, fold it into the narrative headline or the opening lead sentence.
+The single source of truth for UI, UX, styling, design tokens, and prohibited patterns is [DESIGN.md](DESIGN.md).
+All interface work must strictly conform to its Instrumental Style, 5-step typographic scale, sharp 90-degree corners (`border-radius: 0`), and explicit prohibitions (no eyebrows/kickers/overlines, no resting shadows, no middle dot).
 
 ## Paths and text encoding
 
@@ -184,3 +126,6 @@ agent working in this repository.
 - Local implementation does not authorize publication, deployment, or changes
   to external services.
 
+## Project memory in MemPalace
+
+Standard mining rules — in the global `~/.agents/AGENTS.md` (MemPalace section). Wing for this project: `my-personal-website` (hub `http://127.0.0.1:8766/mcp`).
