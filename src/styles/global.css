@@ -891,3 +891,10 @@ dialog.dir-dialog[open]::backdrop {
   animation: rainbow-shimmer 14s ease-in-out infinite;
   animation-delay: var(--rand-delay, 0s);
 }
+
+h1.rainbow-gradient,
+.display.rainbow-gradient {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
